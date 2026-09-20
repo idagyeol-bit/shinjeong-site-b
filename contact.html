@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>현장 문의 | 신정개발</title>
+<meta name="description" content="대상 설비와 작업 목적, 희망 일정을 보내 주시면 검토에 필요한 정보를 함께 확인합니다.">
+<meta name="format-detection" content="telephone=no">
+<meta name="theme-color" content="#0e2e4a">
+<link rel="canonical" href="https://idagyeol-bit.github.io/shinjeong-site-b/contact.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="신정개발">
+<meta property="og:title" content="현장 문의 | 신정개발">
+<meta property="og:description" content="대상 설비와 작업 목적, 희망 일정을 보내 주시면 검토에 필요한 정보를 함께 확인합니다.">
+<meta property="og:url" content="https://idagyeol-bit.github.io/shinjeong-site-b/contact.html">
+<meta property="og:locale" content="ko_KR">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230e2e4a'/%3E%3Ctext x='16' y='22' font-family='sans-serif' font-size='16' font-weight='700' fill='%23fff' text-anchor='middle'%3E신%3C/text%3E%3C/svg%3E">
+<link rel="preload" href="assets/fonts/PretendardVariable.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/site.css">
+</head>
+<body data-page="contact">
+<a class="skip-link" href="#main">본문 바로가기</a>
+<header class="hdr">
+  <a class="hdr__brand" href="index.html" aria-label="신정개발 홈">
+    <b>신정개발</b><span aria-hidden="true">SHINJEONG DEVELOPMENT</span>
+  </a>
+  <nav class="gnb" aria-label="주요 메뉴">
+      <a href="services.html">사업분야</a>
+      <a href="technology.html">로봇·작업 시스템</a>
+      <a href="projects.html">수행 이력</a>
+      <a href="company.html">회사 소개</a>
+  </nav>
+  <div class="hdr__act">
+    <a class="hdr__cta" href="contact.html" aria-current="page">현장 문의 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8.5 7H17v8.5"/></svg></a>
+    <button class="burger" type="button" aria-expanded="false" aria-controls="drawer" aria-label="메뉴 열기"><i></i><i></i><i></i></button>
+  </div>
+</header>
+
+<div class="drawer" id="drawer" aria-hidden="true">
+  <nav aria-label="전체 메뉴">
+    <a href="services.html">사업분야<span>01</span></a>
+    <a href="technology.html">로봇·작업 시스템<span>02</span></a>
+    <a href="projects.html">수행 이력<span>03</span></a>
+    <a href="company.html">회사 소개<span>04</span></a>
+    <a href="contact.html" aria-current="page">현장 문의<span>05</span></a>
+  </nav>
+  <div class="drawer__foot">
+    (주)신정개발 · 1992년부터<br>
+    전라남도 여수시 봉계2길 27<br>
+    <a href="mailto:shinjeong@sjdevel.com">shinjeong@sjdevel.com</a>
+  </div>
+</div>
+
+<main id="main">
+  <section class="phero">
+    <div class="phero__grid" aria-hidden="true"></div>
+    <div class="wrap">
+      <span class="eyebrow">CONTACT</span>
+      <h1>검토가 필요한 현장을<br>알려 주세요.</h1>
+      <p class="phero__lead">대상 설비와 작업 목적, 희망 일정을 보내 주시면 검토에 필요한 정보를 함께 확인하겠습니다.</p>
+    </div>
+  </section>
+
+  <nav class="crumb" aria-label="현재 위치">
+    <div class="wrap">
+      <ol>
+        <li><a href="index.html">홈</a></li>
+        <li><span aria-current="page">현장 문의</span></li>
+      </ol>
+    </div>
+  </nav>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="split split--top split--wide">
+
+        <div data-reveal>
+          <h2>문의 내용 작성</h2>
+          <p class="note mt-14">아래를 채우고 <b class="ink">문의 내용 만들기</b>를 누르면 사용하시는 메일 앱이 열립니다.</p>
+
+          <form class="form mt-28" id="inquiryForm" novalidate>
+            <div class="form__row">
+              <div class="field">
+                <label for="f-name">이름 또는 회사명 <em aria-hidden="true">*</em><span class="sr-only">(필수)</span></label>
+                <input type="text" id="f-name" name="name" autocomplete="organization" required>
+                <p class="field__err" hidden></p>
+              </div>
+              <div class="field">
+                <label for="f-email">회신 이메일 <em aria-hidden="true">*</em><span class="sr-only">(필수)</span></label>
+                <input type="email" id="f-email" name="email" autocomplete="email" required>
+                <p class="field__err" hidden></p>
+              </div>
+            </div>
+
+            <div class="form__row">
+              <div class="field">
+                <label for="f-phone">연락처</label>
+                <input type="tel" id="f-phone" name="phone" autocomplete="tel" inputmode="tel">
+              </div>
+              <div class="field">
+                <label for="f-service">문의 업무</label>
+                <select id="f-service" name="service">
+                  <option value="">선택하지 않음</option>
+                  <option value="S01">설비 클리닝</option>
+                  <option value="S02">촉매·충진물 작업</option>
+                  <option value="S03">화학세정</option>
+                  <option value="S04">준설·슬러지 회수</option>
+                  <option value="S05">관로·지하 조사 및 보수</option>
+                  <option value="T01">로봇·작업 시스템</option>
+                  <option value="E01">회수 이후의 과정</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form__row">
+              <div class="field">
+                <label for="f-place">현장 위치</label>
+                <input type="text" id="f-place" name="place" placeholder="예: 전남 여수">
+              </div>
+              <div class="field">
+                <label for="f-when">희망 일정</label>
+                <input type="text" id="f-when" name="when" placeholder="예: 2027년 상반기 정기보수">
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="f-body">문의 내용 <em aria-hidden="true">*</em><span class="sr-only">(필수)</span></label>
+              <textarea id="f-body" name="body" required placeholder="대상 설비, 작업 목적, 현장 상태를 적어 주세요. 크기·구조·잔류물 정보를 알고 계시면 함께 적어 주시면 검토에 도움이 됩니다."></textarea>
+              <p class="field__err" hidden></p>
+            </div>
+
+            <div class="form__act">
+              <button class="btn btn--fill" type="submit">문의 내용 만들기 <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M13 6.5l5.5 5.5L13 17.5"/></svg></button>
+              <button class="btn btn--line" type="button" data-copy="mail">이메일 주소 복사</button>
+            </div>
+            <p class="form__msg" id="formMsg" role="status" aria-live="polite"></p>
+
+            <div id="copyWrap" hidden>
+              <p class="note mt-6">메일 앱이 열리지 않으면 아래 내용을 복사해 보내 주세요.</p>
+              <pre class="copybox" id="copyBox" tabindex="0"></pre>
+              <div class="mt-12"><button class="btn btn--line btn--sm" type="button" data-copy="body">문의 내용 복사</button></div>
+            </div>
+          </form>
+        </div>
+
+        <div data-reveal data-delay="90">
+          <div class="panel">
+            <h3>연락처</h3>
+            <dl class="dtable dtable--soft mt-18">
+              <div><dt>이메일</dt><dd><a href="mailto:shinjeong@sjdevel.com">shinjeong@sjdevel.com</a></dd></div>
+              <div><dt>주소</dt><dd>전라남도 여수시 봉계2길 27</dd></div>
+              <div><dt>회사명</dt><dd>(주)신정개발</dd></div>
+            </dl>
+          </div>
+
+          <div class="panel panel--line mt-16">
+            <h3>이렇게 알려 주시면 좋습니다</h3>
+            <ul class="numlist mt-16">
+              <li><em>01</em><b>대상 설비</b><p>탱크·반응기·관로 등 작업 대상</p></li>
+              <li><em>02</em><b>작업 목적</b><p>클리닝·제거·교체·조사 등</p></li>
+              <li><em>03</em><b>현장 상태</b><p>크기·구조·잔류물 정보, 사진·도면</p></li>
+              <li><em>04</em><b>희망 일정</b><p>정기보수 기간 등 가능한 시기</p></li>
+            </ul>
+          </div>
+
+          <div class="panel panel--line mt-16">
+            <h3>알아 두실 점</h3>
+            <p class="note mt-10">이 홈페이지에는 문의 접수 서버가 없습니다. 위 양식은 입력하신 내용을 정리해 <b class="ink">방문자의 메일 앱</b>으로 넘기는 방식이며, 홈페이지가 내용을 저장하거나 대신 발송하지 않습니다.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--soft">
+    <div class="wrap">
+      <div class="head">
+        <div data-reveal><span class="eyebrow">FAQ</span><h2>궁금한 점</h2></div>
+        <div class="head__aside" data-reveal data-delay="90"><p class="lead">상담 전에 자주 묻는 내용을 정리했습니다.</p></div>
+      </div>
+      <div class="faq" data-reveal>
+        <details open>
+          <summary>로봇이 모든 작업을 진행하나요?<i aria-hidden="true"></i></summary>
+          <p class="faq__a">설비와 작업 조건에 따라 적용 범위가 달라집니다. 작업 범위에 따라 로봇 작업 이후 필요한 후속·마무리 작업을 진행합니다.</p>
+        </details>
+        <details>
+          <summary>어떤 정보를 보내면 상담에 도움이 되나요?<i aria-hidden="true"></i></summary>
+          <p class="faq__a">대상 설비, 작업 목적, 현장 상태와 희망 일정을 알려 주세요. 크기·구조·사진·도면 등 알고 계신 정보를 함께 정리하면 검토에 도움이 됩니다.</p>
+        </details>
+        <details>
+          <summary>우리 설비에 적용할 수 있는지 바로 알 수 있나요?<i aria-hidden="true"></i></summary>
+          <p class="faq__a">출입구와 내부 구조, 잔류물 특성 등 현장 조건을 확인해야 합니다. 관련 정보를 바탕으로 적용 범위를 검토합니다.</p>
+        </details>
+        <details>
+          <summary>회수한 슬러지의 후속 과정도 상담할 수 있나요?<i aria-hidden="true"></i></summary>
+          <p class="faq__a">회수물의 특성과 현장 조건에 따른 탈수·분리 및 처리 연계 범위를 함께 문의할 수 있습니다.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="ftr">
+  <div class="wrap">
+    <div class="ftr__top">
+      <div class="ftr__brand">
+        <b>신정개발</b><span aria-hidden="true">SHINJEONG DEVELOPMENT</span>
+        <p class="ftr__info">
+          (주)신정개발 · 1992년부터<br>
+          전라남도 여수시 봉계2길 27<br>
+          <a href="mailto:shinjeong@sjdevel.com">shinjeong@sjdevel.com</a>
+        </p>
+      </div>
+      <nav class="ftr__map" aria-label="사이트맵">
+        <div>
+          <h4>사업분야</h4>
+          <ul>
+            <li><a href="service-equipment-cleaning.html">설비 클리닝</a></li>
+            <li><a href="service-catalyst-media.html">촉매·충진물 작업</a></li>
+            <li><a href="service-chemical-cleaning.html">화학세정</a></li>
+            <li><a href="service-dredging-sludge.html">준설·슬러지 회수</a></li>
+            <li><a href="service-inspection-repair.html">관로·지하 조사 및 보수</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>기술</h4>
+          <ul>
+            <li><a href="technology.html">로봇·작업 시스템</a></li>
+            <li><a href="technology.html#recovery">회수 이후의 과정</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>회사</h4>
+          <ul>
+            <li><a href="company.html">회사 소개</a></li>
+            <li><a href="projects.html">수행 이력</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>문의</h4>
+          <ul>
+            <li><a href="contact.html">현장 문의</a></li>
+            <li><a href="mailto:shinjeong@sjdevel.com">이메일로 문의</a></li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+    <div class="ftr__bot">
+      <p>&copy; <span data-year>2026</span> (주)신정개발. All rights reserved.</p>
+      <button class="totop" type="button" data-totop>맨 위로 <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8.5 7H17v8.5"/></svg></button>
+    </div>
+  </div>
+</footer>
+
+<a class="mcta" href="contact.html">현장 문의하기 <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M13 6.5l5.5 5.5L13 17.5"/></svg></a>
+<script src="js/site.js"></script>
+<script src="js/contact.js"></script>
+</body>
+</html>

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://idagyeol-bit.github.io/shinjeong-site-b/sitemap.xml
