@@ -10,7 +10,7 @@ const fs = require('fs');
 const path = require('path');
 
 const OUT = path.resolve(__dirname, '..');
-const SITE_URL = 'https://idagyeol-bit.github.io/shinjeong-site-b/'; // 배포 주소가 정해지면 이 줄만 바꾸세요
+const SITE_URL = 'https://idagyeol-bit.github.io/shinjeong-site-c/'; // 배포 주소가 정해지면 이 줄만 바꾸세요
 
 /* ===================== 콘텐츠 데이터 =====================
    원본 js/data.js의 사실관계를 그대로 옮겼습니다.
