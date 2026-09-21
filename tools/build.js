@@ -27,6 +27,7 @@ const C = {
   hours: '09:00 ~ 17:30',                    // 문의 가능 시간 — 기술소개서(2025)
   email: 'shinjeong@sjdevel.com',
   tagline: '산업설비·환경시설 클리닝',
+  seoTitle: '신정개발 | 산업설비 클리닝 · 무인 로봇 작업 시스템 | 여수',
   intro: '1992년 시작한 신정개발은 산업설비와 환경시설을 다루는 클리닝 전문기업입니다. 설비 유지보수, 촉매·충진물 작업, 준설과 시설 조사·보수의 경험을 바탕으로 현장의 작업 방법을 발전시켜 갑니다.',
   /* 연혁 — 회사소개서(2024.03) 6쪽 "연혁"을 그대로 옮겼습니다. 항목을 더하거나 뺄 때는 이 목록만 고치세요. */
   history: [
@@ -99,7 +100,7 @@ const P = (id) => PHOTOS[id];
 
 const SERVICES = [
   {
-    id: 'S01', file: 'service-equipment-cleaning.html', icon: 'tank', title: '설비 클리닝',
+    id: 'S01', file: 'service-equipment-cleaning.html', icon: 'tank', title: '설비 클리닝', en: 'EQUIPMENT CLEANING',
     summary: '탱크와 Pond, 배수로 등 산업설비의 잔류물과 퇴적물을 다루는 클리닝 작업.',
     short: '설비의 구조와 잔류물 특성을 바탕으로 작업 범위를 살펴봅니다.',
     body: '설비의 구조와 잔류물 특성을 확인하고 작업 범위를 검토합니다. 탱크·Pond 내부 클리닝부터 공장 배수로, R.T.O 유지보수·클리닝, 필터 관련 작업까지 현장에 필요한 업무를 안내합니다.',
@@ -112,7 +113,7 @@ const SERVICES = [
       lead: '진공흡입차와 호스, 그리고 로봇을 연결한 구성을 사진으로 보여 드립니다.' }
   },
   {
-    id: 'S02', file: 'service-catalyst-media.html', icon: 'reactor', title: '촉매·충진물 작업',
+    id: 'S02', file: 'service-catalyst-media.html', icon: 'reactor', title: '촉매·충진물 작업', en: 'EQUIPMENT CLEANING · CATALYST',
     summary: '반응기와 관련 설비의 촉매·충진물 제거 및 교체 작업.',
     short: '반응기와 관련 설비의 조건에 맞춰 요청 업무를 검토합니다.',
     body: '설비 조건과 작업 범위에 따라 촉매·충진물 관련 업무를 검토합니다. 흡입·분리·원격 모니터링 시스템의 역할과 로봇을 적용한 작업 방식을 함께 살펴보세요.',
@@ -132,7 +133,7 @@ const SERVICES = [
       lead: '촉매·충진물을 흡입해 회수하는 장비의 외형과 차량 구성입니다.' }
   },
   {
-    id: 'S03', file: 'service-chemical-cleaning.html', icon: 'pipe', title: '화학세정',
+    id: 'S03', file: 'service-chemical-cleaning.html', icon: 'pipe', title: '화학세정', en: 'CHEMICAL CLEANING',
     summary: '배관·열교환기·냉각탑 계통과 보일러 등 산업설비의 세정 업무.',
     short: '대상 설비와 오염 상태, 세정 목적을 먼저 확인합니다.',
     body: '설비 종류와 오염 상태, 작업 목적을 바탕으로 세정 범위를 검토합니다. 배관류, 열교환기, 냉각탑 계통과 보일러 튜브 등 대상 설비에 필요한 업무를 안내합니다.',
@@ -143,7 +144,7 @@ const SERVICES = [
     photo: Object.assign({}, P('M10'), { note: '안전 구획을 설치하고 차량을 배치한 산업설비 현장의 모습입니다.' })
   },
   {
-    id: 'S04', file: 'service-dredging-sludge.html', icon: 'manhole', title: '준설·슬러지 회수',
+    id: 'S04', file: 'service-dredging-sludge.html', icon: 'manhole', title: '준설·슬러지 회수', en: 'SEWER CLEANING · DREDGING',
     summary: '하수·오수관과 처리시설의 퇴적물 준설 및 슬러지 회수 작업.',
     short: '퇴적물의 특성과 현장 구조, 회수 범위를 함께 살펴봅니다.',
     body: '하수도 퇴적물과 폐수처리장 슬러지 등 대상 물질과 현장 구조를 확인합니다. 회수 작업과 필요한 후속 관리의 범위를 함께 검토합니다.',
@@ -157,7 +158,7 @@ const SERVICES = [
       lead: '회사소개서의 장비 목록에는 무인준설로봇(파쇄형·흡입형), 무인로더, 스키드 로더, 소형 굴삭기 등 준설용 장비가 올라 있습니다. 아래는 그 장비들의 외형입니다.' }
   },
   {
-    id: 'S05', file: 'service-inspection-repair.html', icon: 'scan', title: '관로·지하 조사 및 보수',
+    id: 'S05', file: 'service-inspection-repair.html', icon: 'scan', title: '관로·지하 조사 및 보수', en: 'CCTV · GPR · REPAIR',
     summary: '관로 CCTV와 GPR 조사, 비굴착 보수 등 시설 상태 확인과 보수 업무.',
     short: '조사 대상과 목적에 따라 필요한 업무를 안내합니다.',
     body: '조사 대상과 목적에 맞춰 관로 내부 CCTV 조사, 지하매설물 GPR 조사, 비굴착 보수 관련 업무를 안내합니다. 대상 시설과 요청 범위를 알려 주시면 검토에 필요한 정보를 확인합니다.',
@@ -306,7 +307,10 @@ function head(o) {
 <meta property="og:description" content="${esc(o.desc)}">
 <meta property="og:url" content="${SITE_URL}${o.file === 'index.html' ? '' : o.file}">
 <meta property="og:locale" content="ko_KR">
-<meta name="twitter:card" content="summary">
+<meta property="og:image" content="${SITE_URL}assets/photos/M08-1600.jpg">
+<meta property="og:image:width" content="1600">
+<meta property="og:image:height" content="1067">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230e2e4a'/%3E%3Ctext x='16' y='22' font-family='sans-serif' font-size='16' font-weight='700' fill='%23fff' text-anchor='middle'%3E신%3C/text%3E%3C/svg%3E">
 <link rel="preload" href="assets/fonts/PretendardVariable.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="css/tokens.css">
@@ -507,8 +511,8 @@ pages['index.html'] = () => {
 
   return head({
     file: 'index.html', page: 'home',
-    title: `${C.brand} | ${C.tagline}`,
-    desc: '산업설비 클리닝, 촉매·충진물 작업, 화학세정, 준설·슬러지 회수, 관로·지하 조사 및 보수. 1992년부터 현장을 다뤄 온 신정개발의 다섯 가지 업무와 로봇·작업 시스템을 소개합니다.',
+    title: C.seoTitle,
+    desc: '전남 여수 (주)신정개발 — 산업설비 클리닝, 촉매·충진물 작업, 화학세정, 준설·슬러지 회수, 관로·지하 조사 및 보수. 1992년부터 현장을 다뤄 온 다섯 가지 업무와 자체 개발 무인 로봇 작업 시스템을 소개합니다.',
     jsonld: {
       '@context': 'https://schema.org', '@type': 'Organization',
       name: C.name, alternateName: C.brandEn, foundingDate: String(C.founded),
@@ -882,7 +886,7 @@ ${rel.map((p) => `              <li><b>${esc(p.title)}</b><span class="note">${e
     }) + header('services') + `
 <main id="main">
 ` + phero({
-      eyebrow: `BUSINESS 0${idx + 1}`,
+      eyebrow: `BUSINESS 0${idx + 1} · ${s.en}`,
       h1: esc(s.title),
       lead: s.summary,
       crumbs: [{ label: '사업분야', href: 'services.html' }, { label: s.title }]
@@ -902,7 +906,7 @@ pages['technology.html'] = () => head({
 }) + header('technology') + `
 <main id="main">
 ` + phero({
-  eyebrow: 'ROBOT & SYSTEM',
+  eyebrow: 'ROBOT & SYSTEM · IN-HOUSE DEVELOPED',
   h1: '로봇·작업 시스템',
   lead: TECH.title,
   crumbs: [{ label: '로봇·작업 시스템' }]
@@ -990,11 +994,27 @@ ${RECOVERY.methods.map((m, i) => `        <div>${icon(i === 0 ? 'drop' : 'filter
     </div>
   </section>
 
-  <!-- 06 장비 -->
-  <section class="section section--soft" id="equipment">
+  <!-- 06 자체 개발 -->
+  <section class="section section--soft" id="rnd">
     <div class="wrap">
       <div class="head">
-        <div data-reveal><span class="eyebrow">06 · EQUIPMENT</span><h2>차량과 장비의<br>외형.</h2></div>
+        <div data-reveal><span class="eyebrow">06 · R&amp;D</span><h2>자체 개발해 온<br>무인 로봇 시스템.</h2></div>
+        <div class="head__aside" data-reveal data-delay="90"><p class="lead">2017년 설립한 기업부설연구소를 중심으로 로봇 시스템을 개발해 왔습니다. 아래는 회사소개서와 기술소개서에 수록된 내용입니다.</p></div>
+      </div>
+      <div class="roles" data-reveal>
+        <div>${icon('doc', 30)}<b>기업부설연구소</b><p>2017년 11월 설립. 로봇 시스템의 개발과 시제품 제작을 맡습니다.</p></div>
+        <div>${icon('shield', 30)}<b>등록 특허</b><p>정합식 맨홀(2017) · 관내부 무인 준설 처리 시스템(2017) · 스크류 바퀴를 구비한 수륙양용 준설로봇(2020) · 소형관로 준설로봇 및 그 운전방법(2020) · 워터젯 유닛을 구비한 세정로봇 장치(2020)</p></div>
+        <div>${icon('robot', 30)}<b>연구개발 과제</b><p>능동형 촉매 적재장치 · 석유화학 저장탱크 협업형 클리닝 시스템 · 수중 슬러지 수거 무인 자율 이동 로봇 시스템</p></div>
+        <div>${icon('scan', 30)}<b>시제품과 성능시험</b><p>벽면/천장 부착형 · 흡입/준설 · 파쇄 무인 로봇 시제품을 제작하고, 공인시험기관(KCL) 입회 성능시험을 거쳤습니다.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 07 장비 -->
+  <section class="section" id="equipment">
+    <div class="wrap">
+      <div class="head">
+        <div data-reveal><span class="eyebrow">07 · EQUIPMENT</span><h2>차량과 장비의<br>외형.</h2></div>
         <div class="head__aside" data-reveal data-delay="90"><p class="lead">제어 차량과 흡입차, 궤도형 장비, 흡입 헤드, 로더, 카메라를 갖춘 소형 주행 장비 등 보유 장비의 외형입니다. 장비의 세대·모델·성능 수치는 상담 시 자료로 안내합니다.</p></div>
       </div>
       <div class="grid grid--3">
@@ -1004,7 +1024,7 @@ ${pcards(['R01', 'R25', 'R10', 'R13', 'R20', 'R42'], ['차량과 로봇 장비',
   </section>
 
   <!-- 관련 업무 -->
-  <section class="section">
+  <section class="section section--soft">
     <div class="wrap">
       <div class="head">
         <div data-reveal><span class="eyebrow">RELATED</span><h2>관련 업무</h2></div>
@@ -1177,8 +1197,8 @@ ${serviceCards(true)}
       <dl class="dtable" data-reveal>
         <div><dt>회사명</dt><dd>${esc(C.name)} <span class="note">${esc(C.brandEn)} CO., LTD.</span></dd></div>
         <div><dt>설립</dt><dd>${C.founded}년</dd></div>
-        <div><dt>본사</dt><dd>${icon('pin', 17)} ${esc(C.address)}</dd></div>
-        <div><dt>지사</dt><dd>${icon('pin', 17)} ${esc(C.branch)}</dd></div>
+        <div><dt>본사</dt><dd>${icon('pin', 17)} ${esc(C.address)} <a href="https://map.naver.com/p/search/${encodeURIComponent(C.address)}" target="_blank" rel="noopener">네이버 지도</a> <a href="https://map.kakao.com/link/search/${encodeURIComponent(C.address)}" target="_blank" rel="noopener">카카오맵</a></dd></div>
+        <div><dt>지사</dt><dd>${icon('pin', 17)} ${esc(C.branch)} <a href="https://map.naver.com/p/search/${encodeURIComponent(C.branch)}" target="_blank" rel="noopener">네이버 지도</a></dd></div>
         <div><dt>대표 전화</dt><dd><a href="tel:${C.tel.replace(/-/g, '')}">${C.tel}</a> <span class="note">문의 가능 시간 ${esc(C.hours)}</span></dd></div>
         <div><dt>팩스</dt><dd>${C.fax}</dd></div>
         <div><dt>이메일</dt><dd>${icon('mail', 17)} <a href="mailto:${C.email}">${C.email}</a></dd></div>
@@ -1279,7 +1299,7 @@ ${SERVICES.map((s) => `                  <option value="${s.id}">${esc(s.title)}
               <div><dt>문의 가능 시간</dt><dd>${esc(C.hours)}</dd></div>
               <div><dt>팩스</dt><dd>${C.fax}</dd></div>
               <div><dt>이메일</dt><dd><a href="mailto:${C.email}">${C.email}</a></dd></div>
-              <div><dt>본사</dt><dd>${esc(C.address)}</dd></div>
+              <div><dt>본사</dt><dd>${esc(C.address)} <a href="https://map.naver.com/p/search/${encodeURIComponent(C.address)}" target="_blank" rel="noopener">지도</a></dd></div>
               <div><dt>지사</dt><dd>${esc(C.branch)}</dd></div>
               <div><dt>회사명</dt><dd>${esc(C.name)}</dd></div>
             </dl>
