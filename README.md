@@ -54,9 +54,10 @@
 | `service-chemical-cleaning.html` | 화학세정 |
 | `service-dredging-sludge.html` | 준설·슬러지 회수 |
 | `service-inspection-repair.html` | 관로·지하 조사 및 보수 |
-| `technology.html` | 로봇·작업 시스템 |
+| `process.html` | 현장 진행 방식 (7단계 절차 · 현장 배치 도식 · 인원/로봇 비교표 · 용도별 적용 · 탈수 절차) |
+| `technology.html` | 로봇·작업 시스템 (+ R&D · 세대별 발전 · 보유 장비 구성) |
 | `projects.html` | 수행 이력 (필터·검색) |
-| `company.html` | 회사 소개 |
+| `company.html` | 회사 소개 (연혁 25건 · 면허·인증·조직·기술자격 · 현장과 안전) |
 | `contact.html` | 현장 문의 (양식 + 자주 묻는 질문) |
 | `404.html` | 없는 주소 안내 |
 | `css/tokens.css` | **색·글자 크기·여백을 모아 둔 파일** — 디자인 변경은 여기서 |
@@ -64,9 +65,10 @@
 | `js/site.js` | 헤더 · 모바일 메뉴 · 스크롤 등장 · 숫자 카운트 |
 | `js/projects.js` | 수행 이력 필터 |
 | `js/contact.js` | 문의 양식 |
-| `assets/photos/` | 사진 24장의 웹용 축소본 (전부 클라이언트 사진 ZIP 3개에서 고름, PDF 속 사진은 사용하지 않음) |
+| `assets/photos/` | 사진 24장의 웹용 축소본 — 전부 클라이언트 사진 ZIP 3개에서 고름(PDF 속 사진은 사용하지 않음), 3:2 크롭·완만한 보정. 원본 대응·크롭 좌표는 `tools/photo-plan.json` |
 | `assets/fonts/` | Pretendard 가변 폰트와 라이선스 |
 | `tools/build.js` | (선택) 모든 HTML을 다시 만드는 생성기 |
+| `tools/photo-plan.json` | 사진 ID ↔ 원본 ZIP 파일 ↔ 크롭 좌표 대응표 |
 | `sitemap.xml`, `robots.txt` | 검색엔진 안내 |
 
 ---
@@ -156,7 +158,7 @@ HTML에 `style="margin-top:20px"` 처럼 직접 쓰지 말고 `class="mt-20"` �
 사진은 전부 클라이언트가 보내 준 **사진 ZIP 3개**(홈페이지 메인 / 홈페이지사진모음 / 로봇)에서 골랐고,
 회사소개서·기술소개서 **PDF 안의 사진은 한 장도 쓰지 않았습니다.** 현재 24장을 씁니다.
 (M = 홈페이지 메인.zip, W = 홈페이지사진모음.zip, R = 로봇.zip — `tools/build.js`의 `PHOTOS` 목록에 원본 대응이 적혀 있습니다.)
-축소와 JPEG 재인코딩만 했고 색 보정·합성은 하지 않았습니다.
+2차 보강에서 모든 사진을 3:2로 크롭(불필요한 배경·잡동사니 제거)하고 완만한 명암·채도 보정과 샤프닝을 적용했습니다. 합성·요소 삭제는 하지 않았습니다.
 단, 인터넷 공개를 위해 **W10(사업소개-하수도사진)의 제3자 얼굴 1명**과 **차량 번호판(W10·W01·W07·R01·R13·R15·R25)**은
 흐림 처리했습니다(초상권·개인정보 보호). 원본 파일은 손대지 않았습니다.
 사진 설명(캡션·alt)에는 다음을 **쓰지 않습니다.**
