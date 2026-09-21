@@ -453,9 +453,19 @@ body[data-page="home"] .hdr:not(.is-scrolled) .hdr__cta:hover { background: #fff
 
 /* 연혁 */
 .hist { border-top: 1px solid var(--ink); }
-.hist li { display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: 20px; padding: 22px 4px; border-bottom: 1px solid var(--line); }
+.hist > li { display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: 20px; padding: 22px 4px; border-bottom: 1px solid var(--line); }
 .hist b { font-size: var(--fs-h3); font-weight: 600; color: var(--brand); letter-spacing: -0.02em; line-height: 1.3; }
-.hist span { font-size: var(--fs-body); color: var(--ink); align-self: center; }
+.hist > li > span { font-size: var(--fs-body); color: var(--ink); align-self: center; }
+/* 한 해에 여러 항목이 있을 때 (월 + 내용) */
+.hist__items { display: grid; gap: 6px; padding-top: 4px; }
+.hist__items li { display: grid; grid-template-columns: 30px minmax(0, 1fr); gap: 12px; align-items: baseline; }
+.hist__items em { font-style: normal; font-size: var(--fs-xs); font-weight: 700; letter-spacing: 0.06em; color: var(--muted); }
+.hist__items span { font-size: var(--fs-body); color: var(--ink); }
+/* 긴 목록 옆의 사진을 화면에 붙잡아 둔다 */
+.split--sticky > .split__media { position: sticky; top: calc(var(--header-h) + 24px); }
+/* 인용 문구 (회사 자료의 원칙·슬로건) */
+.quote { font-size: var(--fs-h4); font-weight: 600; color: var(--ink); letter-spacing: -0.02em; line-height: 1.5; }
+.quote span { display: block; margin-top: 4px; font-size: var(--fs-sm); font-weight: 400; color: var(--muted); }
 
 /* FAQ */
 .faq { border-top: 1px solid var(--ink); }
@@ -623,6 +633,7 @@ html:not(.js-on) [data-reveal] { opacity: 1; transform: none; }
   .head { grid-template-columns: 1fr; align-items: start; }
   .split, .split--wide { grid-template-columns: 1fr; }
   .split--rev > :first-child { order: 0; }
+  .split--sticky > .split__media { position: static; }
   .grid--3, .grid--5 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .flow { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .ftr__top { grid-template-columns: 1fr; }
@@ -639,7 +650,7 @@ html:not(.js-on) [data-reveal] { opacity: 1; transform: none; }
   .rec__row { grid-template-columns: 1fr; gap: 6px; padding: 20px 2px; }
   .rec__cat { font-size: var(--fs-xs); }
   .dtable > div { grid-template-columns: 1fr; }
-  .hist li { grid-template-columns: 74px minmax(0, 1fr); gap: 14px; }
+  .hist > li { grid-template-columns: 74px minmax(0, 1fr); gap: 14px; }
   .hist b { font-size: 19px; }
   .form__row { grid-template-columns: 1fr; }
   .numlist li { grid-template-columns: 36px minmax(0, 1fr); gap: 2px 12px; }

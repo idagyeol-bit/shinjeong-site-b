@@ -18,18 +18,84 @@ const SITE_URL = 'https://idagyeol-bit.github.io/shinjeong-site-b/'; // 배포 �
 const C = {
   name: '(주)신정개발',
   brand: '신정개발',
-  brandEn: 'SHINJEONG DEVELOPMENT',
+  brandEn: 'SHINJEONG DEVELOPMENT',          // 기술소개서(2025) 로고 표기: Shinjeong Development Co.,Ltd.
   founded: 1992,
-  address: '전라남도 여수시 봉계2길 27',
+  address: '전라남도 여수시 봉계2길 27',      // 본사 — 회사소개서(2024)·기술소개서(2025) 공통
+  branch: '충청남도 서산시 지곡면 충의로 1106', // 지사 — 기술소개서(2025) 마지막 장
+  tel: '061-682-5537',                       // 대표 전화 — 회사소개서(2024)·기술소개서(2025) 공통
+  fax: '061-683-5567',                       // 팩스 — 회사소개서(2024)·기술소개서(2025) 공통
+  hours: '09:00 ~ 17:30',                    // 문의 가능 시간 — 기술소개서(2025)
   email: 'shinjeong@sjdevel.com',
   tagline: '산업설비·환경시설 클리닝',
   intro: '1992년 시작한 신정개발은 산업설비와 환경시설을 다루는 클리닝 전문기업입니다. 설비 유지보수, 촉매·충진물 작업, 준설과 시설 조사·보수의 경험을 바탕으로 현장의 작업 방법을 발전시켜 갑니다.',
+  /* 연혁 — 회사소개서(2024.03) 6쪽 "연혁"을 그대로 옮겼습니다. 항목을 더하거나 뺄 때는 이 목록만 고치세요. */
   history: [
-    { year: 1992, label: '설립' },
-    { year: 2007, label: '법인 전환' },
-    { year: 2017, label: '기업부설연구소 설립' }
+    { year: 2023, items: [{ m: '05', label: '신용등급 우수기업 인증 (신용등급 BBB-)' }] },
+    { year: 2021, items: [{ m: '11', label: '표창장 — 산업통상자원부' }] },
+    { year: 2020, items: [
+      { m: '12', label: '기술혁신형 중소기업 인증 (INNOBIZ)' },
+      { m: '11', label: '중소기업 경영혁신 공모전 우수상' },
+      { m: '11', label: '지역사회 공헌 인정기업 승인' }
+    ] },
+    { year: 2018, items: [
+      { m: '07', label: '서비스분야 안전보건활동 우수사례 대상' },
+      { m: '07', label: '위험성평가 인증 — 산업안전보건공단' }
+    ] },
+    { year: 2017, items: [
+      { m: '11', label: '기업부설연구소 설립' },
+      { m: '07', label: '경영혁신형 중소기업 인증 (MAINBIZ)' },
+      { m: '06', label: '전남형 강소기업 인증' },
+      { m: '05', label: 'ISO 14001 인증' }
+    ] },
+    { year: 2016, items: [{ m: '05', label: 'KOSHA 18001 인증' }] },
+    { year: 2015, items: [{ m: '09', label: '기계설비공사업 면허 취득' }] },
+    { year: 2012, items: [{ m: '12', label: '자본금 3억 원 증자' }] },
+    { year: 2009, items: [{ m: '03', label: '난방시공업 1종 면허 취득' }] },
+    { year: 2007, items: [
+      { m: '10', label: '환경부장관상 수상' },
+      { m: '09', label: '법인 전환 — ㈜신정개발' }
+    ] },
+    { year: 2006, items: [{ m: '05', label: '지정폐기물 수집·운반 면허 취득' }] },
+    { year: 2004, items: [{ m: '10', label: '일반폐기물 수집·운반 면허 취득' }] },
+    { year: 2002, items: [{ m: '03', label: '상·하수도 설비시공업 면허 취득' }] },
+    { year: 2000, items: [{ m: '04', label: '저수조청소업 등록' }] },
+    { year: 1995, items: [{ m: '10', label: '상호 변경 — 신정개발' }] },
+    { year: 1992, items: [{ m: '03', label: '신학상사 설립' }] }
   ]
 };
+
+/* ===================== 사진 목록 =====================
+   전부 클라이언트가 보내 준 사진 ZIP 3개(홈페이지 메인 / 홈페이지사진모음 / 로봇)에서 골랐습니다.
+   회사소개서·기술소개서 PDF 안의 사진은 쓰지 않습니다.
+   M = 홈페이지 메인.zip, W = 홈페이지사진모음.zip, R = 로봇.zip (번호는 폴더 안 정렬 순서)
+   설명(alt/cap)은 사진에 보이는 것만 적습니다. 모델명·세대·성능·발주처는 적지 않습니다. */
+const PHOTOS = {
+  M02: { id: 'M02', w: 1200, h: 816, sizes: [720, 1200], alt: '신정개발 상호가 보이는 건물 전경', cap: '신정개발 상호가 보이는 건물 전경' },
+  M04: { id: 'M04', w: 1000, h: 750, sizes: [640, 1000, 1400], alt: '산업단지 전경', cap: '산업단지 전경' },
+  M05: { id: 'M05', w: 1400, h: 804, sizes: [800, 1400], alt: '산업설비 현장의 차량과 안전구획', cap: '산업설비 현장의 차량과 안전구획' },
+  M06: { id: 'M06', w: 1000, h: 667, sizes: [640, 1000, 1600], alt: '작업자의 안전모', cap: '안전모' },
+  M08: { id: 'M08', w: 1600, h: 1067, sizes: [960, 1600, 2400], alt: '산업설비 야간 전경' },
+  M10: { id: 'M10', w: 1000, h: 563, sizes: [640, 1000, 1600], alt: '안전 구획이 설치된 산업설비 현장의 차량', cap: '안전 구획이 설치된 현장의 차량' },
+  W01: { id: 'W01', w: 1000, h: 750, sizes: [640, 1000, 1600], alt: '산업설비 현장의 흡입차와 연결 호스', cap: '산업설비 현장의 흡입차와 연결 호스' },
+  W03: { id: 'W03', w: 1000, h: 1000, sizes: [600, 1000], alt: '맨홀 주변에서 호스 작업을 하는 두 작업자', cap: '맨홀 주변에서 호스 작업을 하는 두 작업자' },
+  W04: { id: 'W04', w: 1000, h: 750, sizes: [640, 1000, 1600], alt: '도로 위 맨홀 주변에서 작업하는 작업자들', cap: '맨홀 교체 공사 현장 — 도로 위 맨홀 주변 작업' },
+  W05: { id: 'W05', w: 1000, h: 667, sizes: [640, 1000, 1600], alt: 'SUCTION ROBOT 표기가 보이는 궤도형 장비', cap: 'SUCTION ROBOT 표기가 보이는 궤도형 장비' },
+  W06: { id: 'W06', w: 1000, h: 667, sizes: [640, 1000, 1600], alt: '전면에 파쇄 장치를 갖춘 궤도형 장비', cap: '전면에 파쇄 장치를 갖춘 궤도형 장비' },
+  W07: { id: 'W07', w: 1000, h: 750, sizes: [640, 1000, 1440], alt: '산업설비 현장에 배치된 진공흡입차', cap: '산업설비 현장의 진공흡입차' },
+  W09: { id: 'W09', w: 1000, h: 486, sizes: [640, 1000, 1600], alt: '산업설비 현장의 차량과 작업자', cap: '산업설비 현장의 차량과 작업자' },
+  W10: { id: 'W10', w: 1000, h: 563, sizes: [640, 1000, 1600], alt: '맨홀 주변에서 호스 작업을 하는 작업자들과 차량', cap: '맨홀 주변에서 호스 작업을 하는 작업자들과 차량' },
+  R01: { id: 'R01', w: 1000, h: 667, sizes: [640, 1000, 1600], alt: '차고에 정렬된 차량과 로봇 장비', cap: '차고의 차량과 로봇 장비' },
+  R07: { id: 'R07', w: 1000, h: 667, sizes: [640, 1000, 1600], alt: '작업장 내 차량에 설치된 모니터·제어장치와 조작자', cap: '작업장 내 차량에 설치된 모니터·제어장치와 조작자' },
+  R10: { id: 'R10', w: 1000, h: 667, sizes: [640, 1000, 1600], alt: '전면에 흡입 헤드를 갖춘 궤도형 장비', cap: '전면에 흡입 헤드를 갖춘 궤도형 장비' },
+  R13: { id: 'R13', w: 1000, h: 667, sizes: [640, 1000, 1600], alt: '소형 주행 장비와 흡입 헤드, 호스', cap: '소형 주행 장비와 흡입 헤드, 호스' },
+  R15: { id: 'R15', w: 1000, h: 667, sizes: [640, 1000, 1600], alt: '스키드 로더와 소형 굴삭기', cap: '스키드 로더와 소형 굴삭기' },
+  R20: { id: 'R20', w: 1000, h: 667, sizes: [640, 1000, 1600], alt: '스키드 로더', cap: '스키드 로더' },
+  R25: { id: 'R25', w: 1000, h: 667, sizes: [640, 1000, 1600], alt: '본사 앞에 배치된 제어 차량, 흡입차, 궤도형 장비', cap: '본사 앞 — 제어 차량 · 흡입차 · 궤도형 장비의 연결' },
+  R27: { id: 'R27', w: 1000, h: 667, sizes: [640, 1000, 1600], alt: '야외에서 호스로 연결된 차량과 궤도형 장비', cap: '야외에서 호스로 연결된 차량과 궤도형 장비' },
+  R34: { id: 'R34', w: 1000, h: 667, sizes: [640, 1000, 1600], alt: '차량에 실린 제어 장치와 소형 주행 장비를 다루는 작업자', cap: '차량의 제어 장치와 소형 주행 장비' },
+  R42: { id: 'R42', w: 1000, h: 667, sizes: [640, 1000, 1600], alt: '카메라 헤드를 갖춘 소형 주행 장비', cap: '카메라 헤드를 갖춘 소형 주행 장비' }
+};
+const P = (id) => PHOTOS[id];
 
 const SERVICES = [
   {
@@ -40,11 +106,10 @@ const SERVICES = [
     targets: ['Tank', 'Pond', '공장 내부 배수로', 'R.T.O', 'Filter Press 세정', 'Bag Filter 교체'],
     topTargets: ['Tank', 'Pond', '공장 내부 배수로'],
     inquiryHint: ['대상 설비', '작업 목적', '알고 있는 크기·구조·잔류물 정보'],
-    projects: ['P02', 'P05'], tech: true,
-    photo: { id: 'W01', w: 1000, h: 750, sizes: [640, 1000, 1600],
-      alt: '산업설비 현장의 흡입차와 연결 호스',
-      cap: '산업설비 현장의 흡입차와 연결 호스',
-      note: '산업설비 현장에 배치된 흡입차와 연결 호스의 모습입니다.' }
+    projects: ['P02'], tech: true,
+    photo: Object.assign({}, P('W01'), { note: '산업설비 현장에 배치된 흡입차와 연결 호스의 모습입니다.' }),
+    gallery: { ids: ['W07', 'W09', 'R25'], titles: ['진공흡입차', '현장의 차량과 작업자', '차량·흡입차·궤도형 장비의 연결'],
+      lead: '진공흡입차와 호스, 그리고 로봇을 연결한 구성을 사진으로 보여 드립니다.' }
   },
   {
     id: 'S02', file: 'service-catalyst-media.html', icon: 'reactor', title: '촉매·충진물 작업',
@@ -60,11 +125,11 @@ const SERVICES = [
       { icon: 'separate', label: '분리', text: '회수한 물질을 작업에 맞게 분리하는 역할' },
       { icon: 'monitor', label: '원격 모니터링', text: '설비 밖에서 작업 상황을 확인하는 역할' }
     ],
-    photo: { id: 'W05', w: 1000, h: 667, sizes: [640, 1000, 1600],
-      alt: 'SUCTION ROBOT 표기가 보이는 궤도형 장비',
-      cap: 'SUCTION ROBOT 표기가 보이는 궤도형 장비',
+    photo: Object.assign({}, P('W05'), {
       eyebrow: 'EQUIPMENT', heading: '장비의 외형', scene: false,
-      note: '전면 스크루와 궤도를 갖춘 장비의 외형입니다.' }
+      note: '전면 스크루와 궤도를 갖춘 장비의 외형입니다.' }),
+    gallery: { ids: ['R10', 'R13', 'R01'], titles: ['흡입 헤드를 갖춘 궤도형 장비', '소형 주행 장비와 흡입 헤드', '차량과 로봇 장비'],
+      lead: '촉매·충진물을 흡입해 회수하는 장비의 외형과 차량 구성입니다.' }
   },
   {
     id: 'S03', file: 'service-chemical-cleaning.html', icon: 'pipe', title: '화학세정',
@@ -74,7 +139,8 @@ const SERVICES = [
     targets: ['Plant 배관', '열교환기', 'Cooling Tower 계통', '보일러 Tube 내·외부 관련 세정'],
     topTargets: ['Plant 배관', '열교환기', 'Cooling Tower 계통'],
     inquiryHint: ['대상 설비', '오염 상태', '세정 목적', '가능한 작업 기간'],
-    projects: [], tech: false, photo: null
+    projects: ['P05'], tech: false,
+    photo: Object.assign({}, P('M10'), { note: '안전 구획을 설치하고 차량을 배치한 산업설비 현장의 모습입니다.' })
   },
   {
     id: 'S04', file: 'service-dredging-sludge.html', icon: 'manhole', title: '준설·슬러지 회수',
@@ -85,13 +151,10 @@ const SERVICES = [
     topTargets: ['하수도 퇴적물', '오수관', '폐수처리장 슬러지'],
     inquiryHint: ['시설 종류', '대상 물질', '현장 상태', '희망 작업 시기'],
     projects: ['P03', 'P06'], tech: true, recovery: true,
-    photo: { id: 'W10', w: 1000, h: 563, sizes: [640, 1000, 1600],
-      alt: '맨홀 주변에서 호스 작업을 하는 작업자들과 차량',
-      cap: '맨홀 주변에서 호스 작업을 하는 작업자들과 차량',
-      note: '맨홀 주변에서 호스를 다루는 작업 장면입니다.' },
-    photo2: { id: 'W03', w: 1000, h: 1000, sizes: [600, 1000],
-      alt: '맨홀 주변에서 호스 작업을 하는 두 작업자',
-      cap: '맨홀 주변에서 호스 작업을 하는 두 작업자' }
+    photo: Object.assign({}, P('W10'), { note: '맨홀 주변에서 호스를 다루는 작업 장면입니다.' }),
+    photo2: P('W03'),
+    gallery: { ids: ['W06', 'R15', 'R10'], titles: ['파쇄 장치를 갖춘 궤도형 장비', '스키드 로더와 소형 굴삭기', '흡입 헤드를 갖춘 궤도형 장비'],
+      lead: '회사소개서의 장비 목록에는 무인준설로봇(파쇄형·흡입형), 무인로더, 스키드 로더, 소형 굴삭기 등 준설용 장비가 올라 있습니다. 아래는 그 장비들의 외형입니다.' }
   },
   {
     id: 'S05', file: 'service-inspection-repair.html', icon: 'scan', title: '관로·지하 조사 및 보수',
@@ -101,7 +164,10 @@ const SERVICES = [
     targets: ['관로 CCTV 조사', '지하매설물 GPR 조사', '비굴착 보수'],
     topTargets: ['관로 CCTV 조사', '지하매설물 GPR 조사', '비굴착 보수'],
     inquiryHint: ['대상 구간', '조사·보수 목적', '보유 자료', '희망 일정'],
-    projects: ['P04'], tech: false, photo: null,
+    projects: ['P04'], tech: false,
+    photo: Object.assign({}, P('W04'), { note: '도로 위 맨홀 주변에서 진행한 맨홀 교체 공사의 현장 장면입니다.' }),
+    gallery: { ids: ['R42', 'R34', 'R20'], titles: ['카메라 헤드를 갖춘 소형 주행 장비', '차량의 제어 장치와 조작자', '스키드 로더'],
+      lead: '회사소개서의 장비 목록에는 CCTV 조사차량, 관로 CCTV 로봇, 맨홀 보수 작업용 스키드 로더가 올라 있습니다. 아래는 관련 장비의 외형입니다.' },
     rows: [
       { icon: 'cctv', label: '관로 CCTV 조사', text: '관로 내부를 대상으로 하는 CCTV 조사 업무입니다.' },
       { icon: 'gpr', label: '지하매설물 GPR 조사', text: '지하매설물을 대상으로 하는 GPR 조사 업무입니다.' },
@@ -157,11 +223,15 @@ const PROJECTS = [
   { id: 'P02', title: '설비 내부 Cleaning — 로봇 적용', period: '2023.06', cat: '설비 클리닝', robot: 'stated', summary: '설비 내부 Cleaning 작업에 로봇을 적용한 이력입니다.', svc: 'S01' },
   { id: 'P03', title: '폐수처리장 유량조정조 슬러지 준설', period: '2023.09~2023.11', cat: '준설·슬러지', robot: 'stated', summary: '폐수처리장 유량조정조의 슬러지를 준설한 이력입니다.', svc: 'S04' },
   { id: 'P04', title: '하수관거 CCTV 조사', period: '2022.01~2022.12', cat: '관로·지하 조사', robot: 'na', summary: '하수관거를 대상으로 CCTV 조사를 수행한 이력입니다.', svc: 'S05' },
-  { id: 'P05', title: '정기보수 APH·열교환기 튜브 Cleaning', period: '2022.05~2022.06', cat: '설비 세정', robot: 'unknown', summary: '정기보수 기간에 APH와 열교환기 튜브의 Cleaning을 수행한 이력입니다.', svc: 'S01' },
+  /* P05 분류: 회사소개서 9쪽 사업분야 표에서 열교환기(HEATER EXCHANGERS)·보일러 TUBE는 "화학세정" 항목에 속하므로 그 기준을 따랐습니다.
+     (원본 실적표에는 세정 방식이 적혀 있지 않으므로 발주처 확인 후 '설비 클리닝'으로 바꿀 수 있습니다.) */
+  { id: 'P05', title: '정기보수 APH·열교환기 튜브 Cleaning', period: '2022.05~2022.06', cat: '화학세정', robot: 'unknown', summary: '정기보수 기간에 APH와 열교환기 튜브의 Cleaning을 수행한 이력입니다.', svc: 'S03' },
   { id: 'P06', title: '공정 내 배수로 슬러지 준설', period: '2023.07', cat: '준설·슬러지', robot: 'unknown', summary: '공정 내 배수로의 슬러지를 준설한 이력입니다.', svc: 'S04' }
 ];
-const PROJECT_CATS = ['촉매·충진물', '설비 클리닝', '설비 세정', '준설·슬러지', '관로·지하 조사'];
+/* 필터 분류는 사업분야 5개와 1:1로 맞춥니다. (예전의 '설비 세정'은 사업분야에 없는 여섯 번째 분류였음) */
+const PROJECT_CATS = ['설비 클리닝', '촉매·충진물', '화학세정', '준설·슬러지', '관로·지하 조사'];
 const FEATURED = ['P01', 'P02', 'P04'];
+
 
 /* ===================== 도우미 ===================== */
 const esc = (s) => String(s)
@@ -276,6 +346,7 @@ ${dnav}
   <div class="drawer__foot">
     ${esc(C.name)} · ${C.founded}년부터<br>
     ${esc(C.address)}<br>
+    <a href="tel:${C.tel.replace(/-/g, '')}">${C.tel}</a><br>
     <a href="mailto:${C.email}">${C.email}</a>
   </div>
 </div>
@@ -344,7 +415,9 @@ function footer() {
         <b>${esc(C.brand)}</b><span aria-hidden="true">${esc(C.brandEn)}</span>
         <p class="ftr__info">
           ${esc(C.name)} · ${C.founded}년부터<br>
-          ${esc(C.address)}<br>
+          본사 ${esc(C.address)}<br>
+          지사 ${esc(C.branch)}<br>
+          TEL <a href="tel:${C.tel.replace(/-/g, '')}">${C.tel}</a> · FAX ${C.fax}<br>
           <a href="mailto:${C.email}">${C.email}</a>
         </p>
       </div>
@@ -390,6 +463,19 @@ function serviceCards(reveal) {
       </a>`).join('\n');
 }
 
+/* 사진 카드 묶음 (3열). titles[i]가 있으면 굵은 제목으로, 없으면 사진 설명을 제목으로 쓴다 */
+function pcards(ids, titles, sizesAttr) {
+  const sz = sizesAttr || '(max-width:720px) 92vw, 420px';
+  return ids.map((id, i) => {
+    const p = P(id);
+    const t = titles && titles[i] ? titles[i] : p.cap;
+    return `        <figure class="pcard" data-reveal${i ? ` data-delay="${i * 80}"` : ''}>
+          <div class="pcard__fig">${photo(p, sz)}</div>
+          <figcaption><b>${esc(t)}</b><span>${esc(p.alt)}</span></figcaption>
+        </figure>`;
+  }).join('\n');
+}
+
 function recRow(p, withSummary) {
   const chip = p.robot === 'stated' ? ' <span class="chip">로봇 적용</span>' : '';
   return `        <li class="rec__row" data-cat="${esc(p.cat)}" data-robot="${p.robot}" data-search="${esc(p.title + ' ' + p.cat + ' ' + p.summary)}">
@@ -426,7 +512,7 @@ pages['index.html'] = () => {
     jsonld: {
       '@context': 'https://schema.org', '@type': 'Organization',
       name: C.name, alternateName: C.brandEn, foundingDate: String(C.founded),
-      url: SITE_URL, email: C.email,
+      url: SITE_URL, email: C.email, telephone: '+82-' + C.tel.replace(/^0/, ''), faxNumber: '+82-' + C.fax.replace(/^0/, ''),
       address: { '@type': 'PostalAddress', addressCountry: 'KR', addressRegion: '전라남도', addressLocality: '여수시', streetAddress: '봉계2길 27' },
       description: C.intro
     }
@@ -509,22 +595,11 @@ ${TECH.system.map((r) => `          <div>${icon(r.icon, 30)}<b>${esc(r.label)}</
           <h2>현장의 장면</h2>
         </div>
         <div class="head__aside" data-reveal data-delay="90">
-          <p class="lead">맨홀 주변 작업, 궤도형 장비, 차량의 모니터·제어장치를 사진으로 소개합니다.</p>
+          <p class="lead">맨홀 주변 작업, 궤도형 장비, 차량의 모니터·제어장치, 진공흡입차와 차고의 장비를 사진으로 소개합니다.</p>
         </div>
       </div>
       <div class="grid grid--3">
-        <figure class="pcard" data-reveal>
-          <div class="pcard__fig">${photo({ id: 'W10', w: 1000, h: 563, sizes: [640, 1000, 1600], alt: '맨홀 주변에서 호스 작업을 하는 작업자들과 차량' }, '(max-width:720px) 92vw, 420px')}</div>
-          <figcaption><b>맨홀 주변 작업</b><span>맨홀 주변에서 호스 작업을 하는 작업자들과 차량</span></figcaption>
-        </figure>
-        <figure class="pcard" data-reveal data-delay="80">
-          <div class="pcard__fig">${photo({ id: 'W05', w: 1000, h: 667, sizes: [640, 1000, 1600], alt: 'SUCTION ROBOT 표기가 보이는 궤도형 장비' }, '(max-width:720px) 92vw, 420px')}</div>
-          <figcaption><b>궤도형 장비</b><span>SUCTION ROBOT 표기가 보이는 궤도형 장비</span></figcaption>
-        </figure>
-        <figure class="pcard" data-reveal data-delay="160">
-          <div class="pcard__fig">${photo({ id: 'R07', w: 1000, h: 667, sizes: [640, 1000, 1600], alt: '작업장 내 차량에 설치된 모니터·제어장치와 조작자' }, '(max-width:720px) 92vw, 420px')}</div>
-          <figcaption><b>모니터와 조작자</b><span>작업장 내 차량에 설치된 모니터·제어장치와 조작자</span></figcaption>
-        </figure>
+${pcards(['W10', 'W05', 'R07', 'W07', 'W06', 'R01'], ['맨홀 주변 작업', '궤도형 장비', '모니터와 조작자', '진공흡입차', '파쇄 장치를 갖춘 장비', '차량과 로봇 장비'])}
       </div>
     </div>
   </section>
@@ -637,6 +712,9 @@ SERVICES.forEach((s, idx) => {
     const next = SERVICES[idx + 1];
 
     let body = '';
+    /* 섹션 배경을 흰색 ↔ 옅은 회색으로 번갈아 쓴다 (같은 배경이 연달아 나오지 않게) */
+    let lastSoft = false;                       // 개요 섹션은 흰색
+    const sec = (extra) => { lastSoft = !lastSoft; return `section${lastSoft ? ' section--soft' : ''}${extra ? ' ' + extra : ''}`; };
 
     /* 개요 + 대상 설비 */
     body += `  <section class="section">
@@ -660,7 +738,7 @@ ${s.targets.map((t) => `            <li>${esc(t)}</li>`).join('\n')}
 
     /* 사진 */
     if (s.photo) {
-      body += `  <section class="section section--sm section--soft">
+      body += `  <section class="${sec('section--sm')}">
     <div class="wrap">
       <div class="split">
         <figure class="split__media" data-reveal>
@@ -681,7 +759,7 @@ ${s.targets.map((t) => `            <li>${esc(t)}</li>`).join('\n')}
 
     /* 개념(S02) */
     if (s.concept) {
-      body += `  <section class="section">
+      body += `  <section class="${sec()}">
     <div class="wrap">
       <div class="head">
         <div data-reveal><span class="eyebrow">CONCEPT</span><h2>작업 시스템의 역할</h2></div>
@@ -697,7 +775,7 @@ ${s.concept.map((c) => `        <div>${icon(c.icon, 30)}<b>${esc(c.label)}</b><p
 
     /* 업무 구성(S05) */
     if (s.rows) {
-      body += `  <section class="section section--soft">
+      body += `  <section class="${sec()}">
     <div class="wrap">
       <div class="head">
         <div data-reveal><span class="eyebrow">SCOPE</span><h2>업무 구성</h2></div>
@@ -713,7 +791,7 @@ ${s.rows.map((r) => `        <div>${icon(r.icon, 30)}<b>${esc(r.label)}</b><p>${
 
     /* 회수 이후(S04) */
     if (s.recovery) {
-      body += `  <section class="section">
+      body += `  <section class="${sec()}">
     <div class="wrap">
       <div class="split split--top split--rev">
 ${s.photo2 ? `        <figure class="split__media" data-reveal data-delay="90">
@@ -735,11 +813,25 @@ ${RECOVERY.steps.map((st, i) => `            <li><em>0${i + 1}</em><b>${esc(st.l
 `;
     }
 
-    /* 바로 앞 섹션이 옅은 배경이면 흰색으로, 흰색이면 옅은 배경으로 — 같은 배경이 연달아 나오지 않게 한다 */
-    const prevSoft = s.recovery ? false : s.rows ? true : s.concept ? false : !!s.photo;
+    /* 장비·현장 사진 묶음 (사진 ZIP에서 고른 3장) */
+    if (s.gallery) {
+      body += `  <section class="${sec()}">
+    <div class="wrap">
+      <div class="head">
+        <div data-reveal><span class="eyebrow">EQUIPMENT &amp; FIELD</span><h2>장비와 현장</h2></div>
+        <div class="head__aside" data-reveal data-delay="90"><p class="lead">${esc(s.gallery.lead)}</p></div>
+      </div>
+      <div class="grid grid--3">
+${pcards(s.gallery.ids, s.gallery.titles)}
+      </div>
+      <p class="note mt-22" data-reveal>사진은 업무의 맥락을 보여 주기 위한 장비·현장 사진입니다. 특정 발주처나 수행 실적을 가리키지 않으며, 장비의 모델·성능은 상담 시 안내합니다.</p>
+    </div>
+  </section>
+`;
+    }
 
     /* 상담 정보 + 관련 기술·이력 */
-    body += `  <section class="section${prevSoft ? '' : ' section--soft'}">
+    body += `  <section class="${sec()}">
     <div class="wrap">
       <div class="split split--top">
         <div data-reveal>
@@ -820,7 +912,10 @@ pages['technology.html'] = () => head({
     <div class="wrap">
       <div class="head">
         <div data-reveal><span class="eyebrow">01 · ROLE</span><h2>장비 하나가 아니라,<br>역할이 나뉜 구성.</h2></div>
-        <div class="head__aside" data-reveal data-delay="90"><p class="lead">${esc(TECH.body)}</p></div>
+        <div class="head__aside" data-reveal data-delay="90">
+          <p class="lead">${esc(TECH.body)}</p>
+          <p class="quote mt-18">“사람이 없는 곳에 인명 사고도 없다.”<span>무인 로봇 시스템을 개발해 온 신정개발의 원칙 (회사소개서·기술소개서)</span></p>
+        </div>
       </div>
       <div class="roles" data-reveal>
 ${TECH.system.map((r) => `        <div>${icon(r.icon, 30)}<b>${esc(r.label)}</b><p>${esc(r.text)}</p></div>`).join('\n')}
@@ -895,8 +990,21 @@ ${RECOVERY.methods.map((m, i) => `        <div>${icon(i === 0 ? 'drop' : 'filter
     </div>
   </section>
 
+  <!-- 06 장비 -->
+  <section class="section section--soft" id="equipment">
+    <div class="wrap">
+      <div class="head">
+        <div data-reveal><span class="eyebrow">06 · EQUIPMENT</span><h2>차량과 장비의<br>외형.</h2></div>
+        <div class="head__aside" data-reveal data-delay="90"><p class="lead">제어 차량과 흡입차, 궤도형 장비, 흡입 헤드, 로더, 카메라를 갖춘 소형 주행 장비 등 보유 장비의 외형입니다. 장비의 세대·모델·성능 수치는 상담 시 자료로 안내합니다.</p></div>
+      </div>
+      <div class="grid grid--3">
+${pcards(['R01', 'R25', 'R10', 'R13', 'R20', 'R42'], ['차량과 로봇 장비', '제어 차량 · 흡입차 · 궤도형 장비', '흡입 헤드를 갖춘 궤도형 장비', '소형 주행 장비와 흡입 헤드', '스키드 로더', '카메라 헤드를 갖춘 소형 주행 장비'])}
+      </div>
+    </div>
+  </section>
+
   <!-- 관련 업무 -->
-  <section class="section section--soft">
+  <section class="section">
     <div class="wrap">
       <div class="head">
         <div data-reveal><span class="eyebrow">RELATED</span><h2>관련 업무</h2></div>
@@ -998,12 +1106,15 @@ pages['company.html'] = () => head({
 
   <section class="section section--sm section--soft">
     <div class="wrap">
-      <div class="split split--top">
+      <div class="split split--top split--sticky">
         <div data-reveal>
           <span class="eyebrow">HISTORY</span>
           <h2>연혁</h2>
+          <p class="note mt-14">1992년 신학상사로 출발해 1995년 신정개발로 상호를 바꾸고, 2007년 법인으로 전환했습니다. 회사소개서에 수록된 연혁입니다.</p>
           <ul class="hist mt-28">
-${C.history.map((h) => `            <li><b>${h.year}</b><span>${esc(h.label)}</span></li>`).join('\n')}
+${C.history.map((h) => `            <li><b>${h.year}</b><ul class="hist__items">
+${h.items.map((it) => `              <li><em>${it.m}</em><span>${esc(it.label)}</span></li>`).join('\n')}
+            </ul></li>`).join('\n')}
           </ul>
         </div>
         <figure class="split__media" data-reveal data-delay="90">
@@ -1034,6 +1145,20 @@ ${C.history.map((h) => `            <li><b>${h.year}</b><span>${esc(h.label)}</s
   <section class="section section--soft">
     <div class="wrap">
       <div class="head">
+        <div data-reveal><span class="eyebrow">FIELD &amp; SAFETY</span><h2>현장과 안전</h2></div>
+        <div class="head__aside" data-reveal data-delay="90">
+          <p class="lead">회사소개서에 적힌 핵심가치는 안전·배려·희망입니다. 안전 구획과 보호구를 갖춘 현장, 그리고 산업단지의 모습입니다.</p>
+        </div>
+      </div>
+      <div class="grid grid--3">
+${pcards(['M10', 'M06', 'M04'], ['현장의 차량과 안전 구획', '안전모', '산업단지 전경'])}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="head">
         <div data-reveal><span class="eyebrow">WHAT WE DO</span><h2>다루는 업무</h2></div>
         <div class="head__aside" data-reveal data-delay="90">
           <p class="lead">${esc(C.tagline)}. 다섯 가지 업무로 산업설비와 환경시설의 현장을 다룹니다.</p>
@@ -1046,13 +1171,16 @@ ${serviceCards(true)}
     </div>
   </section>
 
-  <section class="section">
+  <section class="section section--soft">
     <div class="wrap">
       <div class="head head--solo" data-reveal><div><span class="eyebrow">CONTACT</span><h2>연락처</h2></div></div>
       <dl class="dtable" data-reveal>
-        <div><dt>회사명</dt><dd>${esc(C.name)}</dd></div>
+        <div><dt>회사명</dt><dd>${esc(C.name)} <span class="note">${esc(C.brandEn)} CO., LTD.</span></dd></div>
         <div><dt>설립</dt><dd>${C.founded}년</dd></div>
-        <div><dt>주소</dt><dd>${icon('pin', 17)} ${esc(C.address)}</dd></div>
+        <div><dt>본사</dt><dd>${icon('pin', 17)} ${esc(C.address)}</dd></div>
+        <div><dt>지사</dt><dd>${icon('pin', 17)} ${esc(C.branch)}</dd></div>
+        <div><dt>대표 전화</dt><dd><a href="tel:${C.tel.replace(/-/g, '')}">${C.tel}</a> <span class="note">문의 가능 시간 ${esc(C.hours)}</span></dd></div>
+        <div><dt>팩스</dt><dd>${C.fax}</dd></div>
         <div><dt>이메일</dt><dd>${icon('mail', 17)} <a href="mailto:${C.email}">${C.email}</a></dd></div>
         <div><dt>사업 범위</dt><dd>${SERVICES.map((s) => esc(s.title)).join(' · ')}</dd></div>
       </dl>
@@ -1147,8 +1275,12 @@ ${SERVICES.map((s) => `                  <option value="${s.id}">${esc(s.title)}
           <div class="panel">
             <h3>연락처</h3>
             <dl class="dtable dtable--soft mt-18">
+              <div><dt>대표 전화</dt><dd><a href="tel:${C.tel.replace(/-/g, '')}">${C.tel}</a></dd></div>
+              <div><dt>문의 가능 시간</dt><dd>${esc(C.hours)}</dd></div>
+              <div><dt>팩스</dt><dd>${C.fax}</dd></div>
               <div><dt>이메일</dt><dd><a href="mailto:${C.email}">${C.email}</a></dd></div>
-              <div><dt>주소</dt><dd>${esc(C.address)}</dd></div>
+              <div><dt>본사</dt><dd>${esc(C.address)}</dd></div>
+              <div><dt>지사</dt><dd>${esc(C.branch)}</dd></div>
               <div><dt>회사명</dt><dd>${esc(C.name)}</dd></div>
             </dl>
           </div>
