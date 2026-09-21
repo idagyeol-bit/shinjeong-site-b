@@ -132,8 +132,11 @@ body[data-page="home"] .hdr:not(.is-scrolled)::before {
   pointer-events: none;
 }
 
-.hdr__brand { display: flex; flex-direction: column; justify-content: center; gap: 4px; line-height: 1; white-space: nowrap; }
-.hdr__brand b { font-size: 22px; font-weight: 700; letter-spacing: 0.02em; }
+.hdr__brand { display: flex; align-items: center; gap: 11px; line-height: 1; white-space: nowrap; }
+.hdr__logo { width: 36px; height: 44px; flex: 0 0 auto; transition: filter 0.3s var(--ease); }
+body[data-page="home"] .hdr:not(.is-scrolled) .hdr__logo { filter: brightness(0) invert(1); } /* 어두운 히어로 위에서는 흰색 반전 */
+.hdr__brandtext { display: flex; flex-direction: column; justify-content: center; gap: 4px; }
+.hdr__brand b { font-size: 21px; font-weight: 700; letter-spacing: 0.01em; }
 .hdr__brand span { font-size: 9.5px; font-weight: 500; letter-spacing: 0.14em; opacity: 0.72; }
 
 .gnb { display: flex; gap: clamp(18px, 2.4vw, 40px); margin-inline: auto; }
@@ -528,7 +531,8 @@ body[data-page="home"] .hdr:not(.is-scrolled) .hdr__cta:hover { background: #fff
 
 .ftr { background: var(--soft); border-top: 1px solid var(--line); padding-block: clamp(48px, 5vw, 76px) 30px; }
 .ftr__top { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr); gap: clamp(32px, 4vw, 64px); padding-bottom: clamp(36px, 4vw, 56px); border-bottom: 1px solid var(--line); }
-.ftr__brand b { display: block; font-size: 21px; font-weight: 700; color: var(--ink); letter-spacing: 0.02em; }
+.ftr__logo { width: 30px; height: 37px; margin-bottom: 12px; }
+.ftr__brand b { display: block; font-size: 21px; font-weight: 700; color: var(--ink); letter-spacing: 0.01em; }
 .ftr__brand span { display: block; margin-top: 5px; font-size: 9.5px; font-weight: 500; letter-spacing: 0.14em; color: var(--muted); }
 .ftr__info { margin-top: 22px; font-size: var(--fs-sm); line-height: 1.95; color: var(--muted); }
 .ftr__info a { display: inline-block; padding: 8px 0; color: var(--brand); text-decoration: underline; text-underline-offset: 3px; }
@@ -643,6 +647,9 @@ html:not(.js-on) [data-reveal] { opacity: 1; transform: none; }
 
 @media (max-width: 720px) {
   body { line-height: 1.75; }
+  .hdr__logo { width: 28px; height: 34px; }
+  .hdr__brand { gap: 9px; }
+  .hdr__brand b { font-size: 18px; }
   .grid--2, .grid--3, .grid--4, .grid--5 { grid-template-columns: 1fr; }
   .scard { min-height: 0; }
   .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 16px; }

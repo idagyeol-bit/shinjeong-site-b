@@ -19,6 +19,7 @@ const C = {
   name: '(주)신정개발',
   brand: '신정개발',
   brandEn: 'SHINJEONG DEVELOPMENT',          // 기술소개서(2025) 로고 표기: Shinjeong Development Co.,Ltd.
+  /* 심벌(assets/logo/shinjeong-symbol.svg)은 클라이언트 사진 ZIP의 차량 도장(로봇/517A5324.JPG)에서 추출·벡터화한 것. 색상도 사진에서 채취(#27CBD2 / #303580). 정식 원본(AI/SVG) 수령 시 교체 */
   founded: 1992,
   address: '전라남도 여수시 봉계2길 27',      // 본사 — 회사소개서(2024)·기술소개서(2025) 공통
   branch: '충청남도 서산시 지곡면 충의로 1106', // 지사 — 기술소개서(2025) 마지막 장
@@ -394,7 +395,8 @@ function head(o) {
 <meta property="og:image:width" content="1600">
 <meta property="og:image:height" content="1067">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230e2e4a'/%3E%3Ctext x='16' y='22' font-family='sans-serif' font-size='16' font-weight='700' fill='%23fff' text-anchor='middle'%3E신%3C/text%3E%3C/svg%3E">
+<link rel="icon" href="assets/logo/shinjeong-symbol.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/logo/shinjeong-symbol.png">
 <link rel="preload" href="assets/fonts/PretendardVariable.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="css/tokens.css">
 <link rel="stylesheet" href="css/site.css">
@@ -414,8 +416,9 @@ function header(page) {
     ).join('\n');
 
   return `<header class="hdr">
-  <a class="hdr__brand" href="index.html" aria-label="${esc(C.brand)} 홈">
-    <b>${esc(C.brand)}</b><span aria-hidden="true">${esc(C.brandEn)}</span>
+  <a class="hdr__brand" href="index.html" aria-label="${esc(C.name)} 홈">
+    <img class="hdr__logo" src="assets/logo/shinjeong-symbol.svg" width="36" height="44" alt="" aria-hidden="true">
+    <span class="hdr__brandtext"><b>${esc(C.name)}</b><span aria-hidden="true">${esc(C.brandEn)}</span></span>
   </a>
   <nav class="gnb" aria-label="주요 메뉴">
 ${nav}
@@ -499,7 +502,8 @@ function footer() {
   <div class="wrap">
     <div class="ftr__top">
       <div class="ftr__brand">
-        <b>${esc(C.brand)}</b><span aria-hidden="true">${esc(C.brandEn)}</span>
+        <img class="ftr__logo" src="assets/logo/shinjeong-symbol.svg" width="30" height="37" alt="" aria-hidden="true">
+        <b>${esc(C.name)}</b><span aria-hidden="true">${esc(C.brandEn)}</span>
         <p class="ftr__info">
           ${esc(C.name)} · ${C.founded}년부터<br>
           본사 ${esc(C.address)}<br>
