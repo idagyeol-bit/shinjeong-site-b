@@ -777,3 +777,54 @@ html:not(.js-on) [data-reveal] { opacity: 1; transform: none; }
 @media (max-width: 720px) {
   .psum { grid-template-columns: 1fr; }
 }
+
+/* ========== 13. 설비로 찾기 · 사업분야 하위 메뉴 (4차) ========== */
+/* 설비로 찾기 — 버튼 전체가 링크. 마지막(잘 모르겠어요)만 흰 바탕 테두리형 */
+.qf { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.qf__item {
+  display: flex; flex-direction: column; justify-content: center; gap: 4px;
+  min-height: 72px; padding: 14px 18px;
+  background: var(--brand-tint); border: 1px solid transparent; border-radius: var(--radius);
+  transition: border-color 0.2s, background 0.2s;
+}
+.qf__item b { font-size: 15.5px; font-weight: 600; line-height: 1.4; color: var(--ink); letter-spacing: -0.02em; }
+.qf__item span { font-size: var(--fs-xs); font-weight: 600; color: var(--brand); }
+.qf__item--line { background: var(--white); border-color: var(--line); }
+.qf__item:hover, .qf__item:focus-visible { border-color: var(--brand); }
+
+/* PC 하위 메뉴 — 마우스(:hover)·키보드(:focus-within)로 열린다. 위쪽 여백(padding-top)이 메뉴와 패널 사이의 다리 역할 */
+.gnb__item { position: relative; display: flex; align-items: center; }
+.gnb__drop {
+  position: absolute; top: 100%; left: -24px; z-index: 110; padding-top: 14px;
+  visibility: hidden; opacity: 0; transform: translateY(-4px);
+  transition: opacity 0.2s, transform 0.2s var(--ease), visibility 0.2s;
+}
+.gnb__item:hover .gnb__drop, .gnb__item:focus-within .gnb__drop { visibility: visible; opacity: 1; transform: none; }
+.gnb__item.is-esc .gnb__drop { visibility: hidden; opacity: 0; transition: none; }  /* Esc로 닫은 상태 — 즉시 사라져야 마우스 아래에서 다시 열리지 않는다 */
+.gnb__box {
+  width: min(460px, calc(100vw - 2 * var(--gutter))); padding: 8px;
+  background: var(--white); color: var(--ink);
+  border: 1px solid var(--line); border-radius: var(--radius-lg); box-shadow: var(--shadow-lift);
+}
+.gnb__box a { display: block; padding: 11px 14px; border-radius: var(--radius); font-size: var(--fs-sm); font-weight: 400; letter-spacing: -0.01em; color: var(--text); }
+.gnb__box a::after { content: none; }
+.gnb__box a b { display: block; font-size: 15px; font-weight: 600; color: var(--ink); }
+.gnb__box a span { display: block; margin-top: 2px; font-size: var(--fs-xs); line-height: 1.6; color: var(--muted); }
+.gnb__box a:hover, .gnb__box a:focus-visible { background: var(--soft); }
+.gnb__box a.is-current { background: var(--brand-tint); }
+.gnb__box a.is-current b { color: var(--brand); }
+.gnb__box .gnb__all { display: flex; align-items: center; gap: 8px; margin-top: 4px; padding-top: 13px; border-top: 1px solid var(--line); border-radius: 0; font-weight: 600; color: var(--brand); }
+
+/* 휴대폰 메뉴 — 사업분야 아래 들여쓴 하위 링크 (설명 없이 이름만) */
+.drawer__sub { display: flex; flex-direction: column; padding: 4px 0 10px 16px; border-bottom: 1px solid var(--line); }
+.drawer .drawer__sub a { justify-content: flex-start; padding: 9px 2px; border-bottom: 0; font-size: 15px; font-weight: 500; color: var(--text); letter-spacing: -0.02em; }
+.drawer .drawer__sub a.is-current { color: var(--brand); font-weight: 600; }
+
+@media (max-width: 1180px) {
+  .qf { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 720px) {
+  .qf { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .qf__item { min-height: 64px; padding: 12px 14px; }
+  .qf__item b { font-size: 14.5px; }
+}

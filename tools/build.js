@@ -346,6 +346,22 @@ const SHOW_FILTERS = PROJECTS.length > 10;
 
 const FEATURED = ['P01', 'P02', 'P04'];
 
+/* 설비로 찾기 — 방문자가 쓰는 설비 이름 → 업무 페이지.
+   설비 이름은 각 분야 상세의 "대상 설비·업무" 목록에서 골랐고, 업무 이름·링크는 SERVICES에서 가져온다. */
+const QUICK_FIND = [
+  { label: '탱크 · Pond', svc: 'S01' },
+  { label: '공장 배수로 · R.T.O', svc: 'S01' },
+  { label: 'Filter Press · Bag Filter', svc: 'S01' },
+  { label: '반응기 촉매 · 충진물', svc: 'S02' },
+  { label: '배관 · 열교환기', svc: 'S03' },
+  { label: '냉각탑 · 보일러 튜브', svc: 'S03' },
+  { label: '하수관 · 오수관', svc: 'S04' },
+  { label: '하수·폐수처리시설 슬러지', svc: 'S04' },
+  { label: '관로 내부 CCTV 조사', svc: 'S05' },
+  { label: '지하매설물 GPR · 비굴착 보수', svc: 'S05' },
+  { label: '잘 모르겠어요', href: 'contact.html', to: '현장 문의', line: true }
+];
+
 
 /* ===================== 도우미 ===================== */
 const esc = (s) => String(s)
@@ -436,14 +452,32 @@ ${o.jsonld ? `<script type="application/ld+json">${JSON.stringify(o.jsonld)}</sc
 `;
 }
 
-function header(page) {
-  const nav = NAV.map((n) =>
-    `      <a href="${n.href}"${n.key === page ? ' aria-current="page"' : ''}>${esc(n.label)}</a>`
-  ).join('\n');
+/* activeSvc: 분야 상세 페이지에서 하위 메뉴의 현재 분야를 표시하기 위한 id (S01-S05) */
+function header(page, activeSvc) {
+  const cur = (id) => (id === activeSvc ? ' class="is-current"' : '');
+  /* PC 하위 메뉴 패널 — 업무 이름·한 줄 설명·링크는 SERVICES에서 가져온다 */
+  const svcPanel = `
+        <div class="gnb__drop">
+          <div class="gnb__box">
+            <ul>
+${SERVICES.map((s) => `              <li><a href="${s.file}"${cur(s.id)}><b>${esc(s.title)}</b><span>${esc(s.card)}</span></a></li>`).join('\n')}
+            </ul>
+            <a class="gnb__all" href="services.html">사업분야 전체 보기 ${arrow(14)}</a>
+          </div>
+        </div>`;
+  const nav = NAV.map((n) => {
+    const a = `<a href="${n.href}"${n.key === page ? ' aria-current="page"' : ''}>${esc(n.label)}</a>`;
+    return n.key === 'services'
+      ? `      <div class="gnb__item" data-sub>\n        ${a}${svcPanel}\n      </div>`
+      : `      ${a}`;
+  }).join('\n');
   const dnav = NAV.concat([{ href: 'contact.html', label: '현장 문의', key: 'contact' }])
-    .map((n, i) =>
-      `    <a href="${n.href}"${n.key === page ? ' aria-current="page"' : ''}>${esc(n.label)}<span>0${i + 1}</span></a>`
-    ).join('\n');
+    .map((n, i) => {
+      const a = `    <a href="${n.href}"${n.key === page ? ' aria-current="page"' : ''}>${esc(n.label)}<span>0${i + 1}</span></a>`;
+      return n.key === 'services'
+        ? a + `\n    <div class="drawer__sub">\n${SERVICES.map((s) => `      <a href="${s.file}"${cur(s.id)}>${esc(s.title)}</a>`).join('\n')}\n    </div>`
+        : a;
+    }).join('\n');
 
   return `<header class="hdr">
   <a class="hdr__brand" href="index.html" aria-label="${esc(C.name)} 홈">
@@ -711,6 +745,30 @@ ${FAQ.map((f, i) => `        <details${i === 0 ? ' open' : ''}>
       </div>`;
 }
 
+/* 설비로 찾기 — 메인과 사업분야 페이지에 같은 데이터로 넣는다 */
+function quickFind() {
+  const items = QUICK_FIND.map((q) => {
+    const sv = q.svc ? svc(q.svc) : null;
+    const href = sv ? sv.file : q.href;
+    const to = sv ? sv.title : q.to;
+    return `        <a class="qf__item${q.line ? ' qf__item--line' : ''}" href="${href}"><b>${esc(q.label)}</b><span>→ ${esc(to)}</span></a>`;
+  }).join('\n');
+  return `  <!-- ===== 설비로 찾기 ===== -->
+  <section class="section section--sm section--soft">
+    <div class="wrap">
+      <div class="head">
+        <div data-reveal><span class="eyebrow">QUICK FIND</span><h2>어떤 설비의 작업이<br>필요하신가요?</h2></div>
+        <div class="head__aside" data-reveal data-delay="90"><p class="lead">설비를 누르면 맞는 업무 페이지로 바로 이동합니다.</p></div>
+      </div>
+      <nav class="qf" aria-label="설비로 찾기" data-reveal>
+${items}
+      </nav>
+    </div>
+  </section>
+
+`;
+}
+
 /* ===================== 페이지 ===================== */
 const pages = {};
 
@@ -767,7 +825,7 @@ ${TRUST.map((t) => t.t
     </div>
   </section>
 
-  <!-- ===== 사업분야 ===== -->
+${quickFind()}  <!-- ===== 사업분야 ===== -->
   <section class="section" id="what">
     <div class="wrap">
       <div class="head">
@@ -890,8 +948,7 @@ pages['services.html'] = () => head({
   h1: '사업분야',
   lead: '산업설비와 환경시설에서 필요한 다섯 가지 업무입니다. 업무를 고르면 대상 설비와 상담 시 필요한 정보를 확인할 수 있습니다.',
   crumbs: [{ label: '사업분야' }]
-}) + tabs(null) + `
-  <section class="section">
+}) + tabs(null) + '\n' + quickFind() + `  <section class="section">
     <div class="wrap">
       <div class="head">
         <div data-reveal>
@@ -1103,7 +1160,7 @@ ${rel.map((p) => `              <li><b>${esc(p.title)}</b><span class="note">${e
         name: s.title, description: s.summary,
         provider: { '@type': 'Organization', name: C.name, url: SITE_URL }
       }
-    }) + header('services') + `
+    }) + header('services', s.id) + `
 <main id="main">
 ` + phero({
       eyebrow: `BUSINESS 0${idx + 1} · ${s.en}`,

@@ -126,6 +126,22 @@
       if (skip) skip.focus({ preventScroll: true });
     });
 
+    /* ---------- 5-2. 사업분야 하위 메뉴: Esc로 닫기 ---------- */
+    /* 여는 것은 CSS(:hover·:focus-within)가 맡고, 여기서는 Esc로 닫는 것만 처리한다. */
+    Array.prototype.forEach.call(document.querySelectorAll('.gnb__item[data-sub]'), function (item) {
+      var top = item.querySelector('a');
+      // 마우스만 올려 둔 상태에서도 닫히도록 문서 전체에서 Esc를 받는다.
+      document.addEventListener('keydown', function (e) {
+        if (e.key !== 'Escape') return;
+        var hasFocus = item.contains(document.activeElement);
+        if (!hasFocus && !item.matches(':hover')) return;
+        item.classList.add('is-esc');
+        if (hasFocus && top) top.focus();
+      });
+      item.addEventListener('mouseleave', function () { item.classList.remove('is-esc'); });
+      item.addEventListener('focusout', function (e) { if (!item.contains(e.relatedTarget)) item.classList.remove('is-esc'); });
+    });
+
     /* ---------- 6. 현재 연도 ---------- */
     var y = document.querySelector('[data-year]');
     if (y) y.textContent = String(new Date().getFullYear());
