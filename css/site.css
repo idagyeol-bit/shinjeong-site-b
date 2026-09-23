@@ -819,3 +819,39 @@ html:not(.js-on) [data-reveal] { opacity: 1; transform: none; }
   .qf__item { min-height: 64px; padding: 12px 14px; }
   .qf__item b { font-size: 14.5px; }
 }
+
+/* ========== 14. 글 줄이기 · 한눈에 보기 · 보유 장비 (7차) ========== */
+.head > :only-child { grid-column: 1 / -1; }   /* 설명 칸이 없으면 제목이 한 줄 전체를 쓴다 (빈 오른쪽 칸 없음) */
+
+/* 분야 상세 — 한눈에 보기 표 (사진 옆 4줄) */
+.glance__tbl { border-top: 1px solid var(--ink); }
+.glance__tbl > div { display: grid; grid-template-columns: 9.5em minmax(0, 1fr); gap: 16px; padding: 16px 2px; border-bottom: 1px solid var(--line); }
+.glance__tbl dt { font-size: var(--fs-sm); font-weight: 700; color: var(--ink); }
+.glance__tbl dd { font-size: var(--fs-sm); line-height: 1.75; color: var(--text); }
+.glance__links { display: flex; flex-wrap: wrap; gap: 8px 22px; }
+
+/* 장비·로봇 — 용도별 보유 장비 (칩) */
+.eqgrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.eqgrid > div { padding: 20px 22px; background: var(--soft); border-radius: var(--radius-lg); }
+.eqgrid b { display: block; margin-bottom: 12px; font-size: 15px; font-weight: 700; color: var(--ink); }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chips li { padding: 5px 11px; background: var(--white); border: 1px solid var(--line); border-radius: 100px; font-size: 13px; line-height: 1.5; color: var(--text); }
+
+/* 현장 진행 방식 — 접어 둔 표 */
+.fold summary {
+  display: inline-flex; align-items: center; gap: 10px; min-height: 44px; padding: 0 18px;
+  border: 1px solid var(--line); border-radius: var(--radius); list-style: none; cursor: pointer;
+  font-size: 15px; font-weight: 600; color: var(--ink);
+}
+.fold summary::-webkit-details-marker { display: none; }
+.fold summary::after { content: "+"; font-weight: 400; color: var(--brand); }
+.fold[open] summary::after { content: "\2212"; }
+.fold summary:hover { border-color: var(--navy); }
+
+@media (max-width: 960px) {
+  .eqgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 720px) {
+  .eqgrid { grid-template-columns: 1fr; }
+  .glance__tbl > div { grid-template-columns: 1fr; gap: 4px; }
+}

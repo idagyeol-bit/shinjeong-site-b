@@ -105,10 +105,11 @@ const SERVICES = [
   {
     id: 'S01', file: 'service-equipment-cleaning.html', icon: 'tank', title: '설비 클리닝', en: 'EQUIPMENT CLEANING',
     summary: '탱크와 Pond, 배수로 등 산업설비의 잔류물과 퇴적물을 다루는 클리닝 작업.',
-    short: '탱크·Pond부터 배수로·R.T.O까지, 설비 안의 잔류물을 걷어냅니다.',
+    short: '탱크·Pond부터 배수로·R.T.O까지, 설비 안의 잔류물을 걷어냅니다',
     card: '탱크·Pond·배수로·R.T.O 내부의 잔류물과 퇴적물을 제거합니다.',
     body: '탱크·Pond 내부 클리닝, 공장 배수로, R.T.O 유지보수·클리닝, Filter Press 세정과 Bag Filter 교체까지 수행합니다. 필요한 현장에는 로봇을 먼저 투입해 작업자가 위험 물질에 노출되는 시간을 줄입니다.',
     desc: '탱크·Pond 내부 클리닝, 공장 배수로, R.T.O 유지보수·클리닝, Filter Press 세정과 Bag Filter 교체까지 수행합니다. 전남 여수 (주)신정개발.', // 검색 설명: 도입 문단 첫 문장(80자 미만이면 둘째 문장까지) + 지역·회사명, 80~120자
+    equip: ['진공흡입차', '흡입 로봇', '제어 차량'], // 한눈에 보기 표의 '주요 장비'
     targets: ['Tank', 'Pond', '공장 내부 배수로', 'R.T.O', 'Filter Press 세정', 'Bag Filter 교체'],
     topTargets: ['Tank', 'Pond', '공장 내부 배수로'],
     inquiryHint: ['대상 설비', '작업 목적', '알고 있는 크기·구조·잔류물 정보'],
@@ -120,10 +121,11 @@ const SERVICES = [
   {
     id: 'S02', file: 'service-catalyst-media.html', icon: 'reactor', title: '촉매·충진물 작업', en: 'EQUIPMENT CLEANING · CATALYST',
     summary: '반응기와 관련 설비의 촉매·충진물 제거 및 교체 작업.',
-    short: '반응기 안의 촉매·충진물을 로봇으로 꺼내고 교체합니다.',
+    short: '반응기 안의 촉매·충진물을 로봇으로 꺼내고 교체합니다',
     card: '반응기의 촉매·충진물을 제거하고 교체합니다.',
     body: 'Reactor·Tank 내부의 촉매·충진물을 제거하고 교체합니다. 질소 분위기와 방폭 지역 조건에 맞춘 장비를 운용하고, 흡입·분리·원격 모니터링 시스템을 함께 구성합니다.',
     desc: 'Reactor·Tank 내부의 촉매·충진물을 제거하고 교체합니다. 질소 분위기와 방폭 지역 조건에 맞춘 장비를 운용하고, 흡입·분리·원격 모니터링 시스템을 함께 구성합니다. 전남 여수 (주)신정개발.', // 검색 설명: 도입 문단 첫 문장(80자 미만이면 둘째 문장까지) + 지역·회사명, 80~120자
+    equip: ['흡입 로봇', '흡입차', '분리장치', '제어 차량'], // 한눈에 보기 표의 '주요 장비'
     targets: ['촉매 제거·교체', '충진물 제거·교체', '하역·충진 관련 작업의 범위 상담'],
     topTargets: ['촉매 제거·교체', '충진물 제거·교체', '하역·충진 범위 상담'],
     inquiryHint: ['설비 종류', '충진물 특성', '요청 범위', '희망 일정'],
@@ -134,7 +136,6 @@ const SERVICES = [
       { icon: 'monitor', label: '원격 모니터링', text: '설비 밖에서 작업 상황을 확인하는 역할' }
     ],
     photo: Object.assign({}, P('W05'), {
-      eyebrow: 'EQUIPMENT', heading: '장비의 외형', scene: false,
       note: '전면 스크루와 궤도를 갖춘 장비의 외형입니다.' }),
     gallery: { ids: ['R10', 'R13', 'R01'], titles: ['전면 작업 헤드를 갖춘 궤도형 장비', '소형 주행 장비와 흡입 헤드', '차량과 로봇 장비'],
       lead: '회사소개서의 촉매 처리 작업 구성(Robot · Vacuum Car · Separator · Control Car)에 쓰이는 장비의 외형과 차량 구성입니다.' }
@@ -142,10 +143,11 @@ const SERVICES = [
   {
     id: 'S03', file: 'service-chemical-cleaning.html', icon: 'pipe', title: '화학세정', en: 'CHEMICAL CLEANING',
     summary: '배관·열교환기·냉각탑 계통과 보일러 등 산업설비의 세정 업무.',
-    short: '배관부터 보일러 튜브까지, 설비 계통별로 세정합니다.',
+    short: '배관부터 보일러 튜브까지, 설비 계통별로 세정합니다',
     card: '배관·열교환기·냉각탑·보일러를 세정합니다.',
     body: '배관류, 열교환기, 냉각탑 계통과 보일러 튜브를 세정합니다. 화학세정용 내산장비(50HP/20HP)를 보유하고 있으며, 정기보수 기간에 APH·열교환기 튜브 Cleaning을 수행했습니다.',
     desc: '배관류, 열교환기, 냉각탑 계통과 보일러 튜브를 세정합니다. 화학세정용 내산장비(50HP/20HP)를 보유하고 있으며, 정기보수 기간에 APH·열교환기 튜브 Cleaning을 수행했습니다. 전남 여수 (주)신정개발.', // 검색 설명: 도입 문단 첫 문장(80자 미만이면 둘째 문장까지) + 지역·회사명, 80~120자
+    equip: ['화학세정용 내산장비(50HP/20HP)'], // 한눈에 보기 표의 '주요 장비'
     targets: ['Plant 배관', '열교환기', 'Cooling Tower 계통', '보일러 Tube 내·외부 관련 세정'],
     topTargets: ['Plant 배관', '열교환기', 'Cooling Tower 계통'],
     inquiryHint: ['대상 설비', '오염 상태', '세정 목적', '가능한 작업 기간'],
@@ -155,10 +157,11 @@ const SERVICES = [
   {
     id: 'S04', file: 'service-dredging-sludge.html', icon: 'manhole', title: '준설·슬러지 회수', en: 'SEWER CLEANING · DREDGING',
     summary: '하수·오수관과 처리시설의 퇴적물 준설 및 슬러지 회수 작업.',
-    short: '하수관로부터 폐수처리장까지, 퇴적물을 준설하고 슬러지를 회수합니다.',
+    short: '하수관로부터 폐수처리장까지, 퇴적물을 준설하고 슬러지를 회수합니다',
     card: '하수·오수관과 처리시설의 퇴적물을 준설하고 슬러지를 회수합니다.',
     body: '하수도 퇴적물, 하수처리시설, 오수관, 폐수처리장 슬러지를 다룹니다. 무인준설로봇으로 회수하고, 데칸타·필터프레스로 탈수해 처리량을 줄입니다.',
     desc: '하수도 퇴적물, 하수처리시설, 오수관, 폐수처리장 슬러지를 다룹니다. 무인준설로봇으로 회수하고, 데칸타·필터프레스로 탈수해 처리량을 줄입니다. 전남 여수 (주)신정개발.', // 검색 설명: 도입 문단 첫 문장(80자 미만이면 둘째 문장까지) + 지역·회사명, 80~120자
+    equip: ['무인준설로봇(파쇄형·흡입형)', '무인로더', '스키드 로더', '소형 굴삭기', '데칸타'], // 한눈에 보기 표의 '주요 장비'
     targets: ['하수도 퇴적물', '하수처리시설', '오수관', '폐수처리장 슬러지'],
     topTargets: ['하수도 퇴적물', '오수관', '폐수처리장 슬러지'],
     inquiryHint: ['시설 종류', '대상 물질', '현장 상태', '희망 작업 시기'],
@@ -170,10 +173,11 @@ const SERVICES = [
   {
     id: 'S05', file: 'service-inspection-repair.html', icon: 'scan', title: '관로·지하 조사 및 보수', en: 'CCTV · GPR · REPAIR',
     summary: '관로 CCTV와 GPR 조사, 비굴착 보수 등 시설 상태 확인과 보수 업무.',
-    short: '관로 속은 CCTV로, 땅속은 GPR로 확인하고 보수합니다.',
+    short: '관로 속은 CCTV로, 땅속은 GPR로 확인하고 보수합니다',
     card: '관로 CCTV·GPR로 조사하고, 비굴착으로 보수합니다.',
     body: '관로 내부 CCTV 조사, 지하매설물 GPR 조사, 비굴착 보수를 수행합니다. CCTV 조사차량(D=250~600mm)과 관로 CCTV 로봇을 보유하고 있으며, 하수관거 CCTV 조사를 1년간(2022.01~2022.12) 수행했습니다.',
     desc: '관로 내부 CCTV 조사, 지하매설물 GPR 조사, 비굴착 보수를 수행합니다. CCTV 조사차량(D=250~600mm)과 관로 CCTV 로봇을 보유하고 있습니다. 전남 여수 (주)신정개발.', // 검색 설명: 도입 문단 첫 문장(80자 미만이면 둘째 문장까지) + 지역·회사명, 80~120자
+    equip: ['CCTV 조사차량(D=250~600mm)', '관로 CCTV 로봇', '스키드 로더'], // 한눈에 보기 표의 '주요 장비'
     targets: ['관로 CCTV 조사', '지하매설물 GPR 조사', '비굴착 보수'],
     topTargets: ['관로 CCTV 조사', '지하매설물 GPR 조사', '비굴착 보수'],
     inquiryHint: ['대상 구간', '조사·보수 목적', '보유 자료', '희망 일정'],
@@ -239,9 +243,9 @@ const PROCESS = {
   ],
   /* p.4 개발 배경 — 출처를 그대로 표기 */
   facts: [
-    { n: '200회', l: '연간 밀폐공간 작업 (신정개발 연간 작업 기준)' },
-    { n: '800명', l: '연간 밀폐공간 투입 인원 (신정개발 연간 작업 기준)' },
-    { n: '1,200시간', l: '연간 밀폐공간 작업시간 (신정개발 연간 작업 기준)' }
+    { n: '200회', l: '연간 밀폐공간 작업' },
+    { n: '800명', l: '연간 밀폐공간 투입 인원' },
+    { n: '1,200시간', l: '연간 밀폐공간 작업시간' }
   ],
   factsNote: '고용노동부 산업재해조사(2014~2023)에 따르면 밀폐공간 질식 재해자 100명 중 50명이 사망했고, 설비 관련 사고의 23.7%가 청소 작업 중 일어났습니다. 신정개발의 로봇 시스템은 이 위험을 줄이기 위해 개발했습니다.',
   factsSrc: '기술소개서(2025) 인용',
@@ -521,9 +525,8 @@ function phero(o) {
   return `  <section class="phero">
     <div class="phero__grid" aria-hidden="true"></div>
     <div class="wrap">
-      <span class="eyebrow">${esc(o.eyebrow)}</span>
       <h1>${o.h1}</h1>
-      ${o.lead ? `<p class="phero__lead">${esc(o.lead)}</p>` : ''}
+      ${o.keepLead ? `<p class="phero__lead">${esc(o.keepLead)}</p>` : ''}
     </div>
   </section>
 
@@ -554,7 +557,7 @@ function cta(o) {
   const t = o || {};
   return `  <section class="cta">
     <div class="wrap">
-      <h2 data-reveal>${t.h2 || '검토가 필요한 현장을<br>알려 주세요.'}</h2>
+      <h2 data-reveal>${t.h2 || '검토가 필요한 현장을<br>알려 주세요'}</h2>
       <p data-reveal data-delay="80">${esc(t.p || '대상 설비와 작업 목적, 희망 일정을 보내 주시면 가능한 작업 범위와 진행 방법을 안내해 드립니다.')}</p>
       <div class="cta__act" data-reveal data-delay="160">
         <a class="btn btn--ghost" href="contact.html">현장 문의하기 ${arrow(18)}</a>
@@ -729,7 +732,7 @@ function pcards(ids, titles, sizesAttr) {
     const t = titles && titles[i] ? titles[i] : p.cap;
     return `        <figure class="pcard" data-reveal${i ? ` data-delay="${i * 80}"` : ''}>
           <div class="pcard__fig">${photo(p, sz)}</div>
-          <figcaption><b>${esc(t)}</b><span>${esc(p.alt)}</span></figcaption>
+          <figcaption><b>${esc(t)}</b></figcaption>
         </figure>`;
   }).join('\n');
 }
@@ -767,7 +770,7 @@ function quickFind() {
   <section class="section section--sm section--soft">
     <div class="wrap">
       <div class="head">
-        <div data-reveal><span class="eyebrow">QUICK FIND</span><h2>어떤 설비의 작업이<br>필요하신가요?</h2></div>
+        <div data-reveal><h2>어떤 설비의 작업이<br>필요하신가요?</h2></div>
         <div class="head__aside" data-reveal data-delay="90"><p class="lead">설비를 누르면 맞는 업무 페이지로 바로 이동합니다.</p></div>
       </div>
       <nav class="qf" aria-label="설비로 찾기" data-reveal>
@@ -836,11 +839,9 @@ ${quickFind()}  <!-- ===== 사업분야 ===== -->
     <div class="wrap">
       <div class="head">
         <div data-reveal>
-          <span class="eyebrow">WHAT WE DO</span>
-          <h2>산업설비와 환경시설,<br>다섯 가지 업무로 다룹니다.</h2>
+          <h2>산업설비와 환경시설,<br>다섯 가지 업무로 다룹니다</h2>
         </div>
         <div class="head__aside" data-reveal data-delay="90">
-          <p class="lead">${esc(C.tagline)}. 설비의 구조와 잔류물 특성을 먼저 확인하고, 현장 조건에 맞는 방법으로 작업합니다.</p>
           <a class="tlink" href="services.html">사업분야 전체 보기 ${upArrow(14)}</a>
         </div>
       </div>
@@ -855,11 +856,9 @@ ${serviceCards(true)}
     <div class="wrap">
       <div class="head">
         <div data-reveal>
-          <span class="eyebrow">EXPERIENCE</span>
           <h2>주요 수행 이력</h2>
         </div>
         <div class="head__aside" data-reveal data-delay="90">
-          <p class="lead">회사 자료에 수록된 수행 이력 가운데 일부입니다.</p>
           <a class="tlink" href="projects.html">수행 이력 전체 보기 ${upArrow(14)}</a>
         </div>
       </div>
@@ -874,11 +873,9 @@ ${feat.map((p) => recRow(p, true)).join('\n')}
     <div class="wrap">
       <div class="head">
         <div data-reveal>
-          <span class="eyebrow">HOW WE WORK</span>
-          <h2>설비 안의 작업을,<br>설비 밖에서 지켜봅니다.</h2>
+          <h2>설비 안의 작업을,<br>설비 밖에서 지켜봅니다</h2>
         </div>
         <div class="head__aside" data-reveal data-delay="90">
-          <p class="lead">${esc(TECH.body)}</p>
           <a class="tlink" href="technology.html">장비·로봇 자세히 보기 ${upArrow(14)}</a>
           <a class="tlink ml-16" href="process.html">현장 진행 방식 보기 ${upArrow(14)}</a>
         </div>
@@ -901,11 +898,7 @@ ${TECH.system.map((r) => `          <div>${icon(r.icon, 30)}<b>${esc(r.label)}</
     <div class="wrap">
       <div class="head">
         <div data-reveal>
-          <span class="eyebrow">ON SITE</span>
           <h2>현장의 장면</h2>
-        </div>
-        <div class="head__aside" data-reveal data-delay="90">
-          <p class="lead">맨홀 호스 작업, 궤도형 장비, 차량의 모니터·제어 장치, 진공흡입차, 차고의 장비를 사진으로 소개합니다.</p>
         </div>
       </div>
       <div class="grid grid--3">
@@ -919,8 +912,7 @@ ${pcards(['W10', 'W05', 'R07', 'W07', 'W06', 'R01'], ['맨홀 호스 작업', '�
     <div class="wrap">
       <div class="split">
         <div data-reveal>
-          <span class="eyebrow">ABOUT US</span>
-          <h2>${C.founded}년부터<br>쌓아 온 현장 경험.</h2>
+          <h2>${C.founded}년부터<br>쌓아 온 현장 경험</h2>
           <p class="lead mt-20">${esc(C.intro)}</p>
           <div class="mt-28"><a class="btn btn--line" href="company.html">회사 소개 ${arrow(18)}</a></div>
         </div>
@@ -950,19 +942,13 @@ pages['services.html'] = () => head({
 }) + header('services') + `
 <main id="main">
 ` + phero({
-  eyebrow: 'OUR BUSINESS',
   h1: '사업분야',
-  lead: '산업설비와 환경시설에서 필요한 다섯 가지 업무입니다. 업무를 고르면 대상 설비와 상담 시 필요한 정보를 확인할 수 있습니다.',
   crumbs: [{ label: '사업분야' }]
 }) + tabs(null) + '\n' + quickFind() + `  <section class="section">
     <div class="wrap">
       <div class="head">
         <div data-reveal>
-          <span class="eyebrow">WHAT WE DO</span>
           <h2>다섯 가지 업무</h2>
-        </div>
-        <div class="head__aside" data-reveal data-delay="90">
-          <p class="lead">각 업무마다 다루는 설비와 상담 시 알려 주시면 좋은 정보를 정리해 두었습니다. 업무를 눌러 확인하세요.</p>
         </div>
       </div>
       <div class="grid grid--3">
@@ -975,11 +961,9 @@ ${serviceCards(true)}
     <div class="wrap">
       <div class="head">
         <div data-reveal>
-          <span class="eyebrow">HOW WE WORK</span>
           <h2>업무와 함께 살펴볼<br>작업 시스템</h2>
         </div>
         <div class="head__aside" data-reveal data-delay="90">
-          <p class="lead">로봇과 원격 모니터링을 활용한 작업 방식, 그리고 회수 이후의 과정은 사업분야와 구분해 따로 정리했습니다.</p>
           <a class="tlink" href="technology.html">장비·로봇 보기 ${upArrow(14)}</a>
         </div>
       </div>
@@ -990,7 +974,7 @@ ${TECH.system.map((r) => `        <div>${icon(r.icon, 30)}<b>${esc(r.label)}</b>
   </section>
 
 ` + cta({
-  h2: '어떤 업무에 해당하는지<br>모르셔도 괜찮습니다.',
+  h2: '어떤 업무에 해당하는지<br>모르셔도 괜찮습니다',
   p: '대상 설비와 작업 목적을 알려 주시면 맞는 업무와 진행 방법을 안내해 드립니다.'
 }) + MAIN_END + footer() + foot();
 
@@ -1001,161 +985,74 @@ SERVICES.forEach((s, idx) => {
     const prev = SERVICES[idx - 1];
     const next = SERVICES[idx + 1];
 
-    let body = '';
     /* 섹션 배경을 흰색 ↔ 옅은 회색으로 번갈아 쓴다 (같은 배경이 연달아 나오지 않게) */
-    let lastSoft = false;                       // 개요 섹션은 흰색
+    let lastSoft = false;                       // 첫 섹션은 흰색
     const sec = (extra) => { lastSoft = !lastSoft; return `section${lastSoft ? ' section--soft' : ''}${extra ? ' ' + extra : ''}`; };
+    const sections = [];
 
-    /* 개요 + 대상 설비 */
-    body += `  <section class="section">
+    /* 한눈에 보기 — 사진 1장 + 4줄 표. 표 내용은 모두 분야 데이터(targets·equip·projects·inquiryHint)에서 가져온다 */
+    const links = [];
+    if (s.concept) links.push(`<a class="tlink" href="technology.html">작업 시스템 자세히 보기 ${arrow(14)}</a>`);   // 촉매: '작업 시스템의 역할' 섹션 대신
+    else if (s.tech) links.push(`<a class="tlink" href="technology.html">장비·로봇 보기 ${upArrow(14)}</a>`);     // 관련 기술
+    if (s.recovery) links.push(`<a class="tlink" href="process.html#dewater">탈수 과정 자세히 보기 ${arrow(14)}</a>`); // 준설: '회수 이후의 과정' 섹션 대신
+    sections.push(`  <section class="section">
     <div class="wrap">
-      <div class="split split--top">
-        <div data-reveal>
-          <span class="eyebrow">OVERVIEW</span>
-          <h2>${esc(s.short)}</h2>
-          <p class="lead mt-20">${esc(s.body)}</p>
-        </div>
-        <div data-reveal data-delay="90">
-          <h3 class="mb-16">대상 설비·업무</h3>
-          <ul class="targets">
-${s.targets.map((t) => `            <li>${esc(t)}</li>`).join('\n')}
-          </ul>
-        </div>
-      </div>
-    </div>
-  </section>
-`;
-
-    /* 사진 */
-    if (s.photo) {
-      body += `  <section class="${sec('section--sm')}">
-    <div class="wrap">
-      <div class="split">
+      <div class="head head--solo" data-reveal><div><h2>${esc(s.short)}</h2></div></div>
+      <div class="split split--top glance">
         <figure class="split__media" data-reveal>
           <div class="split__fig">${photo(s.photo, '(max-width:960px) 92vw, 620px')}</div>
           <figcaption class="split__cap">${esc(s.photo.cap)}</figcaption>
         </figure>
         <div data-reveal data-delay="90">
-          <span class="eyebrow">${esc(s.photo.eyebrow || 'FIELD')}</span>
-          <h2>${esc(s.photo.heading || '현장의 모습')}</h2>
-          <p class="lead mt-18">${esc(s.photo.note)}</p>
+          <dl class="glance__tbl">
+            <div><dt>대상 설비</dt><dd>${s.targets.map(esc).join(' · ')}</dd></div>
+            <div><dt>주요 장비</dt><dd>${s.equip.map(esc).join(' · ')}</dd></div>
+            <div><dt>관련 이력</dt><dd>${rel.length ? rel.map((p) => `${esc(p.title)} (${esc(p.period)})`).join(' · ') : '이 홈페이지의 수행 이력에는 이 업무로 분류된 항목이 없습니다.'}</dd></div>
+            <div><dt>문의 시 필요한 정보</dt><dd>${s.inquiryHint.map(esc).join(' · ')}</dd></div>
+          </dl>
+${links.length ? `          <p class="glance__links mt-18">${links.join('')}</p>\n` : ''}          <div class="mt-24"><a class="btn btn--fill" href="contact.html?service=${s.id}">이 업무로 문의하기 ${arrow(18)}</a></div>
         </div>
       </div>
     </div>
   </section>
-`;
-    }
-
-    /* 개념(S02) */
-    if (s.concept) {
-      body += `  <section class="${sec()}">
-    <div class="wrap">
-      <div class="head">
-        <div data-reveal><span class="eyebrow">CONCEPT</span><h2>작업 시스템의 역할</h2></div>
-        <div class="head__aside" data-reveal data-delay="90"><p class="lead">촉매·충진물 작업에서 살펴보는 시스템의 역할을 개념으로 정리했습니다.</p></div>
-      </div>
-      <div class="roles" data-reveal>
-${s.concept.map((c) => `        <div>${icon(c.icon, 30)}<b>${esc(c.label)}</b><p>${esc(c.text)}</p></div>`).join('\n')}
-      </div>
-    </div>
-  </section>
-`;
-    }
+`);
 
     /* 업무 구성(S05) */
     if (s.rows) {
-      body += `  <section class="${sec()}">
+      sections.push(`  <section class="${sec()}">
     <div class="wrap">
-      <div class="head">
-        <div data-reveal><span class="eyebrow">SCOPE</span><h2>업무 구성</h2></div>
-        <div class="head__aside" data-reveal data-delay="90"><p class="lead">조사 대상과 목적에 따라 필요한 업무를 안내합니다.</p></div>
-      </div>
+      <div class="head head--solo" data-reveal><div><h2>업무 구성</h2></div></div>
       <div class="roles" data-reveal>
 ${s.rows.map((r) => `        <div>${icon(r.icon, 30)}<b>${esc(r.label)}</b><p>${esc(r.text)}</p></div>`).join('\n')}
       </div>
     </div>
   </section>
-`;
-    }
-
-    /* 회수 이후(S04) */
-    if (s.recovery) {
-      body += `  <section class="${sec()}">
-    <div class="wrap">
-      <div class="split split--top split--rev">
-        <div data-reveal data-delay="90">
-${dewaterDiagram()}
-        </div>
-        <div data-reveal>
-          <span class="eyebrow">AFTER RECOVERY</span>
-          <h2>회수 이후의 과정</h2>
-          <p class="lead mt-18">${esc(RECOVERY.body)}</p>
-          <ul class="numlist mt-26">
-${RECOVERY.steps.map((st, i) => `            <li><em>0${i + 1}</em><b>${esc(st.label)}</b><p>${esc(st.text)}</p></li>`).join('\n')}
-          </ul>
-          <div class="mt-24"><a class="tlink" href="technology.html#recovery">회수 이후의 과정 자세히 보기 ${upArrow(14)}</a></div>
-        </div>
-      </div>
-    </div>
-  </section>
-`;
+`);
     }
 
     /* 장비·현장 사진 묶음 (사진 ZIP에서 고른 3장) */
     if (s.gallery) {
-      body += `  <section class="${sec()}">
+      sections.push(`  <section class="${sec()}">
     <div class="wrap">
-      <div class="head">
-        <div data-reveal><span class="eyebrow">EQUIPMENT &amp; FIELD</span><h2>장비와 현장</h2></div>
-        <div class="head__aside" data-reveal data-delay="90"><p class="lead">${esc(s.gallery.lead)}</p></div>
-      </div>
+      <div class="head head--solo" data-reveal><div><h2>장비와 현장</h2></div></div>
       <div class="grid grid--3">
 ${pcards(s.gallery.ids, s.gallery.titles)}
       </div>
     </div>
   </section>
-`;
+`);
     }
 
-    /* 상담 정보 + 관련 기술·이력 */
-    body += `  <section class="${sec()}">
-    <div class="wrap">
-      <div class="split split--top">
-        <div data-reveal>
-          <span class="eyebrow">BEFORE YOU ASK</span>
-          <h2>문의하실 때<br>알려 주시면 좋은 정보</h2>
-          <ul class="numlist mt-28">
-${s.inquiryHint.map((h, i) => `            <li><em>0${i + 1}</em><b>${esc(h)}</b></li>`).join('\n')}
-          </ul>
-          <div class="mt-28"><a class="btn btn--fill" href="contact.html?service=${s.id}">이 업무로 문의하기 ${arrow(18)}</a></div>
-        </div>
-        <div data-reveal data-delay="90">
-${s.tech ? `          <div class="panel panel--line mb-16">
-            <h3>관련 기술</h3>
-            <p class="note mt-10">${esc(TECH.title)}</p>
-            <div class="mt-14"><a class="tlink" href="technology.html">장비·로봇 보기 ${upArrow(14)}</a></div>
-          </div>` : ''}
-${rel.length ? `          <div class="panel panel--line">
-            <h3>관련 수행 이력</h3>
-            <ul class="rlist mt-14">
-${rel.map((p) => `              <li><b>${esc(p.title)}</b><span class="note">${esc(p.period)} · ${esc(p.cat)}</span></li>`).join('\n')}
-            </ul>
-            <div class="mt-16"><a class="tlink" href="projects.html">수행 이력 전체 보기 ${upArrow(14)}</a></div>
-          </div>` : `          <div class="panel">
-            <h3>이 업무의 수행 이력</h3>
-            <p class="note mt-10">이 홈페이지의 수행 이력에는 이 업무로 분류된 항목이 없습니다. 전체 수행 이력은 아래에서 확인하실 수 있습니다.</p>
-            <div class="mt-14"><a class="tlink" href="projects.html">수행 이력 전체 보기 ${upArrow(14)}</a></div>
-          </div>`}
-        </div>
-      </div>
-
+    /* 이전·다음 분야 — 마지막 섹션 끝에 붙인다 */
+    const pnav = `
       <nav class="head pnav" aria-label="다른 사업분야">
         <div>${prev ? `<a class="tlink" href="${prev.file}">${icon('arrow', 14)} 이전 · ${esc(prev.title)}</a>` : `<a class="tlink" href="services.html">${icon('arrow', 14)} 사업분야 전체</a>`}</div>
         <div class="head__aside pnav__next">${next ? `<a class="tlink" href="${next.file}">다음 · ${esc(next.title)} ${arrow(14)}</a>` : `<a class="tlink" href="services.html">사업분야 전체 ${arrow(14)}</a>`}</div>
       </nav>
-    </div>
-  </section>
 `;
+    const last = sections.length - 1;
+    sections[last] = sections[last].replace(/    <\/div>\n  <\/section>\n$/, pnav + '    </div>\n  </section>\n');
+    const body = sections.join('');
 
     return head({
       file: s.file, page: 'services',
@@ -1169,13 +1066,11 @@ ${rel.map((p) => `              <li><b>${esc(p.title)}</b><span class="note">${e
     }) + header('services', s.id) + `
 <main id="main">
 ` + phero({
-      eyebrow: `BUSINESS 0${idx + 1} · ${s.en}`,
       h1: esc(s.title),
-      lead: s.summary,
       crumbs: [{ label: '사업분야', href: 'services.html' }, { label: s.title }]
     }) + tabs(s.id) + '\n' + body + `
 ` + cta({
-      h2: `${esc(s.title)},<br>어디까지 가능한지 물어보세요.`,
+      h2: `${esc(s.title)},<br>어디까지 가능한지 물어보세요`,
       p: s.inquiryHint.join(' · ') + ' 등을 알려 주시면 가능한 작업 범위와 진행 방법을 안내해 드립니다.'
     }) + MAIN_END + footer() + foot();
   };
@@ -1189,33 +1084,29 @@ pages['technology.html'] = () => head({
 }) + header('technology') + `
 <main id="main">
 ` + phero({
-  eyebrow: 'EQUIPMENT & ROBOTS · IN-HOUSE DEVELOPED',
   h1: '장비·로봇',
-  lead: TECH.title,
   crumbs: [{ label: '장비·로봇' }]
 }) + `
-  <!-- 01 장비의 역할 -->
-  <section class="section">
+  <!-- 01 보유 장비 (차량·장비 사진 + 용도별 장비 목록) -->
+  <section class="section" id="equipment">
     <div class="wrap">
-      <div class="head">
-        <div data-reveal><span class="eyebrow">01 · ROLE</span><h2>장비 하나가 아니라,<br>역할이 나뉜 구성.</h2></div>
-        <div class="head__aside" data-reveal data-delay="90">
-          <p class="lead">${esc(TECH.body)}</p>
-          <p class="quote mt-18">“사람이 없는 곳에 인명 사고도 없다.”<span>무인 로봇 시스템을 개발해 온 신정개발의 원칙 (회사소개서·기술소개서)</span></p>
-        </div>
+      <div class="head head--solo" data-reveal><div><h2>보유 장비</h2></div></div>
+      <div class="grid grid--3">
+${pcards(['R01', 'R25', 'R10', 'R13', 'R20', 'R42'], ['차량과 로봇 장비', '제어 차량과 궤도형 장비의 연결', '전면 작업 헤드를 갖춘 궤도형 장비', '소형 주행 장비와 흡입 헤드', '스키드 로더', '카메라 헤드를 갖춘 소형 주행 장비'])}
       </div>
-      <div class="roles" data-reveal>
-${TECH.system.map((r) => `        <div>${icon(r.icon, 30)}<b>${esc(r.label)}</b><p>${esc(r.text)}</p></div>`).join('\n')}
+      <div class="eqgrid mt-block" data-reveal>
+${EQUIP.map((e) => `        <div><b>${esc(e.g)}</b><ul class="chips">${e.d.split(', ').map((x) => `<li>${esc(x)}</li>`).join('')}</ul></div>`).join('\n')}
       </div>
+      <p class="note mt-14">보유 수량과 가동 상태는 문의 시 안내합니다.</p>
     </div>
   </section>
 
-  <!-- 02 자체 개발 -->
+
+  <!-- 02 자체 개발 · 세대별 발전 · 5세대 특징 -->
   <section class="section section--soft" id="rnd">
     <div class="wrap">
       <div class="head">
-        <div data-reveal><span class="eyebrow">02 · R&amp;D</span><h2>자체 개발해 온<br>무인 로봇 시스템.</h2></div>
-        <div class="head__aside" data-reveal data-delay="90"><p class="lead">2017년 설립한 기업부설연구소를 중심으로 로봇 시스템을 개발해 왔습니다.</p></div>
+        <div data-reveal><h2>자체 개발해 온<br>무인 로봇 시스템</h2></div>
       </div>
       <div class="roles" data-reveal>
         <div>${icon('doc', 30)}<b>기업부설연구소</b><p>2017년 11월 설립. 로봇 시스템의 개발과 시제품 제작을 맡습니다.</p></div>
@@ -1239,26 +1130,14 @@ ${PROCESS.generations.map((g, i) => `            <li><em>${i + 1}</em><b>${esc(g
     </div>
   </section>
 
-  <!-- 03 연결 구성 -->
+  <!-- 03 장비의 역할 -->
   <section class="section">
     <div class="wrap">
       <div class="head">
-        <div data-reveal><span class="eyebrow">03 · CONNECTION</span><h2>연결 구성</h2></div>
-        <div class="head__aside" data-reveal data-delay="90"><p class="lead">로봇과 흡입차는 호스로 연결해 구성합니다. 아래는 야외에서 차량과 궤도형 장비를 호스로 연결해 둔 모습입니다.</p></div>
+        <div data-reveal><h2>장비 하나가 아니라,<br>역할이 나뉜 구성</h2></div>
       </div>
-      <div class="grid grid--3" data-reveal>
-        <figure class="pcard">
-          <div class="pcard__fig">${photo(P('R27'), '(max-width:720px) 92vw, 420px')}</div>
-          <figcaption><b>연결 · 흡입차와 궤도형 장비</b><span>${esc(P('R27').alt)}</span></figcaption>
-        </figure>
-        <figure class="pcard">
-          <div class="pcard__fig">${photo(P('W05'), '(max-width:720px) 92vw, 420px')}</div>
-          <figcaption><b>장비 · 궤도형 장비의 외형</b><span>${esc(P('W05').alt)}</span></figcaption>
-        </figure>
-        <figure class="pcard">
-          <div class="pcard__fig">${photo(P('R07'), '(max-width:720px) 92vw, 420px')}</div>
-          <figcaption><b>제어 · 모니터와 조작자</b><span>${esc(P('R07').alt)}</span></figcaption>
-        </figure>
+      <div class="roles" data-reveal>
+${TECH.system.map((r) => `        <div>${icon(r.icon, 30)}<b>${esc(r.label)}</b><p>${esc(r.text)}</p></div>`).join('\n')}
       </div>
     </div>
   </section>
@@ -1267,8 +1146,7 @@ ${PROCESS.generations.map((g, i) => `            <li><em>${i + 1}</em><b>${esc(g
   <section class="section section--soft">
     <div class="wrap">
       <div class="head">
-        <div data-reveal><span class="eyebrow">04 · APPLICABILITY</span><h2>적용의 출발점은<br>현장의 조건입니다.</h2></div>
-        <div class="head__aside" data-reveal data-delay="90"><p class="lead">적용 가능성은 아래 조건을 확인한 뒤 판단합니다. 알고 계신 정보를 보내 주시면 검토에 도움이 됩니다.</p></div>
+        <div data-reveal><h2>적용의 출발점은<br>현장의 조건입니다</h2></div>
       </div>
       <ul class="numlist" data-reveal>
 ${TECH.conditions.map((c, i) => `        <li><em>0${i + 1}</em><b>${esc(c.label)}</b><p>${esc(c.text)}</p></li>`).join('\n')}
@@ -1280,8 +1158,7 @@ ${TECH.conditions.map((c, i) => `        <li><em>0${i + 1}</em><b>${esc(c.label)
   <section class="section section--navy">
     <div class="wrap">
       <div class="head">
-        <div data-reveal><span class="eyebrow">05 · FLOW</span><h2>작업의 흐름과<br>후속 작업</h2></div>
-        <div class="head__aside" data-reveal data-delay="90"><p class="lead">${esc(TECH.followUp)}</p></div>
+        <div data-reveal><h2>작업의 흐름과<br>후속 작업</h2></div>
       </div>
       <ul class="flow" data-reveal>
 ${TECH.flow.map((f, i) => `        <li><em>0${i + 1}</em><b>${esc(f)}</b></li>`).join('\n')}
@@ -1294,8 +1171,7 @@ ${TECH.flow.map((f, i) => `        <li><em>0${i + 1}</em><b>${esc(f)}</b></li>`)
   <section class="section" id="recovery">
     <div class="wrap">
       <div class="head">
-        <div data-reveal><span class="eyebrow">06 · AFTER RECOVERY</span><h2>회수한 물질의<br>다음 과정까지.</h2></div>
-        <div class="head__aside" data-reveal data-delay="90"><p class="lead">${esc(RECOVERY.body)}</p></div>
+        <div data-reveal><h2>회수한 물질의<br>다음 과정까지</h2></div>
       </div>
       <ul class="numlist" data-reveal>
 ${RECOVERY.steps.map((s, i) => `        <li><em>0${i + 1}</em><b>${esc(s.label)}</b><p>${esc(s.text)}</p></li>`).join('\n')}
@@ -1308,31 +1184,12 @@ ${RECOVERY.methods.map((m, i) => `        <div>${icon(i === 0 ? 'drop' : 'filter
     </div>
   </section>
 
-  <!-- 07 장비 -->
-  <section class="section section--soft" id="equipment">
-    <div class="wrap">
-      <div class="head">
-        <div data-reveal><span class="eyebrow">07 · EQUIPMENT</span><h2>차량과 장비의<br>외형.</h2></div>
-        <div class="head__aside" data-reveal data-delay="90"><p class="lead">제어 차량과 흡입차, 궤도형 장비, 흡입 헤드, 로더, 카메라를 갖춘 소형 주행 장비 등 보유 장비의 외형입니다. 장비의 세대·모델·성능 수치는 상담 시 자료로 안내합니다.</p></div>
-      </div>
-      <div class="grid grid--3">
-${pcards(['R01', 'R25', 'R10', 'R13', 'R20', 'R42'], ['차량과 로봇 장비', '제어 차량과 궤도형 장비의 연결', '전면 작업 헤드를 갖춘 궤도형 장비', '소형 주행 장비와 흡입 헤드', '스키드 로더', '카메라 헤드를 갖춘 소형 주행 장비'])}
-      </div>
-      <h3 class="mt-block mb-16">보유 장비 구성</h3>
-      <div class="eqlist" data-reveal>
-${EQUIP.map((e) => `        <div><b>${esc(e.g)}</b><p>${esc(e.d)}</p></div>`).join('\n')}
-      </div>
-      <p class="note mt-14">회사소개서(2024) 장비 목록을 용도별로 묶은 것입니다. 보유 수량과 현재 가동 상태는 상담 시 안내합니다.</p>
-    </div>
-  </section>
-
   <!-- 관련 업무 -->
-  <section class="section">
+  <section class="section section--soft">
     <div class="wrap">
       <div class="head">
-        <div data-reveal><span class="eyebrow">RELATED</span><h2>관련 업무</h2></div>
+        <div data-reveal><h2>관련 업무</h2></div>
         <div class="head__aside" data-reveal data-delay="90">
-          <p class="lead">장비·로봇과 함께 살펴볼 업무입니다. 업무별 대상과 상담 조건은 상세 화면에서 확인하세요.</p>
           <a class="tlink" href="services.html">사업분야 전체 보기 ${upArrow(14)}</a>
         </div>
       </div>
@@ -1348,7 +1205,7 @@ ${SRC_LINE}    </div>
   </section>
 
 ` + cta({
-  h2: '우리 현장에도 적용할 수 있는지<br>물어보세요.',
+  h2: '우리 현장에도 적용할 수 있는지<br>물어보세요',
   p: '출입구와 내부 구조, 잔류물 특성 등 알고 계신 정보를 보내 주세요.'
 }) + MAIN_END + footer() + foot();
 
@@ -1361,17 +1218,14 @@ pages['process.html'] = () => head({
 }) + header('process') + `
 <main id="main">
 ` + phero({
-  eyebrow: 'HOW WE WORK',
-  h1: '현장에서는<br>이렇게 진행합니다.',
-  lead: '문의부터 회수물 처리까지의 순서와 현장 배치, 사람이 들어갈 때와 로봇을 넣을 때의 차이를 보여 드립니다.',
+  h1: '현장에서는<br>이렇게 진행합니다',
   crumbs: [{ label: '현장 진행 방식' }]
 }) + `
   <!-- 01 진행 순서 -->
   <section class="section">
     <div class="wrap">
       <div class="head">
-        <div data-reveal><span class="eyebrow">01 · PROCEDURE</span><h2>문의부터 폐기물 처리까지,<br>일곱 단계.</h2></div>
-        <div class="head__aside" data-reveal data-delay="90"><p class="lead">무인 Cleaning System의 일곱 단계입니다. 세부 진행은 현장 조건에 맞춰 조정합니다.</p></div>
+        <div data-reveal><h2>문의부터 폐기물 처리까지,<br>일곱 단계</h2></div>
       </div>
       <div class="proc">
 ${PROCESS.steps.map((st, i) => `        <article data-reveal${i ? ` data-delay="${(i % 3) * 80}"` : ''}>
@@ -1390,8 +1244,7 @@ ${PROCESS.steps.map((st, i) => `        <article data-reveal${i ? ` data-delay="
   <section class="section section--soft">
     <div class="wrap">
       <div class="head">
-        <div data-reveal><span class="eyebrow">02 · LAYOUT</span><h2>작업자는 밖에,<br>로봇은 안에.</h2></div>
-        <div class="head__aside" data-reveal data-delay="90"><p class="lead">제어 차량에서 CCTV로 설비 내부를 보며 로봇을 원격 조정하고, 로봇은 호스로 흡입차(Vacuum Car)와 연결됩니다. 촉매·충진물 작업에서는 분리장치(Separator)를 함께 구성합니다.</p></div>
+        <div data-reveal><h2>작업자는 밖에,<br>로봇은 안에</h2></div>
       </div>
 ${siteDiagram()}
       <div class="grid grid--3 mt-24">
@@ -1404,16 +1257,20 @@ ${pcards(['R25', 'R07', 'R27'], ['제어 차량과 궤도형 장비의 연결', 
   <section class="section">
     <div class="wrap">
       <div class="head">
-        <div data-reveal><span class="eyebrow">03 · WHY ROBOT</span><h2>사람이 없는 곳에<br>인명 사고도 없다.</h2></div>
+        <div data-reveal><h2>사람이 없는 곳에<br>인명 사고도 없다</h2></div>
         <div class="head__aside" data-reveal data-delay="90"><p class="lead">${esc(PROCESS.factsNote)}</p><p class="note">${esc(PROCESS.factsSrc)}</p></div>
       </div>
       <div class="facts" data-reveal>
 ${PROCESS.facts.map((f) => `        <div><b>${esc(f.n)}</b><span>${esc(f.l)}</span></div>`).join('\n')}
       </div>
+      <p class="note mt-14" data-reveal>신정개발 연간 작업 기준 · 기술소개서(2025)</p>
       <h3 class="mt-block mb-16">밀폐공간 작업 위험성 비교</h3>
 ${cmpTable(PROCESS.risk, '주요 위험성', '위험 노출', '위험 회피')}
-      <h3 class="mt-block mb-16">밀폐공간 작업 효율성 비교</h3>
+      <details class="fold mt-block">
+        <summary>효율성 비교 표 보기</summary>
+        <h3 class="mt-18 mb-16">밀폐공간 작업 효율성 비교</h3>
 ${cmpTable(PROCESS.eff, '주요 효율성', '제한', '가능')}
+      </details>
     </div>
   </section>
 
@@ -1421,8 +1278,7 @@ ${cmpTable(PROCESS.eff, '주요 효율성', '제한', '가능')}
   <section class="section section--soft">
     <div class="wrap">
       <div class="head">
-        <div data-reveal><span class="eyebrow">04 · USE CASES</span><h2>용도별 적용 범위와<br>유의점.</h2></div>
-        <div class="head__aside" data-reveal data-delay="90"><p class="lead">용도별로 할 수 있는 일과 적용 조건을 함께 정리했습니다.</p></div>
+        <div data-reveal><h2>용도별 적용 범위와<br>유의점</h2></div>
       </div>
       <div class="creds creds--4">
 ${PROCESS.cases.map((c, i) => `        <div data-reveal${i ? ` data-delay="${i * 70}"` : ''}>
@@ -1439,8 +1295,8 @@ ${PROCESS.cases.map((c, i) => `        <div data-reveal${i ? ` data-delay="${i *
   <section class="section" id="dewater">
     <div class="wrap">
       <div class="head">
-        <div data-reveal><span class="eyebrow">05 · AFTER RECOVERY</span><h2>회수물은 탈수해<br>양을 줄입니다.</h2></div>
-        <div class="head__aside" data-reveal data-delay="90"><p class="lead">클리닝·준설로 회수한 물질은 데칸타(원심분리) 또는 필터프레스(여과·압착)로 탈수합니다. 기술소개서가 적은 효과는 ${PROCESS.dewaterEffect.map(esc).join(', ')}입니다.</p></div>
+        <div data-reveal><h2>회수물은 탈수해<br>양을 줄입니다</h2></div>
+        <div class="head__aside" data-reveal data-delay="90"><p class="lead">데칸타(원심분리)·필터프레스(여과·압착)로 탈수해 폐기물 처리량·비용·시간을 줄입니다.</p></div>
       </div>
       <div data-reveal>
 ${dewaterDiagram()}
@@ -1449,7 +1305,7 @@ ${SRC_LINE}    </div>
   </section>
 
 ` + cta({
-  h2: '우리 현장은 어떤 순서로<br>진행될지 물어보세요.',
+  h2: '우리 현장은 어떤 순서로<br>진행될지 물어보세요',
   p: '대상 설비·작업 목적·희망 일정을 알려 주시면 현장 검토부터 안내하겠습니다.'
 }) + MAIN_END + footer() + foot();
 
@@ -1461,9 +1317,7 @@ pages['projects.html'] = () => head({
 }) + header('projects') + `
 <main id="main">
 ` + phero({
-  eyebrow: 'EXPERIENCE',
   h1: '수행 이력',
-  lead: '회사 자료에 수록된 과거 수행 이력입니다. 각 이력은 회사 자료에 기재된 기간과 업무를 기준으로 안내합니다.',
   crumbs: [{ label: '수행 이력' }]
 }) + `
   <section class="section">
@@ -1519,9 +1373,7 @@ pages['company.html'] = () => head({
 }) + header('company') + `
 <main id="main">
 ` + phero({
-  eyebrow: 'ABOUT US',
-  h1: `${C.founded}년부터<br>쌓아 온 현장 경험.`,
-  lead: C.intro,
+  h1: `${C.founded}년부터<br>쌓아 온 현장 경험`,
   crumbs: [{ label: '회사 소개' }]
 }) + `
   <section class="section">
@@ -1539,7 +1391,6 @@ pages['company.html'] = () => head({
     <div class="wrap">
       <div class="split split--top split--sticky">
         <div data-reveal>
-          <span class="eyebrow">HISTORY</span>
           <h2>연혁</h2>
           <p class="note mt-14">1992년 신학상사로 출발해 1995년 신정개발로 상호를 바꾸고, 2007년 법인으로 전환했습니다.</p>
           <ul class="hist mt-28">
@@ -1559,8 +1410,7 @@ ${h.items.map((it) => `              <li><em>${it.m}</em><span>${esc(it.label)}<
   <section class="section" id="credentials">
     <div class="wrap">
       <div class="head">
-        <div data-reveal><span class="eyebrow">CREDENTIALS</span><h2>면허·인증과<br>조직.</h2></div>
-        <div class="head__aside" data-reveal data-delay="90"><p class="lead">신정개발이 보유한 면허·허가·인증과 조직, 기술자격입니다. 인증서 사본이 필요하시면 문의해 주세요.</p></div>
+        <div data-reveal><h2>면허·인증과<br>조직</h2></div>
       </div>
       <div class="creds">
         <div data-reveal>
@@ -1594,8 +1444,7 @@ ${h.items.map((it) => `              <li><em>${it.m}</em><span>${esc(it.label)}<
     <div class="wrap">
       <div class="split split--rev">
         <div data-reveal>
-          <span class="eyebrow">ON SITE</span>
-          <h2>설비와 작업 환경을<br>함께 살핍니다.</h2>
+          <h2>설비와 작업 환경을<br>함께 살핍니다</h2>
           <p class="lead mt-20">시설의 구조와 작업 목적, 잔류물의 특성을 확인하는 것에서 업무 검토가 시작됩니다.</p>
           <div class="mt-28"><a class="btn btn--line" href="services.html">사업분야 보기 ${arrow(18)}</a></div>
         </div>
@@ -1610,10 +1459,7 @@ ${h.items.map((it) => `              <li><em>${it.m}</em><span>${esc(it.label)}<
   <section class="section">
     <div class="wrap">
       <div class="head">
-        <div data-reveal><span class="eyebrow">FIELD &amp; SAFETY</span><h2>현장과 안전</h2></div>
-        <div class="head__aside" data-reveal data-delay="90">
-          <p class="lead">회사소개서에 적힌 핵심가치는 안전·배려·희망입니다. 안전 구획과 보호구를 갖춘 현장, 그리고 산업단지의 모습입니다.</p>
-        </div>
+        <div data-reveal><h2>현장과 안전</h2></div>
       </div>
       <div class="grid grid--3">
 ${pcards(['M10', 'M06', 'M04'], ['현장의 차량과 안전 구획', '안전모', '산업단지 전경'])}
@@ -1624,9 +1470,8 @@ ${pcards(['M10', 'M06', 'M04'], ['현장의 차량과 안전 구획', '안전모
   <section class="section section--soft">
     <div class="wrap">
       <div class="head">
-        <div data-reveal><span class="eyebrow">WHAT WE DO</span><h2>다루는 업무</h2></div>
+        <div data-reveal><h2>다루는 업무</h2></div>
         <div class="head__aside" data-reveal data-delay="90">
-          <p class="lead">${esc(C.tagline)}. 다섯 가지 업무로 산업설비와 환경시설의 현장을 다룹니다.</p>
           <a class="tlink" href="services.html">사업분야 전체 보기 ${upArrow(14)}</a>
         </div>
       </div>
@@ -1638,7 +1483,7 @@ ${serviceCards(true)}
 
   <section class="section">
     <div class="wrap">
-      <div class="head head--solo" data-reveal><div><span class="eyebrow">CONTACT</span><h2>연락처</h2></div></div>
+      <div class="head head--solo" data-reveal><div><h2>연락처</h2></div></div>
       <dl class="dtable" data-reveal>
         <div><dt>회사명</dt><dd>${esc(C.name)} <span class="note">${esc(C.brandEn)} CO., LTD.</span></dd></div>
         <div><dt>설립</dt><dd>${C.founded}년</dd></div>
@@ -1662,9 +1507,8 @@ pages['contact.html'] = () => head({
 }) + header('contact') + `
 <main id="main">
 ` + phero({
-  eyebrow: 'CONTACT',
-  h1: '검토가 필요한 현장을<br>알려 주세요.',
-  lead: '대상 설비와 작업 목적, 희망 일정을 보내 주시면 가능한 작업 범위와 진행 방법을 안내해 드립니다.',
+  h1: '검토가 필요한 현장을<br>알려 주세요',
+  keepLead: '대상 설비 · 작업 목적 · 희망 일정을 알려 주세요.',
   crumbs: [{ label: '현장 문의' }]
 }) + `
   <section class="section">
@@ -1769,8 +1613,7 @@ ${SERVICES.map((s) => `                  <option value="${s.id}">${esc(s.title)}
   <section class="section section--soft">
     <div class="wrap">
       <div class="head">
-        <div data-reveal><span class="eyebrow">FAQ</span><h2>궁금한 점</h2></div>
-        <div class="head__aside" data-reveal data-delay="90"><p class="lead">상담 전에 자주 묻는 내용을 정리했습니다.</p></div>
+        <div data-reveal><h2>궁금한 점</h2></div>
       </div>
 ${faqBlock()}
     </div>
@@ -1788,14 +1631,12 @@ pages['404.html'] = () => head({
 }) + header('') + `
 <main id="main">
 ` + phero({
-  eyebrow: 'ERROR 404',
-  h1: '페이지를 찾을 수 없습니다.',
-  lead: '주소가 바뀌었거나 삭제된 페이지일 수 있습니다. 아래에서 찾으시는 내용을 골라 보세요.',
+  h1: '페이지를 찾을 수 없습니다',
   crumbs: [{ label: '페이지를 찾을 수 없습니다' }]
 }) + `
   <section class="section">
     <div class="wrap">
-      <div class="head head--solo"><div><span class="eyebrow">WHERE TO GO</span><h2>이쪽으로 가 보세요</h2></div></div>
+      <div class="head head--solo"><div><h2>이쪽으로 가 보세요</h2></div></div>
       <div class="grid grid--3">
         <a class="scard" href="index.html"><span class="scard__ico">${icon('shield', 40)}</span><h3>홈</h3><p>첫 화면으로 이동합니다.</p><span class="scard__go">이동 ${arrow(14)}</span></a>
         <a class="scard" href="services.html"><span class="scard__ico">${icon('tank', 40)}</span><h3>사업분야</h3><p>다섯 가지 업무를 확인합니다.</p><span class="scard__go">이동 ${arrow(14)}</span></a>
