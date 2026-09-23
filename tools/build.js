@@ -19,7 +19,7 @@ const C = {
   name: '(주)신정개발',
   brand: '신정개발',
   brandEn: 'SHINJEONG DEVELOPMENT',          // 기술소개서(2025) 로고 표기: Shinjeong Development Co.,Ltd.
-  /* 심벌(assets/logo/shinjeong-symbol.svg)은 클라이언트 사진 ZIP의 차량 도장(로봇/517A5324.JPG)에서 추출·벡터화한 것. 색상도 사진에서 채취(#27CBD2 / #303580). 정식 원본(AI/SVG) 수령 시 교체 */
+  /* 심벌(assets/logo/shinjeong-symbol.svg)은 클라이언트 사진 ZIP의 차량 도장(로봇/517A5324.JPG)에서 추출·벡터화한 것. 색상은 5차 지시서 기준 #47A948(초록) / #29398A(남색) — 받은 이미지에서 뽑은 값, 공식 CI 값 확인 전. 정식 원본(AI/SVG) 수령 시 교체 */
   founded: 1992,
   address: '전라남도 여수시 봉계2길 27',      // 본사 — 회사소개서(2024)·기술소개서(2025) 공통
   branch: '충청남도 서산시 지곡면 충의로 1106', // 지사 — 기술소개서(2025) 마지막 장
@@ -795,21 +795,13 @@ pages['index.html'] = () => {
   <section class="hero">
     <div class="hero__media">${photo(heroPhoto, '100vw', true)}</div>
     <div class="wrap hero__inner">
-      <span class="eyebrow">INDUSTRIAL CLEANING · SINCE ${C.founded}</span>
-      <h1>설비 안의 잔류물과 퇴적물,<br>안전하게 제거합니다.</h1>
-      <p class="hero__lead">탱크·반응기·관로의 클리닝과 준설, 촉매 교체를 1992년부터 여수에서 해 온 산업설비 클리닝 전문기업입니다. 위험한 내부 작업에는 자체 개발한 로봇을 먼저 투입합니다.</p>
+      <span class="eyebrow">여수 · ${C.founded}년 설립</span>
+      <h1>산업설비 클리닝과 준설,<br>30년 넘게 현장에서 해 왔습니다.</h1>
+      <p class="hero__lead">탱크·반응기의 잔류물과 촉매부터 하수관로의 퇴적물까지 제거합니다. 위험한 내부 작업에는 자체 개발한 로봇을 먼저 투입합니다.</p>
       <div class="hero__act">
-        <a class="btn btn--ghost" href="services.html">사업분야 보기 ${arrow(18)}</a>
+        <a class="btn btn--light" href="services.html">사업분야 보기 ${arrow(18)}</a>
         <a class="btn btn--ghost" href="contact.html">현장 문의 ${arrow(18)}</a>
       </div>
-    </div>
-    <div class="hero__bar">
-      <ul>
-        <li><b>${C.founded}년 설립</b><span>2007 법인 전환 · 2017 기업부설연구소 설립</span></li>
-        <li><b>다섯 가지 업무</b><span>클리닝 · 촉매 · 세정 · 준설 · 조사</span></li>
-        <li><b>주요 현장</b><span>석유화학·정유 플랜트 · 발전 설비 · 상·하수도</span></li>
-        <li><b>회수 이후까지</b><span>데칸타·필터프레스로 탈수</span></li>
-      </ul>
     </div>
   </section>
 
@@ -821,7 +813,8 @@ ${TRUST.map((t) => t.t
     ? `        <div class="stat stat--text"><b>${t.t.split(' · ').map(esc).join('&nbsp;· ')}</b><span>${esc(t.l)}</span></div>`
     : `        <div class="stat"><b><span data-count="${t.n}">${t.n}</span><i>${esc(t.unit)}</i></b><span>${esc(t.l)}</span></div>`).join('\n')}
       </div>
-      <p class="note mt-14" data-reveal>${esc(TRUST_SRC)}</p>
+      <p class="note mt-14" data-reveal><b class="ink">주요 현장</b> — 석유화학·정유 플랜트 · 발전 설비 · 상·하수도</p>
+      <p class="note mt-6" data-reveal>${esc(TRUST_SRC)}</p>
     </div>
   </section>
 

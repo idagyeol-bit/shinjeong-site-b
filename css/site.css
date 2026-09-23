@@ -203,32 +203,19 @@ body[data-page="home"] .hdr:not(.is-scrolled) .hdr__cta:hover { background: #fff
   content: ""; position: absolute; inset: 0;
   background:
     linear-gradient(180deg, #06131d99 0%, #06131d33 26%, #06131d40 52%, #06131de0 100%),
-    linear-gradient(90deg, #06131da6 0%, #06131d1a 58%, #06131d00 82%);
+    linear-gradient(90deg, #06131de6 0%, #06131db3 40%, #06131d40 70%, #06131d10 100%);
 }
-.hero__inner { position: relative; z-index: 1; width: 100%; padding-block: calc(var(--header-h) + 40px) 132px; }
+.hero__inner { position: relative; z-index: 1; width: 100%; padding-block: calc(var(--header-h) + 40px) 72px; }
 .hero .eyebrow { color: #cfe2f0; }
 .hero h1 {
-  color: #fff; font-size: var(--fs-display); font-weight: 600;
-  line-height: 1.2; letter-spacing: var(--ls-tight); max-width: 17em;
+  color: #fff; font-size: calc(var(--fs-display) * 0.85); font-weight: 600;
+  line-height: 1.25; letter-spacing: var(--ls-tight); max-width: 17em;
 }
 .hero__lead {
   margin-top: clamp(18px, 2vw, 28px); max-width: 34em;
   font-size: var(--fs-lead); line-height: 1.8; color: #dce8f1;
 }
 .hero__act { margin-top: clamp(28px, 3vw, 44px); display: flex; flex-wrap: wrap; gap: 12px; }
-
-.hero__bar {
-  position: absolute; z-index: 1; left: 0; right: 0; bottom: 0;
-  border-top: 1px solid #ffffff26;
-}
-.hero__bar ul {
-  display: flex; flex-wrap: wrap; gap: 0;
-  max-width: var(--wrap); margin-inline: auto; padding-inline: var(--gutter);
-}
-.hero__bar li { flex: 1 1 0; min-width: 150px; padding: 18px 16px 18px 0; }
-.hero__bar li + li { padding-left: 24px; border-left: 1px solid #ffffff1f; }
-.hero__bar b { display: block; font-size: 15px; font-weight: 600; color: #fff; letter-spacing: -0.02em; }
-.hero__bar span { display: block; margin-top: 3px; font-size: 13px; color: #a9c3d6; line-height: 1.6; }
 
 
 /* 서브 페이지 상단 배너 — 모든 하위 페이지가 동일 규격 */
@@ -293,6 +280,8 @@ body[data-page="home"] .hdr:not(.is-scrolled) .hdr__cta:hover { background: #fff
 .btn--line:hover { border-color: var(--navy); background: var(--navy); color: #fff; }
 .btn--ghost { border-color: #ffffff59; color: #fff; }
 .btn--ghost:hover { background: #fff; color: var(--navy); border-color: #fff; }
+.btn--light { background: #fff; border-color: #fff; color: var(--navy); }
+.btn--light:hover { background: var(--brand-tint); border-color: var(--brand-tint); color: var(--navy); }
 .btn--sm { min-height: 44px; padding: 0 18px; font-size: 15px; }
 
 .tlink {
@@ -570,18 +559,15 @@ html:not(.js-on) [data-reveal] { opacity: 1; transform: none; }
 
 /* 히어로 등장 — 애니메이션 완료가 아니라 .is-in 클래스로 제어한다.
    (스크립트가 막혀도 글자가 사라지지 않도록) */
-.js-on .hero__inner > *,
-.js-on .hero__bar {
+.js-on .hero__inner > * {
   opacity: 0; transform: translateY(24px);
   transition: opacity 0.9s var(--ease), transform 0.9s var(--ease);
 }
-.js-on .hero.is-in .hero__inner > *,
-.js-on .hero.is-in .hero__bar { opacity: 1; transform: none; }
+.js-on .hero.is-in .hero__inner > * { opacity: 1; transform: none; }
 .js-on .hero__inner > *:nth-child(1) { transition-delay: 0.10s; }
 .js-on .hero__inner > *:nth-child(2) { transition-delay: 0.22s; }
 .js-on .hero__inner > *:nth-child(3) { transition-delay: 0.34s; }
 .js-on .hero__inner > *:nth-child(4) { transition-delay: 0.46s; }
-.js-on .hero__bar { transition-delay: 0.58s; }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
@@ -592,7 +578,7 @@ html:not(.js-on) [data-reveal] { opacity: 1; transform: none; }
     transition-delay: 0s !important;
   }
   [data-reveal] { opacity: 1 !important; transform: none !important; }
-  .js-on .hero__inner > *, .js-on .hero__bar { opacity: 1 !important; transform: none !important; }
+  .js-on .hero__inner > * { opacity: 1 !important; transform: none !important; }
   .hero__media img { animation: none !important; transform: none !important; }
 }
 
@@ -671,11 +657,6 @@ html:not(.js-on) [data-reveal] { opacity: 1; transform: none; }
   .numlist p { grid-column: 2; }
   .hero { display: block; min-height: 0; }
   .hero__inner { padding-block: calc(var(--header-h) + 88px) 40px; }
-  .hero__bar { position: relative; z-index: 1; }
-  .hero__bar li { flex: 1 1 50%; min-width: 0; padding: 14px 12px 14px 0; }
-  .hero__bar li:nth-child(odd) { border-left: 0; padding-left: 0; }
-  .hero__bar li + li { padding-left: 16px; }
-  .hero__bar li:nth-child(3), .hero__bar li:nth-child(4) { border-top: 1px solid #ffffff1f; }
   .btn { width: 100%; }
   .hero__act .btn, .cta__act .btn { width: auto; flex: 1 1 auto; min-width: 190px; }
 }
