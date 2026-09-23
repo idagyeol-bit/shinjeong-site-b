@@ -10,7 +10,7 @@ const fs = require('fs');
 const path = require('path');
 
 const OUT = path.resolve(__dirname, '..');
-const SITE_URL = 'https://idagyeol-bit.github.io/shinjeong-site-c/'; // 배포 주소가 정해지면 이 줄만 바꾸세요
+const SITE_URL = 'https://idagyeol-bit.github.io/shinjeong-site-b/'; // 배포 주소가 정해지면 이 줄만 바꾸세요
 
 /* ===================== 콘텐츠 데이터 =====================
    원본 js/data.js의 사실관계를 그대로 옮겼습니다.
@@ -105,6 +105,7 @@ const SERVICES = [
     id: 'S01', file: 'service-equipment-cleaning.html', icon: 'tank', title: '설비 클리닝', en: 'EQUIPMENT CLEANING',
     summary: '탱크와 Pond, 배수로 등 산업설비의 잔류물과 퇴적물을 다루는 클리닝 작업.',
     short: '설비의 구조와 잔류물 특성을 바탕으로 작업 범위를 살펴봅니다.',
+    card: '탱크·Pond·배수로·R.T.O 내부의 잔류물과 퇴적물을 제거합니다.',
     body: '설비의 구조와 잔류물 특성을 확인하고 작업 범위를 검토합니다. 탱크·Pond 내부 클리닝부터 공장 배수로, R.T.O 유지보수·클리닝, 필터 관련 작업까지 현장에 필요한 업무를 안내합니다.',
     targets: ['Tank', 'Pond', '공장 내부 배수로', 'R.T.O', 'Filter Press 세정', 'Bag Filter 교체'],
     topTargets: ['Tank', 'Pond', '공장 내부 배수로'],
@@ -118,6 +119,7 @@ const SERVICES = [
     id: 'S02', file: 'service-catalyst-media.html', icon: 'reactor', title: '촉매·충진물 작업', en: 'EQUIPMENT CLEANING · CATALYST',
     summary: '반응기와 관련 설비의 촉매·충진물 제거 및 교체 작업.',
     short: '반응기와 관련 설비의 조건에 맞춰 요청 업무를 검토합니다.',
+    card: '반응기의 촉매·충진물을 제거하고 교체합니다.',
     body: '설비 조건과 작업 범위에 따라 촉매·충진물 관련 업무를 검토합니다. 흡입·분리·원격 모니터링 시스템의 역할과 로봇을 적용한 작업 방식을 함께 살펴보세요.',
     targets: ['촉매 제거·교체', '충진물 제거·교체', '하역·충진 관련 작업의 범위 상담'],
     topTargets: ['촉매 제거·교체', '충진물 제거·교체', '하역·충진 범위 상담'],
@@ -138,6 +140,7 @@ const SERVICES = [
     id: 'S03', file: 'service-chemical-cleaning.html', icon: 'pipe', title: '화학세정', en: 'CHEMICAL CLEANING',
     summary: '배관·열교환기·냉각탑 계통과 보일러 등 산업설비의 세정 업무.',
     short: '대상 설비와 오염 상태, 세정 목적을 먼저 확인합니다.',
+    card: '배관·열교환기·냉각탑·보일러를 세정합니다.',
     body: '설비 종류와 오염 상태, 작업 목적을 바탕으로 세정 범위를 검토합니다. 배관류, 열교환기, 냉각탑 계통과 보일러 튜브 등 대상 설비에 필요한 업무를 안내합니다.',
     targets: ['Plant 배관', '열교환기', 'Cooling Tower 계통', '보일러 Tube 내·외부 관련 세정'],
     topTargets: ['Plant 배관', '열교환기', 'Cooling Tower 계통'],
@@ -149,6 +152,7 @@ const SERVICES = [
     id: 'S04', file: 'service-dredging-sludge.html', icon: 'manhole', title: '준설·슬러지 회수', en: 'SEWER CLEANING · DREDGING',
     summary: '하수·오수관과 처리시설의 퇴적물 준설 및 슬러지 회수 작업.',
     short: '퇴적물의 특성과 현장 구조, 회수 범위를 함께 살펴봅니다.',
+    card: '하수·오수관과 처리시설의 퇴적물을 준설하고 슬러지를 회수합니다.',
     body: '하수도 퇴적물과 폐수처리장 슬러지 등 대상 물질과 현장 구조를 확인합니다. 회수 작업과 필요한 후속 관리의 범위를 함께 검토합니다.',
     targets: ['하수도 퇴적물', '하수처리시설', '오수관', '폐수처리장 슬러지'],
     topTargets: ['하수도 퇴적물', '오수관', '폐수처리장 슬러지'],
@@ -162,6 +166,7 @@ const SERVICES = [
     id: 'S05', file: 'service-inspection-repair.html', icon: 'scan', title: '관로·지하 조사 및 보수', en: 'CCTV · GPR · REPAIR',
     summary: '관로 CCTV와 GPR 조사, 비굴착 보수 등 시설 상태 확인과 보수 업무.',
     short: '조사 대상과 목적에 따라 필요한 업무를 안내합니다.',
+    card: '관로 CCTV·GPR로 조사하고, 비굴착으로 보수합니다.',
     body: '조사 대상과 목적에 맞춰 관로 내부 CCTV 조사, 지하매설물 GPR 조사, 비굴착 보수 관련 업무를 안내합니다. 대상 시설과 요청 범위를 알려 주시면 검토에 필요한 정보를 확인합니다.',
     targets: ['관로 CCTV 조사', '지하매설물 GPR 조사', '비굴착 보수'],
     topTargets: ['관로 CCTV 조사', '지하매설물 GPR 조사', '비굴착 보수'],
@@ -180,7 +185,7 @@ const SERVICES = [
 
 const TECH = {
   title: '현장 조건에 맞춰 적용하는 로봇 클리닝',
-  body: '로봇과 원격 모니터링을 활용해 내부 작업을 수행하고, 작업자의 위험 노출을 줄이는 방향을 검토합니다. 적용 가능성은 설비 구조와 출입구, 잔류물의 성상, 온도 및 장비 이동 조건에 따라 확인합니다.',
+  body: '작업자가 들어가기 전에 로봇이 위험 물질을 먼저 제거하고, 작업자는 설비 밖 제어 차량에서 CCTV로 내부를 보며 조작합니다. 방폭 지역용 장비(유압 구동 · 방폭 카메라 · Non-spark 재질)로 Reactor·Tank 내부의 질소 분위기 작업까지 수행합니다. 적용 범위는 설비 구조와 잔류물 조건을 확인해 정합니다.',
   followUp: '작업 범위에 따라 로봇 작업 이후 필요한 후속·마무리 작업을 진행합니다.',
   system: [
     { icon: 'robot', label: '로봇', text: '설비 내부에서 작업을 수행합니다.' },
@@ -298,8 +303,8 @@ const FAQ = [
   { q: '어떤 정보를 보내면 상담에 도움이 되나요?', a: '대상 설비, 작업 목적, 현장 상태와 희망 일정을 알려 주세요. 크기·구조·사진·도면 등 알고 계신 정보를 함께 정리하면 검토에 도움이 됩니다.' },
   { q: '우리 설비에 적용할 수 있는지 바로 알 수 있나요?', a: '출입구와 내부 구조, 잔류물 특성 등 현장 조건을 확인해야 합니다. 관련 정보를 바탕으로 적용 범위를 검토합니다.' },
   { q: '회수한 슬러지의 후속 과정도 상담할 수 있나요?', a: '회수물의 특성과 현장 조건에 따른 탈수·분리 및 처리 연계 범위를 함께 문의할 수 있습니다.' },
-  { q: '밀폐공간 작업에서 로봇 투입이 왜 더 안전한가요?', a: '작업자가 들어가기 전에 로봇이 위험 물질을 먼저 제거하고, 작업자는 설비 밖 제어 차량에서 CCTV로 내부를 확인하며 조작합니다. 유독가스 질식, 고위험 물질 접촉, 협소 공간 부상 같은 위험에 노출되는 시간이 줄어듭니다. (기술소개서의 위험성 비교 기준)' },
-  { q: '방폭 지역이나 질소 분위기의 설비에도 적용할 수 있나요?', a: '기술소개서 기준으로 방폭 지역 작업 조건에 맞춘 장비(유압 구동, 방폭 카메라, Non-spark 재질)를 운용하며, Reactor·Tank 내부의 질소 분위기 충진물 제거 작업도 적용 범위에 포함됩니다. 실제 적용 여부는 현장 조건을 확인한 뒤 안내합니다.' }
+  { q: '밀폐공간 작업에서 로봇 투입이 왜 더 안전한가요?', a: '작업자가 들어가기 전에 로봇이 위험 물질을 먼저 제거하고, 작업자는 설비 밖 제어 차량에서 CCTV로 내부를 확인하며 조작합니다. 유독가스 질식, 고위험 물질 접촉, 협소 공간 부상 같은 위험에 노출되는 시간이 줄어듭니다.' },
+  { q: '방폭 지역이나 질소 분위기의 설비에도 적용할 수 있나요?', a: '기술소개서 기준으로 방폭 지역 작업 조건에 맞춘 장비(유압 구동, 방폭 카메라, Non-spark 재질)를 운용하며, Reactor·Tank 내부의 질소 분위기 충진물 제거 작업도 적용 범위에 포함됩니다.' }
 ];
 
 const PROJECTS = [
@@ -314,6 +319,24 @@ const PROJECTS = [
 ];
 /* 필터 분류는 사업분야 5개와 1:1로 맞춥니다. (예전의 '설비 세정'은 사업분야에 없는 여섯 번째 분류였음) */
 const PROJECT_CATS = ['설비 클리닝', '촉매·충진물', '화학세정', '준설·슬러지', '관로·지하 조사'];
+/* 메인 신뢰 숫자 띠 — 200회: 기술소개서(2025) p.4 · 170여 건: 회사소개서(2024) 2020~2023 실적표
+   · 등록 특허 8건, ISO 9001 · 14001 · KOSHA-MS: 회사소개서(2024) (CREDS 참고) */
+const TRUST = [
+  { n: 200, unit: '회', l: '연간 밀폐공간 작업' },
+  { n: 170, unit: '여 건', l: '수행 실적 (2020~2023)' },
+  { n: 8, unit: '건', l: '등록 특허' },
+  { t: 'ISO 9001 · 14001 · KOSHA-MS', l: '품질·환경·안전보건 인증' }
+];
+const TRUST_SRC = '회사소개서(2024) · 기술소개서(2025)';
+
+/* 수행 이력 요약 띠 — 회사소개서(2024) 2020~2023 실적표 */
+const PROJECT_SUMMARY = {
+  n: 170, unit: '여 건', l: '2020~2023년 수행 실적 (회사소개서 2024)',
+  sectors: ['석유화학·정유·산업가스 플랜트', '발전 설비', '지자체·공공기관 상·하수도', '건설 현장']
+};
+/* 이력이 10건을 넘을 때만 분야 탭·로봇 적용 체크·검색창을 보여 준다 */
+const SHOW_FILTERS = PROJECTS.length > 10;
+
 const FEATURED = ['P01', 'P02', 'P04'];
 
 
@@ -521,6 +544,7 @@ ${g.items.map((i) => `            <li><a href="${i.href}">${esc(i.label)}</a></l
         </div>`).join('\n')}
       </nav>
     </div>
+    <p class="ftr__note">사이트의 사진은 모두 신정개발이 제공한 현장·장비 사진입니다.</p>
     <div class="ftr__bot">
       <p>&copy; <span data-year>2026</span> ${esc(C.name)}. All rights reserved.</p>
       <button class="totop" type="button" data-totop>맨 위로 ${icon('up', 13)}</button>
@@ -528,7 +552,10 @@ ${g.items.map((i) => `            <li><a href="${i.href}">${esc(i.label)}</a></l
   </div>
 </footer>
 
-<a class="mcta" href="contact.html">현장 문의하기 ${arrow(17)}</a>
+<nav class="mcta" aria-label="빠른 문의">
+  <a class="mcta__tel" href="tel:${C.tel.replace(/-/g, '')}">전화 문의</a>
+  <a class="mcta__go" href="contact.html">현장 문의 ${arrow(17)}</a>
+</nav>
 `;
 }
 
@@ -633,7 +660,7 @@ function serviceCards(reveal) {
         <span class="scard__no">0${i + 1}</span>
         <span class="scard__ico">${icon(s.icon, 40)}</span>
         <h3>${esc(s.title)}</h3>
-        <p>${esc(s.short)}</p>
+        <p>${esc(s.card)}</p>
         <span class="scard__tags">${s.topTargets.map((t) => `<span>${esc(t)}</span>`).join('')}</span>
         <span class="scard__go">자세히 보기 ${arrow(14)}</span>
       </a>`).join('\n');
@@ -700,8 +727,8 @@ pages['index.html'] = () => {
     <div class="hero__media">${photo(heroPhoto, '100vw', true)}</div>
     <div class="wrap hero__inner">
       <span class="eyebrow">INDUSTRIAL CLEANING · SINCE ${C.founded}</span>
-      <h1>현장을 이해하고,<br>기술로 답합니다.</h1>
-      <p class="hero__lead">산업설비 클리닝부터 로봇을 활용한 작업까지, 신정개발은 현장의 조건에서 작업의 답을 찾습니다.</p>
+      <h1>사람이 들어가기 위험한 설비 안,<br>로봇이 먼저 들어갑니다.</h1>
+      <p class="hero__lead">1992년부터 여수에서 탱크·반응기·관로 안의 잔류물과 촉매, 퇴적물을 제거해 온 산업설비 클리닝 전문기업입니다.</p>
       <div class="hero__act">
         <a class="btn btn--ghost" href="services.html">사업분야 보기 ${arrow(18)}</a>
         <a class="btn btn--ghost" href="contact.html">현장 문의 ${arrow(18)}</a>
@@ -714,6 +741,18 @@ pages['index.html'] = () => {
         <li><b>로봇·원격 작업</b><span>작업자의 위험 노출을 줄이는 방향</span></li>
         <li><b>회수 이후까지</b><span>탈수·분리와 처리 연계 범위 상담</span></li>
       </ul>
+    </div>
+  </section>
+
+  <!-- ===== 신뢰 숫자 ===== -->
+  <section class="section section--sm trust" aria-label="숫자로 보는 신정개발">
+    <div class="wrap">
+      <div class="stats" data-reveal>
+${TRUST.map((t) => t.t
+    ? `        <div class="stat stat--text"><b>${t.t.split(' · ').map(esc).join('&nbsp;· ')}</b><span>${esc(t.l)}</span></div>`
+    : `        <div class="stat"><b><span data-count="${t.n}">${t.n}</span><i>${esc(t.unit)}</i></b><span>${esc(t.l)}</span></div>`).join('\n')}
+      </div>
+      <p class="note mt-14" data-reveal>${esc(TRUST_SRC)}</p>
     </div>
   </section>
 
@@ -926,7 +965,6 @@ ${s.targets.map((t) => `            <li>${esc(t)}</li>`).join('\n')}
           <span class="eyebrow">${esc(s.photo.eyebrow || 'FIELD')}</span>
           <h2>${esc(s.photo.heading || '현장의 모습')}</h2>
           <p class="lead mt-18">${esc(s.photo.note)}</p>
-          <p class="note mt-18">사진은 업무의 맥락을 보여 주기 위한 ${s.photo.scene === false ? '장비 사진' : '현장 장면'}입니다. 특정 발주처나 수행 실적을 가리키지 않습니다.</p>
         </div>
       </div>
     </div>
@@ -1000,7 +1038,6 @@ ${RECOVERY.steps.map((st, i) => `            <li><em>0${i + 1}</em><b>${esc(st.l
       <div class="grid grid--3">
 ${pcards(s.gallery.ids, s.gallery.titles)}
       </div>
-      <p class="note mt-22" data-reveal>사진은 업무의 맥락을 보여 주기 위한 장비·현장 사진입니다. 특정 발주처나 수행 실적을 가리키지 않으며, 장비의 모델·성능은 상담 시 안내합니다.</p>
     </div>
   </section>
 `;
@@ -1231,7 +1268,7 @@ ${EQUIP.map((e) => `        <div><b>${esc(e.g)}</b><p>${esc(e.d)}</p></div>`).jo
 ${SERVICES.filter((s) => s.tech).map((s, i) => `        <a class="scard" href="${s.file}" data-reveal data-delay="${i * 70}">
           <span class="scard__ico">${icon(s.icon, 40)}</span>
           <h3>${esc(s.title)}</h3>
-          <p>${esc(s.short)}</p>
+          <p>${esc(s.card)}</p>
           <span class="scard__go">자세히 보기 ${arrow(14)}</span>
         </a>`).join('\n')}
       </div>
@@ -1350,7 +1387,7 @@ ${dewaterDiagram()}
 pages['projects.html'] = () => head({
   file: 'projects.html', page: 'projects',
   title: `수행 이력 | ${C.brand}`,
-  desc: '회사 자료에 수록된 신정개발의 과거 수행 이력입니다. 분야를 선택하거나 검색해 살펴볼 수 있습니다.'
+  desc: '회사 자료에 수록된 신정개발의 과거 수행 이력입니다.' + (SHOW_FILTERS ? ' 분야를 선택하거나 검색해 살펴볼 수 있습니다.' : '') // 필터를 숨기면 안내 문장도 뺀다
 }) + header('projects') + `
 <main id="main">
 ` + phero({
@@ -1362,7 +1399,14 @@ pages['projects.html'] = () => head({
   <section class="section">
     <div class="wrap">
 
-      <div class="filters" role="group" aria-label="분야 선택" data-reveal>
+      <div class="psum" data-reveal>
+        <div class="stat"><b><span data-count="${PROJECT_SUMMARY.n}">${PROJECT_SUMMARY.n}</span><i>${esc(PROJECT_SUMMARY.unit)}</i></b><span>${esc(PROJECT_SUMMARY.l)}</span></div>
+        <ul class="psum__chips" aria-label="주요 발주처 업종">
+${PROJECT_SUMMARY.sectors.map((x) => `          <li class="chip">${esc(x)}</li>`).join('\n')}
+        </ul>
+      </div>
+
+${SHOW_FILTERS ? `      <div class="filters" role="group" aria-label="분야 선택" data-reveal>
         <button type="button" data-filter="전체" aria-pressed="true">전체</button>
 ${PROJECT_CATS.map((c) => `        <button type="button" data-filter="${esc(c)}" aria-pressed="false">${esc(c)}</button>`).join('\n')}
       </div>
@@ -1375,7 +1419,7 @@ ${PROJECT_CATS.map((c) => `        <button type="button" data-filter="${esc(c)}"
         </div>
       </div>
 
-      <p class="note" data-reveal>표시 중인 이력 <b id="recCount" class="ink">${PROJECTS.length}</b>건</p>
+` : ''}      <p class="note" data-reveal>표시 중인 이력 <b id="recCount" class="ink">${PROJECTS.length}</b>건</p>
       <p class="note mt-6" data-reveal>회사소개서(2024)에는 2020~2023년 수행 실적 170여 건이 수록되어 있으며, 발주처는 석유화학·정유·산업가스 플랜트, 발전 설비, 지방자치단체·공공기관의 상·하수도 사업, 건설 현장 등입니다. 아래는 그중 대표 이력이며 전체 목록은 문의 시 안내합니다.</p>
 
       <ul class="rec mt-10" id="recList" data-reveal>
@@ -1645,11 +1689,6 @@ ${SERVICES.map((s) => `                  <option value="${s.id}">${esc(s.title)}
               <li><em>03</em><b>현장 상태</b><p>크기·구조·잔류물 정보, 사진·도면</p></li>
               <li><em>04</em><b>희망 일정</b><p>정기보수 기간 등 가능한 시기</p></li>
             </ul>
-          </div>
-
-          <div class="panel panel--line mt-16">
-            <h3>알아 두실 점</h3>
-            <p class="note mt-10">이 홈페이지에는 문의 접수 서버가 없습니다. 위 양식은 입력하신 내용을 정리해 <b class="ink">방문자의 메일 앱</b>으로 넘기는 방식이며, 홈페이지가 내용을 저장하거나 대신 발송하지 않습니다.</p>
           </div>
         </div>
 

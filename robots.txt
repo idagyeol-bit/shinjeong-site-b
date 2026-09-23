@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://idagyeol-bit.github.io/shinjeong-site-c/sitemap.xml
+Sitemap: https://idagyeol-bit.github.io/shinjeong-site-b/sitemap.xml

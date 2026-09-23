@@ -5,9 +5,9 @@
 외부 라이브러리(jQuery, GSAP 등)를 하나도 쓰지 않습니다.
 
 > **저장소 구성**
-> - `shinjeong-site-b` — 처음 만든 원본 디자인 (비교·보관용)
-> - `shinjeong-site-c` — **이 저장소.** 사실 검증·보강을 거친 2차 수정본. 배포 주소 https://idagyeol-bit.github.io/shinjeong-site-c/
-> 앞으로의 수정은 이 저장소에서 합니다.
+> - `shinjeong-site-b` — **이 저장소.** 사실 검증·보강을 거친 2차 수정본. 배포 주소 https://idagyeol-bit.github.io/shinjeong-site-b/
+> - `-c` 저장소는 같은 내용의 사본이며 공개(GitHub Pages)되어 있지 않습니다.
+> 앞으로의 수정은 이 저장소(-b)에서 합니다.
 ---
 
 ## 1. 바로 열어 보기
