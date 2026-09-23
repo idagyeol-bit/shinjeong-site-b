@@ -360,21 +360,16 @@ const HERO_SERVICES = [
   { svc: 'S05', label: '관로 조사' }
 ];
 
-/* 설비로 찾기 — 방문자가 쓰는 설비 이름 → 업무 페이지.
-   설비 이름은 각 분야 상세의 "대상 설비·업무" 목록에서 골랐고, 업무 이름·링크는 SERVICES에서 가져온다. */
-const QUICK_FIND = [
-  { label: '탱크 · Pond', svc: 'S01' },
-  { label: '공장 배수로 · R.T.O', svc: 'S01' },
-  { label: 'Filter Press · Bag Filter', svc: 'S01' },
-  { label: '반응기 촉매 · 충진물', svc: 'S02' },
-  { label: '배관 · 열교환기', svc: 'S03' },
-  { label: '냉각탑 · 보일러 튜브', svc: 'S03' },
-  { label: '하수관 · 오수관', svc: 'S04' },
-  { label: '하수·폐수처리시설 슬러지', svc: 'S04' },
-  { label: '관로 내부 CCTV 조사', svc: 'S05' },
-  { label: '지하매설물 GPR · 비굴착 보수', svc: 'S05' },
-  { label: '잘 모르겠어요', href: 'contact.html', to: '현장 문의', line: true }
-];
+/* 업무 카드의 설비 칩 — 방문자가 쓰는 설비 이름(한국어 우선). 칩마다 그 카드의 분야 페이지로 연결한다.
+   4차 '설비로 찾기' 데이터를 옮겨 쓴 것이고, 이름은 모두 분야 상세의 대상 설비에 있는 것이다. */
+const CARD_CHIPS = {
+  S01: ['탱크', 'Pond', '공장 배수로', 'R.T.O', 'Filter Press', 'Bag Filter'],
+  S02: ['반응기 촉매', '충진물'],
+  S03: ['배관', '열교환기', '냉각탑', '보일러 튜브'],
+  S04: ['하수관', '오수관', '하수·폐수처리시설 슬러지'],
+  S05: ['관로 CCTV 조사', '지하매설물 GPR 조사', '비굴착 보수']
+};
+
 
 
 /* ===================== 도우미 ===================== */
@@ -617,6 +612,10 @@ ${g.items.map((i) => `            <li><a href="${i.href}">${esc(i.label)}</a></l
 /* 현장 진행 방식·장비·로봇·회사 소개 본문 맨 아래에 넣는 출처 한 줄 */
 const SRC_LINE = '      <p class="note mt-block">출처: (주)신정개발 회사소개서(2024) · 기술소개서(2025)</p>\n';
 
+/* 업무 카드 바로 아래 한 줄 — 어느 업무인지 모를 때 (메인·사업분야 공통) */
+const SVC_HELP = '      <p class="svc-help mt-28" data-reveal>어느 업무인지 모르시면 → <a href="contact.html">현장 문의</a></p>';
+
+
 const MAIN_END = '</main>\n\n';
 
 function foot(extraJs) {
@@ -713,7 +712,17 @@ ${rows.map((r) => `          <tr><td>${esc(r.r)}</td><td data-h="인원 투입">
 }
 
 /* ===================== 공통 블록 ===================== */
-function serviceCards(reveal) {
+/* chips: true 이면(메인·사업분야) 카드 전체 링크 대신 제목·설비 칩·"자세히 보기"만 링크로 두고, 위쪽 번호는 뺀다 */
+function serviceCards(reveal, chips) {
+  if (chips) {
+    return SERVICES.map((s, i) => `      <article class="scard scard--chips"${reveal ? ` data-reveal data-delay="${i * 70}"` : ''}>
+        <span class="scard__ico">${icon(s.icon, 40)}</span>
+        <h3><a href="${s.file}">${esc(s.title)}</a></h3>
+        <p>${esc(s.card)}</p>
+        <ul class="scard__chips" aria-label="${esc(s.title)} 대상 설비">${CARD_CHIPS[s.id].map((c) => `<li><a href="${s.file}">${esc(c)}</a></li>`).join('')}</ul>
+        <a class="scard__go" href="${s.file}">자세히 보기 ${arrow(14)}</a>
+      </article>`).join('\n');
+  }
   return SERVICES.map((s, i) => `      <a class="scard" href="${s.file}"${reveal ? ` data-reveal data-delay="${i * 70}"` : ''}>
         <span class="scard__no">0${i + 1}</span>
         <span class="scard__ico">${icon(s.icon, 40)}</span>
@@ -756,30 +765,6 @@ ${FAQ.map((f, i) => `        <details${i === 0 ? ' open' : ''}>
           <p class="faq__a">${esc(f.a)}</p>
         </details>`).join('\n')}
       </div>`;
-}
-
-/* 설비로 찾기 — 메인과 사업분야 페이지에 같은 데이터로 넣는다 */
-function quickFind() {
-  const items = QUICK_FIND.map((q) => {
-    const sv = q.svc ? svc(q.svc) : null;
-    const href = sv ? sv.file : q.href;
-    const to = sv ? sv.title : q.to;
-    return `        <a class="qf__item${q.line ? ' qf__item--line' : ''}" href="${href}"><b>${esc(q.label)}</b><span>→ ${esc(to)}</span></a>`;
-  }).join('\n');
-  return `  <!-- ===== 설비로 찾기 ===== -->
-  <section class="section section--sm section--soft">
-    <div class="wrap">
-      <div class="head">
-        <div data-reveal><h2>어떤 설비의 작업이<br>필요하신가요?</h2></div>
-        <div class="head__aside" data-reveal data-delay="90"><p class="lead">설비를 누르면 맞는 업무 페이지로 바로 이동합니다.</p></div>
-      </div>
-      <nav class="qf" aria-label="설비로 찾기" data-reveal>
-${items}
-      </nav>
-    </div>
-  </section>
-
-`;
 }
 
 /* ===================== 페이지 ===================== */
@@ -834,20 +819,22 @@ ${TRUST.map((t) => t.t
     </div>
   </section>
 
-${quickFind()}  <!-- ===== 사업분야 ===== -->
+  <!-- ===== 사업분야 ===== -->
   <section class="section" id="what">
     <div class="wrap">
       <div class="head">
         <div data-reveal>
-          <h2>산업설비와 환경시설,<br>다섯 가지 업무로 다룹니다</h2>
+          <h2>사업분야</h2>
         </div>
         <div class="head__aside" data-reveal data-delay="90">
           <a class="tlink" href="services.html">사업분야 전체 보기 ${upArrow(14)}</a>
         </div>
       </div>
       <div class="grid grid--5">
-${serviceCards(true)}
+${serviceCards(true, true)}
       </div>
+${SVC_HELP}
+
     </div>
   </section>
 
@@ -944,7 +931,8 @@ pages['services.html'] = () => head({
 ` + phero({
   h1: '사업분야',
   crumbs: [{ label: '사업분야' }]
-}) + tabs(null) + '\n' + quickFind() + `  <section class="section">
+}) + tabs(null) + `
+  <section class="section">
     <div class="wrap">
       <div class="head">
         <div data-reveal>
@@ -952,8 +940,9 @@ pages['services.html'] = () => head({
         </div>
       </div>
       <div class="grid grid--3">
-${serviceCards(true)}
+${serviceCards(true, true)}
       </div>
+${SVC_HELP}
     </div>
   </section>
 

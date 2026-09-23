@@ -770,19 +770,6 @@ html:not(.js-on) [data-reveal] { opacity: 1; transform: none; }
 }
 
 /* ========== 13. 설비로 찾기 · 사업분야 하위 메뉴 (4차) ========== */
-/* 설비로 찾기 — 버튼 전체가 링크. 마지막(잘 모르겠어요)만 흰 바탕 테두리형 */
-.qf { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
-.qf__item {
-  display: flex; flex-direction: column; justify-content: center; gap: 4px;
-  min-height: 72px; padding: 14px 18px;
-  background: var(--brand-tint); border: 1px solid transparent; border-radius: var(--radius);
-  transition: border-color 0.2s, background 0.2s;
-}
-.qf__item b { font-size: 15.5px; font-weight: 600; line-height: 1.4; color: var(--ink); letter-spacing: -0.02em; }
-.qf__item span { font-size: var(--fs-xs); font-weight: 600; color: var(--brand); }
-.qf__item--line { background: var(--white); border-color: var(--line); }
-.qf__item:hover, .qf__item:focus-visible { border-color: var(--brand); }
-
 /* PC 하위 메뉴 — 마우스(:hover)·키보드(:focus-within)로 열린다. 위쪽 여백(padding-top)이 메뉴와 패널 사이의 다리 역할 */
 .gnb__item { position: relative; display: flex; align-items: center; }
 .gnb__drop {
@@ -811,14 +798,6 @@ html:not(.js-on) [data-reveal] { opacity: 1; transform: none; }
 .drawer .drawer__sub a { justify-content: flex-start; padding: 9px 2px; border-bottom: 0; font-size: 15px; font-weight: 500; color: var(--text); letter-spacing: -0.02em; }
 .drawer .drawer__sub a.is-current { color: var(--brand); font-weight: 600; }
 
-@media (max-width: 1180px) {
-  .qf { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-}
-@media (max-width: 720px) {
-  .qf { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
-  .qf__item { min-height: 64px; padding: 12px 14px; }
-  .qf__item b { font-size: 14.5px; }
-}
 
 /* ========== 14. 글 줄이기 · 한눈에 보기 · 보유 장비 (7차) ========== */
 .head > :only-child { grid-column: 1 / -1; }   /* 설명 칸이 없으면 제목이 한 줄 전체를 쓴다 (빈 오른쪽 칸 없음) */
@@ -855,3 +834,21 @@ html:not(.js-on) [data-reveal] { opacity: 1; transform: none; }
   .eqgrid { grid-template-columns: 1fr; }
   .glance__tbl > div { grid-template-columns: 1fr; gap: 4px; }
 }
+
+/* ========== 15. 업무 카드의 설비 칩 (8차) ========== */
+/* 메인·사업분야 카드는 제목·칩·"자세히 보기"만 링크 (카드 전체 링크 아님) */
+.scard--chips h3 a { color: inherit; }
+.scard--chips h3 a:hover, .scard--chips h3 a:focus-visible { color: var(--brand); }
+.scard--chips .scard__ico { margin-top: 0; }
+.scard__chips { margin-top: auto; padding-top: 20px; display: flex; flex-wrap: wrap; gap: 6px; }
+.scard__chips a {
+  display: inline-flex; align-items: center; min-height: 36px; padding: 0 12px;
+  border: 1px solid var(--line); border-radius: 100px; background: var(--soft);
+  font-size: 12.5px; font-weight: 500; line-height: 1.35; color: var(--text);
+  transition: border-color 0.2s, color 0.2s;
+}
+.scard__chips a:hover, .scard__chips a:focus-visible { border-color: var(--brand); color: var(--brand); }
+.scard--chips .scard__go { align-self: flex-start; }
+.svc-help { text-align: center; font-size: var(--fs-sm); color: var(--muted); }
+.svc-help a { font-weight: 600; color: var(--brand); text-decoration: underline; text-underline-offset: 3px; }
+
