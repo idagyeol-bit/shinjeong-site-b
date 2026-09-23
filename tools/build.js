@@ -346,6 +346,16 @@ const SHOW_FILTERS = PROJECTS.length > 10;
 
 const FEATURED = ['P01', 'P02', 'P04'];
 
+/* 메인 첫 화면 제목 — 하는 일 다섯 가지. 표시 글자만 여기서 정하고, 연결 주소는 SERVICES에서 가져온다.
+   br: true 인 항목 뒤에서 PC 줄을 나눈다(휴대폰에서는 자연 줄바꿈). */
+const HERO_SERVICES = [
+  { svc: 'S01', label: '탱크 클리닝' },
+  { svc: 'S02', label: '촉매 교체' },
+  { svc: 'S03', label: '화학세정', br: true },
+  { svc: 'S04', label: '준설' },
+  { svc: 'S05', label: '관로 조사' }
+];
+
 /* 설비로 찾기 — 방문자가 쓰는 설비 이름 → 업무 페이지.
    설비 이름은 각 분야 상세의 "대상 설비·업무" 목록에서 골랐고, 업무 이름·링크는 SERVICES에서 가져온다. */
 const QUICK_FIND = [
@@ -796,8 +806,11 @@ pages['index.html'] = () => {
     <div class="hero__media">${photo(heroPhoto, '100vw', true)}</div>
     <div class="wrap hero__inner">
       <span class="eyebrow">여수 · ${C.founded}년 설립</span>
-      <h1>산업설비 클리닝과 준설,<br>30년 넘게 현장에서 해 왔습니다.</h1>
-      <p class="hero__lead">탱크·반응기의 잔류물과 촉매부터 하수관로의 퇴적물까지 제거합니다. 위험한 내부 작업에는 자체 개발한 로봇을 먼저 투입합니다.</p>
+      <h1 class="hero__svc" aria-label="${esc(HERO_SERVICES.map((h) => h.label).join(', '))}">${HERO_SERVICES.map((h, i) =>
+        /* 가운뎃점을 앞 이름과 한 덩어리(줄바꿈 금지)로 묶어 줄 맨 앞에 오지 않게 한다 */
+        `<span class="hero__svcitem"><a href="${svc(h.svc).file}">${esc(h.label)}</a>${i < HERO_SERVICES.length - 1 ? `<span class="hero__dot${h.br ? ' hero__dot--brk' : ''}" aria-hidden="true"> ·</span>` : ''}</span>${h.br ? '<br class="hero__br">' : ''}`
+      ).join(' ')}</h1>
+      <p class="hero__lead hero__lead--strong">산업설비 클리닝 전문기업, 신정개발</p>
       <div class="hero__act">
         <a class="btn btn--light" href="services.html">사업분야 보기 ${arrow(18)}</a>
         <a class="btn btn--ghost" href="contact.html">현장 문의 ${arrow(18)}</a>
