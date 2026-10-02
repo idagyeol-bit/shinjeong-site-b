@@ -53,7 +53,7 @@
       <a href="company.html">회사 소개</a>
   </nav>
   <div class="hdr__act">
-    <a class="hdr__cta" href="contact.html">현장 문의 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8.5 7H17v8.5"/></svg></a>
+    <a class="hdr__cta" href="contact.html">현장 문의 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M13 6.5l5.5 5.5L13 17.5"/></svg></a>
     <button class="burger" type="button" aria-expanded="false" aria-controls="drawer" aria-label="메뉴 열기"><i></i><i></i><i></i></button>
   </div>
 </header>
@@ -125,78 +125,67 @@
       <p class="note" data-reveal>표시 중인 이력 <b id="recCount" class="ink">12</b>건</p>
       <p class="note mt-6" data-reveal>2020~2023년 4년간 170여 건의 작업을 수행했습니다. 발주처는 석유화학·정유·산업가스 플랜트, 발전 설비, 지방자치단체·공공기관의 상·하수도 사업, 건설 현장 등입니다. 이 가운데 4개 발주처와는 4년 동안 매년 단가계약으로 작업했습니다. 아래는 그중 대표 이력이며, 전체 목록은 문의 시 안내합니다.</p>
 
-      <ul class="rec mt-10" id="recList" data-reveal>
+      <div class="rec__head mt-10" data-reveal><span>기간</span><span>수행 작업</span><span>관련 업무</span></div>
+      <ul class="rec" id="recList" data-reveal>
         <li class="rec__row" data-cat="설비 클리닝" data-robot="unknown" data-search="Pond Cleaning 단가계약 설비 클리닝 Pond Cleaning을 단가계약으로 해마다 수행한 이력입니다.">
           <span class="rec__date">2020~2023</span>
           <span class="rec__name">Pond Cleaning 단가계약</span>
-          <span class="rec__cat">설비 클리닝</span>
-          <a class="rec__go" href="service-equipment-cleaning.html" aria-label="설비 클리닝 업무 보기"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8.5 7H17v8.5"/></svg></a>
+          <a class="rec__cat" href="service-equipment-cleaning.html">설비 클리닝 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M13 6.5l5.5 5.5L13 17.5"/></svg></a>
         </li>
         <li class="rec__row" data-cat="준설·슬러지" data-robot="unknown" data-search="준설작업 단가계약 준설·슬러지 준설작업을 단가계약으로 해마다 수행한 이력입니다.">
           <span class="rec__date">2020~2023</span>
           <span class="rec__name">준설작업 단가계약</span>
-          <span class="rec__cat">준설·슬러지</span>
-          <a class="rec__go" href="service-dredging-sludge.html" aria-label="준설·슬러지 회수 업무 보기"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8.5 7H17v8.5"/></svg></a>
+          <a class="rec__cat" href="service-dredging-sludge.html">준설·슬러지 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M13 6.5l5.5 5.5L13 17.5"/></svg></a>
         </li>
         <li class="rec__row" data-cat="준설·슬러지" data-robot="stated" data-search="폐수처리장 유량조정조 슬러지 준설 준설·슬러지 폐수처리장 유량조정조의 슬러지를 준설한 이력입니다.">
           <span class="rec__date">2023.09~2023.11</span>
           <span class="rec__name">폐수처리장 유량조정조 슬러지 준설 <span class="chip">로봇 적용</span></span>
-          <span class="rec__cat">준설·슬러지</span>
-          <a class="rec__go" href="service-dredging-sludge.html" aria-label="준설·슬러지 회수 업무 보기"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8.5 7H17v8.5"/></svg></a>
+          <a class="rec__cat" href="service-dredging-sludge.html">준설·슬러지 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M13 6.5l5.5 5.5L13 17.5"/></svg></a>
         </li>
         <li class="rec__row" data-cat="준설·슬러지" data-robot="unknown" data-search="공정 내 배수로 슬러지 준설 준설·슬러지 공정 내 배수로의 슬러지를 준설한 이력입니다.">
           <span class="rec__date">2023.07</span>
           <span class="rec__name">공정 내 배수로 슬러지 준설</span>
-          <span class="rec__cat">준설·슬러지</span>
-          <a class="rec__go" href="service-dredging-sludge.html" aria-label="준설·슬러지 회수 업무 보기"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8.5 7H17v8.5"/></svg></a>
+          <a class="rec__cat" href="service-dredging-sludge.html">준설·슬러지 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M13 6.5l5.5 5.5L13 17.5"/></svg></a>
         </li>
         <li class="rec__row" data-cat="설비 클리닝" data-robot="stated" data-search="설비 내부 Cleaning 설비 클리닝 설비 내부 Cleaning 작업에 로봇을 적용한 이력입니다.">
           <span class="rec__date">2023.06</span>
           <span class="rec__name">설비 내부 Cleaning <span class="chip">로봇 적용</span></span>
-          <span class="rec__cat">설비 클리닝</span>
-          <a class="rec__go" href="service-equipment-cleaning.html" aria-label="설비 클리닝 업무 보기"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8.5 7H17v8.5"/></svg></a>
+          <a class="rec__cat" href="service-equipment-cleaning.html">설비 클리닝 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M13 6.5l5.5 5.5L13 17.5"/></svg></a>
         </li>
         <li class="rec__row" data-cat="촉매·충진물" data-robot="unknown" data-search="건조제 교체 촉매·충진물 공장의 건조제를 교체한 이력입니다.">
           <span class="rec__date">2023.03~2023.06</span>
           <span class="rec__name">건조제 교체</span>
-          <span class="rec__cat">촉매·충진물</span>
-          <a class="rec__go" href="service-catalyst-media.html" aria-label="촉매·충진물 작업 업무 보기"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8.5 7H17v8.5"/></svg></a>
+          <a class="rec__cat" href="service-catalyst-media.html">촉매·충진물 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M13 6.5l5.5 5.5L13 17.5"/></svg></a>
         </li>
         <li class="rec__row" data-cat="촉매·충진물" data-robot="unknown" data-search="흡착제 교체 촉매·충진물 설비의 흡착제를 교체한 이력입니다.">
           <span class="rec__date">2023.03</span>
           <span class="rec__name">흡착제 교체</span>
-          <span class="rec__cat">촉매·충진물</span>
-          <a class="rec__go" href="service-catalyst-media.html" aria-label="촉매·충진물 작업 업무 보기"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8.5 7H17v8.5"/></svg></a>
+          <a class="rec__cat" href="service-catalyst-media.html">촉매·충진물 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M13 6.5l5.5 5.5L13 17.5"/></svg></a>
         </li>
         <li class="rec__row" data-cat="촉매·충진물" data-robot="stated" data-search="반응기 로봇 촉매 Unloading 촉매·충진물 반응기 촉매 Unloading 작업에 로봇을 적용한 이력입니다.">
           <span class="rec__date">2023.02~2023.04</span>
           <span class="rec__name">반응기 로봇 촉매 Unloading <span class="chip">로봇 적용</span></span>
-          <span class="rec__cat">촉매·충진물</span>
-          <a class="rec__go" href="service-catalyst-media.html" aria-label="촉매·충진물 작업 업무 보기"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8.5 7H17v8.5"/></svg></a>
+          <a class="rec__cat" href="service-catalyst-media.html">촉매·충진물 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M13 6.5l5.5 5.5L13 17.5"/></svg></a>
         </li>
         <li class="rec__row" data-cat="화학세정" data-robot="unknown" data-search="정기보수 APH·열교환기 튜브 Cleaning 화학세정 정기보수 기간에 APH와 열교환기 튜브의 Cleaning을 수행한 이력입니다.">
           <span class="rec__date">2022.05~2022.06</span>
           <span class="rec__name">정기보수 APH·열교환기 튜브 Cleaning</span>
-          <span class="rec__cat">화학세정</span>
-          <a class="rec__go" href="service-chemical-cleaning.html" aria-label="화학세정 업무 보기"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8.5 7H17v8.5"/></svg></a>
+          <a class="rec__cat" href="service-chemical-cleaning.html">화학세정 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M13 6.5l5.5 5.5L13 17.5"/></svg></a>
         </li>
         <li class="rec__row" data-cat="촉매·충진물" data-robot="unknown" data-search="대정비 촉매 교체 촉매·충진물 대정비 기간에 반응기 촉매를 교체한 이력입니다.">
           <span class="rec__date">2022.05</span>
           <span class="rec__name">대정비 촉매 교체</span>
-          <span class="rec__cat">촉매·충진물</span>
-          <a class="rec__go" href="service-catalyst-media.html" aria-label="촉매·충진물 작업 업무 보기"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8.5 7H17v8.5"/></svg></a>
+          <a class="rec__cat" href="service-catalyst-media.html">촉매·충진물 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M13 6.5l5.5 5.5L13 17.5"/></svg></a>
         </li>
         <li class="rec__row" data-cat="관로·지하 조사" data-robot="na" data-search="하수관거 CCTV 조사 관로·지하 조사 하수관거를 대상으로 CCTV 조사를 수행한 이력입니다.">
           <span class="rec__date">2022.01~2022.12</span>
           <span class="rec__name">하수관거 CCTV 조사</span>
-          <span class="rec__cat">관로·지하 조사</span>
-          <a class="rec__go" href="service-inspection-repair.html" aria-label="관로·지하 조사 및 보수 업무 보기"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8.5 7H17v8.5"/></svg></a>
+          <a class="rec__cat" href="service-inspection-repair.html">관로·지하 조사 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M13 6.5l5.5 5.5L13 17.5"/></svg></a>
         </li>
         <li class="rec__row" data-cat="설비 클리닝" data-robot="unknown" data-search="위험물 저장탱크 개방검사 Cleaning 설비 클리닝 위험물 저장탱크 개방검사에 맞춰 내부를 Cleaning한 이력입니다.">
           <span class="rec__date">2020.05~2020.11</span>
           <span class="rec__name">위험물 저장탱크 개방검사 Cleaning</span>
-          <span class="rec__cat">설비 클리닝</span>
-          <a class="rec__go" href="service-equipment-cleaning.html" aria-label="설비 클리닝 업무 보기"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8.5 7H17v8.5"/></svg></a>
+          <a class="rec__cat" href="service-equipment-cleaning.html">설비 클리닝 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M13 6.5l5.5 5.5L13 17.5"/></svg></a>
         </li>
       </ul>
 

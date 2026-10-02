@@ -432,7 +432,7 @@ const icon = (n, size = 24, cls = '') =>
   `<svg viewBox="0 0 24 24" width="${size}" height="${size}" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"${cls ? ` class="${cls}"` : ''}>${ICONS[n] || ''}</svg>`;
 
 const arrow = (s = 18) => icon('arrow', s);
-const upArrow = (s = 15) => icon('up', s);
+const upArrow = (s = 15) => icon('up', s); // 바깥 사이트 링크용 대각선 화살표 (13차부터 사이트 안 이동은 arrow 사용)
 
 /* 사진 태그 (여러 크기를 준비해 필요한 것만 내려받게 한다) */
 function photo(p, sizesAttr, eager) {
@@ -519,7 +519,7 @@ ${SERVICES.map((s) => `              <li><a href="${s.file}"${cur(s.id)}><b>${es
 ${nav}
   </nav>
   <div class="hdr__act">
-    <a class="hdr__cta" href="contact.html"${page === 'contact' ? ' aria-current="page"' : ''}>현장 문의 ${upArrow(14)}</a>
+    <a class="hdr__cta" href="contact.html"${page === 'contact' ? ' aria-current="page"' : ''}>현장 문의 ${arrow(14)}</a>
     <button class="burger" type="button" aria-expanded="false" aria-controls="drawer" aria-label="메뉴 열기"><i></i><i></i><i></i></button>
   </div>
 </header>
@@ -767,17 +767,18 @@ function pcards(ids, titles, sizesAttr) {
   }).join('\n');
 }
 
-function recRow(p, withSummary) {
+/* 수행 이력 한 줄 (메인·수행 이력 페이지 공통). 3번째 칸의 분야 이름이 분야 상세로 가는 링크다(13차) */
+function recRow(p) {
   const chip = p.robot === 'stated' ? ' <span class="chip">로봇 적용</span>' : '';
   return `        <li class="rec__row" data-cat="${esc(p.cat)}" data-robot="${p.robot}" data-search="${esc(p.title + ' ' + p.cat + ' ' + p.summary)}">
           <span class="rec__date">${esc(p.period)}</span>
           <span class="rec__name">${esc(p.title)}${chip}</span>
-          <span class="rec__cat">${esc(p.cat)}</span>
-          ${withSummary
-    ? `<a class="rec__go" href="${svc(p.svc).file}" aria-label="${esc(svc(p.svc).title)} 업무 보기">${upArrow(13)}</a>`
-    : `<a class="rec__go" href="projects.html">이력 보기 ${upArrow(13)}</a>`}
+          <a class="rec__cat" href="${svc(p.svc).file}">${esc(p.cat)} ${arrow(14)}</a>
         </li>`;
 }
+
+/* 수행 이력 목록의 머리글 줄 (13차) — 목록(ul) 바깥의 보이는 글자로 둔다. 720px 이하에서는 숨긴다 */
+const REC_HEAD = `      <div class="rec__head" data-reveal><span>기간</span><span>수행 작업</span><span>관련 업무</span></div>`;
 
 function faqBlock() {
   return `      <div class="faq" data-reveal>
@@ -847,8 +848,8 @@ ${TRUST.map((t) => t.t
         <div data-reveal>
           <h2>사업분야</h2>
         </div>
-        <div class="head__aside" data-reveal data-delay="90">
-          <a class="tlink" href="services.html">사업분야 전체 보기 ${upArrow(14)}</a>
+        <div class="head__aside head__aside--end" data-reveal data-delay="90">
+          <a class="tlink" href="services.html">사업분야 전체 보기 ${arrow(14)}</a>
         </div>
       </div>
       <div class="grid grid--5">
@@ -866,14 +867,16 @@ ${SVC_HELP}
         <div data-reveal>
           <h2>주요 수행 이력</h2>
         </div>
-        <div class="head__aside" data-reveal data-delay="90">
-          <a class="tlink" href="projects.html">수행 이력 전체 보기 ${upArrow(14)}</a>
+        <div class="head__aside head__aside--end" data-reveal data-delay="90">
+          <a class="tlink" href="projects.html">수행 이력 전체 보기 ${arrow(14)}</a>
         </div>
       </div>
+${REC_HEAD}
       <ul class="rec" data-reveal>
-${feat.map((p) => recRow(p, true)).join('\n')}
+${feat.map((p) => recRow(p)).join('\n')}
       </ul>
       <p class="note mt-14" data-reveal>4개 발주처와 2020~2023년 매년 단가계약으로 작업했습니다.</p>
+      <div class="mt-24" data-reveal><a class="btn btn--line btn--sm" href="projects.html">수행 이력 ${PROJECTS.length}건 모두 보기 ${arrow(18)}</a></div>
     </div>
   </section>
 
@@ -884,9 +887,9 @@ ${feat.map((p) => recRow(p, true)).join('\n')}
         <div data-reveal>
           <h2>설비 밖에서 조종하는<br>무인 작업 시스템</h2>
         </div>
-        <div class="head__aside" data-reveal data-delay="90">
-          <a class="tlink" href="technology.html">장비·로봇 자세히 보기 ${upArrow(14)}</a>
-          <a class="tlink ml-16" href="process.html">현장 진행 방식 보기 ${upArrow(14)}</a>
+        <div class="head__aside head__aside--end" data-reveal data-delay="90">
+          <a class="tlink" href="technology.html">장비·로봇 자세히 보기 ${arrow(14)}</a>
+          <a class="tlink ml-16" href="process.html">현장 진행 방식 보기 ${arrow(14)}</a>
         </div>
       </div>
 
@@ -988,7 +991,7 @@ SERVICES.forEach((s, idx) => {
     /* 한눈에 보기 — 사진 1장 + 4줄 표. 표 내용은 모두 분야 데이터(targets·equip·projects·inquiryHint)에서 가져온다 */
     const links = [];
     if (s.concept) links.push(`<a class="tlink" href="technology.html">작업 시스템 자세히 보기 ${arrow(14)}</a>`);   // 촉매: '작업 시스템의 역할' 섹션 대신
-    else if (s.tech) links.push(`<a class="tlink" href="technology.html">장비·로봇 보기 ${upArrow(14)}</a>`);     // 관련 기술
+    else if (s.tech) links.push(`<a class="tlink" href="technology.html">장비·로봇 보기 ${arrow(14)}</a>`);     // 관련 기술
     if (s.recovery) links.push(`<a class="tlink" href="process.html#dewater">탈수 과정 자세히 보기 ${arrow(14)}</a>`); // 준설: '회수 이후의 과정' 섹션 대신
     sections.push(`  <section class="section">
     <div class="wrap">
@@ -1133,7 +1136,7 @@ ${TECH.system.map((r) => `        <div>${icon(r.icon, 30)}<b>${esc(r.label)}</b>
       <ul class="numlist" data-reveal>
 ${TECH.conditions.map((c, i) => `        <li><em>0${i + 1}</em><b>${esc(c.label)}</b><p>${esc(c.text)}</p></li>`).join('\n')}
       </ul>
-      <p class="note mt-22" data-reveal>${esc(TECH.flowNote)} <a class="tlink" href="process.html">현장 진행 방식 자세히 보기 ${upArrow(14)}</a></p>
+      <p class="note mt-22" data-reveal>${esc(TECH.flowNote)} <a class="tlink" href="process.html">현장 진행 방식 자세히 보기 ${arrow(14)}</a></p>
     </div>
   </section>
 
@@ -1150,7 +1153,7 @@ ${RECOVERY.steps.map((s, i) => `        <li><em>0${i + 1}</em><b>${esc(s.label)}
 ${RECOVERY.methods.map((m, i) => `        <div>${icon(i === 0 ? 'drop' : 'filter', 30)}<b>${esc(m.label)}</b><p>${esc(m.text)}</p></div>`).join('\n')}
       </div>
       <p class="note mt-14" data-reveal>${esc(DEWATER_NOTE)}</p>
-      <p class="mt-14" data-reveal><a class="tlink" href="process.html#dewater">탈수 과정 자세히 보기 ${upArrow(14)}</a></p>
+      <p class="mt-14" data-reveal><a class="tlink" href="process.html#dewater">탈수 과정 자세히 보기 ${arrow(14)}</a></p>
     </div>
   </section>
 
@@ -1159,8 +1162,8 @@ ${RECOVERY.methods.map((m, i) => `        <div>${icon(i === 0 ? 'drop' : 'filter
     <div class="wrap">
       <div class="head">
         <div data-reveal><h2>관련 업무</h2></div>
-        <div class="head__aside" data-reveal data-delay="90">
-          <a class="tlink" href="services.html">사업분야 전체 보기 ${upArrow(14)}</a>
+        <div class="head__aside head__aside--end" data-reveal data-delay="90">
+          <a class="tlink" href="services.html">사업분야 전체 보기 ${arrow(14)}</a>
         </div>
       </div>
       <div class="grid grid--3">
@@ -1319,13 +1322,9 @@ ${SHOW_SEARCH ? `      <div class="toolbar" data-reveal>
 ` : ''}` : ''}      <p class="note" data-reveal>표시 중인 이력 <b id="recCount" class="ink">${PROJECTS.length}</b>건</p>
       <p class="note mt-6" data-reveal>2020~2023년 4년간 170여 건의 작업을 수행했습니다. 발주처는 석유화학·정유·산업가스 플랜트, 발전 설비, 지방자치단체·공공기관의 상·하수도 사업, 건설 현장 등입니다. 이 가운데 4개 발주처와는 4년 동안 매년 단가계약으로 작업했습니다. 아래는 그중 대표 이력이며, 전체 목록은 문의 시 안내합니다.</p>
 
-      <ul class="rec mt-10" id="recList" data-reveal>
-${PROJECT_ORDER.map(prj).map((p) => `        <li class="rec__row" data-cat="${esc(p.cat)}" data-robot="${p.robot}" data-search="${esc(p.title + ' ' + p.cat + ' ' + p.summary)}">
-          <span class="rec__date">${esc(p.period)}</span>
-          <span class="rec__name">${esc(p.title)}${p.robot === 'stated' ? ' <span class="chip">로봇 적용</span>' : ''}</span>
-          <span class="rec__cat">${esc(p.cat)}</span>
-          <a class="rec__go" href="${svc(p.svc).file}" aria-label="${esc(svc(p.svc).title)} 업무 보기">${upArrow(13)}</a>
-        </li>`).join('\n')}
+${REC_HEAD.replace('class="rec__head"', 'class="rec__head mt-10"')}
+      <ul class="rec" id="recList" data-reveal>
+${PROJECT_ORDER.map(prj).map((p) => recRow(p)).join('\n')}
       </ul>
 
       <p class="note rec__empty" id="recEmpty" hidden>조건에 맞는 이력이 없습니다. 다른 분야를 선택하거나 검색어를 지워 보세요.</p>
@@ -1445,8 +1444,8 @@ ${pcards(['M10', 'M06', 'M04'], ['현장의 차량과 안전 구획', '안전모
     <div class="wrap">
       <div class="head">
         <div data-reveal><h2>다루는 업무</h2></div>
-        <div class="head__aside" data-reveal data-delay="90">
-          <a class="tlink" href="services.html">사업분야 전체 보기 ${upArrow(14)}</a>
+        <div class="head__aside head__aside--end" data-reveal data-delay="90">
+          <a class="tlink" href="services.html">사업분야 전체 보기 ${arrow(14)}</a>
         </div>
       </div>
       <div class="grid grid--5">
