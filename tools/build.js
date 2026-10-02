@@ -1246,11 +1246,11 @@ ${rndGroup('기타 클리닝 로봇', '흡입 로봇 외에 토사·슬러지 �
 ${rndGroup('작업 구성', '로봇은 설비 안에서, 흡입차는 밖에서 호스로 연결해 작업합니다.', robotTable('작업 구성', ['구성', '위치', '역할'], PROCESS.crew, ['25%', '16.67%', '58.33%']))}
       <div class="eqgroup" data-reveal>
         <div class="eqgroup__head"><h3>적용 조건</h3></div>
-        <p class="eqgroup__desc">로봇 투입 여부는 아래 다섯 가지를 확인한 뒤 정합니다.</p>
+        <p class="eqgroup__desc">로봇 투입 여부와 작업 방법은 아래 다섯 가지를 확인하고 사전 시험(Test)을 거쳐 정합니다.</p>
         <ul class="numlist">
 ${TECH.conditions.map((c, i) => `          <li><em>0${i + 1}</em><b>${esc(c.label)}</b><p>${esc(c.text)}</p></li>`).join('\n')}
         </ul>
-        <p class="note mt-22">${esc(TECH.flowNote)} <a class="tlink" href="process.html">현장 진행 방식 자세히 보기 ${arrow(14)}</a></p>
+        <div class="mt-24"><a class="btn btn--line btn--sm" href="process.html">현장 진행 방식 자세히 보기 ${arrow(18)}</a></div>
       </div>
     </div>
   </section>
