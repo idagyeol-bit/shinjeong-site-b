@@ -329,6 +329,13 @@ const PROCESS = {
     ['스크류 바퀴를 구비한 수륙양용 준설로봇', '2020'],
     ['소형관로 준설로봇 및 그 운전방법', '2020'],
     ['워터젯 유닛을 구비한 세정로봇 장치', '2020']
+  ],
+  /* 26차: 작업 구성 표(기술소개서 2025 p.18~19, process.html 4·5단계) — 구성 · 위치 · 역할 */
+  crew: [
+    ['로봇', '설비 내부', '잔여 위험 물질 회수, 전면부 Jet Nozzle로 내부 세척'],
+    ['제어 차량 (원격 조종·CCTV)', '설비 밖', '작업자가 CCTV로 내부를 보며 로봇 조종'],
+    ['진공흡입차', '설비 밖', '호스로 연결해 회수물 흡입'],
+    ['분리장치 (Separator)', '설비 밖', '촉매·충진물 작업에서 회수물 분리']
   ]
 };
 
@@ -424,7 +431,7 @@ function eqGroup(g) {
           <colgroup><col class="eqtbl__c1"><col class="eqtbl__c2"><col class="eqtbl__c3"><col class="eqtbl__c4"></colgroup>
           <thead><tr><th scope="col">장비명</th><th scope="col">규격</th><th scope="col">용도</th><th scope="col">보유</th></tr></thead>
           <tbody>
-${g.rows.map(([name, spec, use, qty, rnd]) => `            <tr><td class="eqtbl__name">${esc(name)}</td><td class="eqtbl__spec${spec === '—' ? ' eqtbl__spec--none' : ''}">${esc(spec)}</td><td class="eqtbl__use">${esc(use)}${rnd ? `<a class="glance__more" href="#rnd">무인 로봇 시스템 보기 ${arrow(14)}</a>` : ''}</td><td class="eqtbl__qty${qty === '—' ? ' eqtbl__qty--none' : ''}">${esc(qty)}</td></tr>`).join('\n')}
+${g.rows.map(([name, spec, use, qty, rnd]) => `            <tr><td class="eqtbl__name">${esc(name)}</td><td class="eqtbl__spec${spec === '—' ? ' eqtbl__spec--none' : ''}">${esc(spec)}</td><td class="eqtbl__use">${esc(use)}${rnd ? `<a class="glance__more" href="#rnd">무인 로봇 보기 ${arrow(14)}</a>` : ''}</td><td class="eqtbl__qty${qty === '—' ? ' eqtbl__qty--none' : ''}">${esc(qty)}</td></tr>`).join('\n')}
           </tbody>
         </table>`;
   return `      <div class="eqgroup${g.photos.length ? ' eqgroup--photo' : ''}" id="${g.id}" data-reveal>
@@ -728,7 +735,7 @@ function cta(o) {
 function footer() {
   const map = [
     { h: '사업분야', items: SERVICES.map((s) => ({ href: s.file, label: s.title })) },
-    { h: '기술', items: [{ href: 'process.html', label: '현장 진행 방식' }, { href: 'technology.html', label: '장비·로봇' }, { href: 'technology.html#recovery', label: '회수 이후의 과정' }] },
+    { h: '기술', items: [{ href: 'process.html', label: '현장 진행 방식' }, { href: 'technology.html', label: '장비·로봇' }, { href: 'process.html#dewater', label: '회수 이후의 과정' }] },
     { h: '회사', items: [{ href: 'projects.html', label: '수행 이력' }, { href: 'company.html', label: '회사 소개' }] },
     { h: '문의', items: [{ href: 'contact.html', label: '현장 문의' }, { href: `mailto:${C.email}`, label: '이메일로 문의' }] }
   ];
@@ -1216,11 +1223,41 @@ ${EQUIP_GROUPS.map(eqGroup).join('\n')}
   </section>
 
 
-  <!-- 02 자체 개발한 무인 로봇 시스템 (25차: 숫자 요약 4칸 + 소제목·설명·표 6묶음) -->
+  <!-- 02 자체 개발 무인 로봇 (26차: 현장에 쓰는 로봇 — 세대별 비교 · 5세대 사양 · 기타 클리닝 로봇) -->
   <section class="section section--soft" id="rnd">
     <div class="wrap">
       <div class="head">
-        <div data-reveal><h2>자체 개발해 온<br>무인 로봇 시스템</h2></div>
+        <div data-reveal><h2>자체 개발 무인 로봇</h2></div>
+      </div>
+${rndGroup('무인 흡입 로봇(Vacuum) 세대별 비교', '탱크·Pond용 무인 흡입 로봇은 1세대부터 5세대까지 개발했습니다.', robotTable('무인 흡입 로봇(Vacuum) 세대별 비교', ['세대', '방식', '적용 대상', '수중 작업', '구동', '비고'], PROCESS.generations))}
+${rndGroup('5세대 무인 클리닝 로봇 주요 사양', '5세대 무인 클리닝 로봇의 사양입니다.', robotTable('5세대 무인 클리닝 로봇 주요 사양', ['항목', '내용'], PROCESS.gen5, ['9.5em', '']))}
+${rndGroup('기타 클리닝 로봇', '흡입 로봇 외에 토사·슬러지 작업과 고압 세척에 쓰는 로봇입니다.', robotTable('기타 클리닝 로봇', ['로봇', '대상', '조종', '구동', '수중 작업'], PROCESS.others))}
+    </div>
+  </section>
+
+  <!-- 03 로봇 작업 구성과 적용 조건 (26차: 작업 시스템 구성 + 적용 조건을 한 구역으로) -->
+  <section class="section" id="system">
+    <div class="wrap">
+      <div class="head">
+        <div data-reveal><h2>로봇 작업 구성과 적용 조건</h2></div>
+      </div>
+${rndGroup('작업 구성', '로봇은 설비 안에서, 흡입차는 밖에서 호스로 연결해 작업합니다.', robotTable('작업 구성', ['구성', '위치', '역할'], PROCESS.crew, ['25%', '16.67%', '58.33%']))}
+      <div class="eqgroup" data-reveal>
+        <div class="eqgroup__head"><h3>적용 조건</h3></div>
+        <p class="eqgroup__desc">로봇 투입 여부는 아래 다섯 가지를 확인한 뒤 정합니다.</p>
+        <ul class="numlist">
+${TECH.conditions.map((c, i) => `          <li><em>0${i + 1}</em><b>${esc(c.label)}</b><p>${esc(c.text)}</p></li>`).join('\n')}
+        </ul>
+        <p class="note mt-22">${esc(TECH.flowNote)} <a class="tlink" href="process.html">현장 진행 방식 자세히 보기 ${arrow(14)}</a></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 연구개발과 특허 (26차: 숫자 요약 4칸 + 연구개발 과제 · 로봇 시제품 사양 · 등록 특허 + 출처) -->
+  <section class="section section--soft" id="research">
+    <div class="wrap">
+      <div class="head">
+        <div data-reveal><h2>연구개발과 특허</h2></div>
       </div>
       <div class="stats stats--flush" data-reveal>
         <div class="stat"><b><span data-count="2017">2017</span></b><span>기업부설연구소 설립</span></div>
@@ -1228,74 +1265,9 @@ ${EQUIP_GROUPS.map(eqGroup).join('\n')}
         <div class="stat"><b><span data-count="${PROCESS.projects.length}">${PROCESS.projects.length}</span><i>건</i></b><span>연구개발 과제</span></div>
         <div class="stat"><b><span data-count="${PROCESS.protos.length}">${PROCESS.protos.length}</span><i>종</i></b><span>로봇 시제품</span></div>
       </div>
-${rndGroup('무인 흡입 로봇(Vacuum) 세대별 비교', '탱크·Pond용 무인 흡입 로봇은 1세대부터 5세대까지 개발했습니다.', robotTable('무인 흡입 로봇(Vacuum) 세대별 비교', ['세대', '방식', '적용 대상', '수중 작업', '구동', '비고'], PROCESS.generations))}
-${rndGroup('5세대 무인 클리닝 로봇 주요 사양', '5세대 무인 클리닝 로봇의 사양입니다.', robotTable('5세대 무인 클리닝 로봇 주요 사양', ['항목', '내용'], PROCESS.gen5, ['9.5em', '']))}
-${rndGroup('기타 클리닝 로봇', '흡입 로봇 외에 토사·슬러지 작업과 고압 세척에 쓰는 로봇입니다.', robotTable('기타 클리닝 로봇', ['로봇', '대상', '조종', '구동', '수중 작업'], PROCESS.others))}
 ${rndGroup('연구개발 과제', '기업부설연구소가 수행한 과제와 과제별 성능 지표입니다.', robotTable('연구개발 과제', ['과제', '활용', '주요 성능 지표', '구동'], PROCESS.projects, ['25%', '25%', '41.67%', '8.33%']))}
 ${rndGroup('로봇 시제품 사양', '기업부설연구소에서 제작한 시제품의 사양입니다. 벽면/천장 부착형은 공인시험기관(KCL) 입회 성능시험을 거쳤습니다.', robotTable('로봇 시제품 사양', ['로봇', '크기 (폭×길이×높이)', '무게', '구동', '조종'], PROCESS.protos))}
 ${rndGroup('등록 특허', '로봇과 준설 관련 등록 특허입니다.', robotTable('등록 특허', ['특허 명칭', '등록 연도'], PROCESS.patents, ['', '8em']))}
-    </div>
-  </section>
-
-  <!-- 03 장비의 역할 -->
-  <section class="section">
-    <div class="wrap">
-      <div class="head">
-        <div data-reveal><h2>작업 시스템 구성</h2></div>
-      </div>
-      <div class="roles" data-reveal>
-${TECH.system.map((r) => `        <div>${icon(r.icon, 30)}<b>${esc(r.label)}</b><p>${esc(r.text)}</p></div>`).join('\n')}
-      </div>
-    </div>
-  </section>
-
-  <!-- 04 적용 조건 -->
-  <section class="section section--soft">
-    <div class="wrap">
-      <div class="head">
-        <div data-reveal><h2>적용의 출발점은<br>현장의 조건입니다</h2></div>
-      </div>
-      <ul class="numlist" data-reveal>
-${TECH.conditions.map((c, i) => `        <li><em>0${i + 1}</em><b>${esc(c.label)}</b><p>${esc(c.text)}</p></li>`).join('\n')}
-      </ul>
-      <p class="note mt-22" data-reveal>${esc(TECH.flowNote)} <a class="tlink" href="process.html">현장 진행 방식 자세히 보기 ${arrow(14)}</a></p>
-    </div>
-  </section>
-
-  <!-- 05 회수 이후 -->
-  <section class="section" id="recovery">
-    <div class="wrap">
-      <div class="head">
-        <div data-reveal><h2>회수한 물질의<br>다음 과정까지</h2></div>
-      </div>
-      <ul class="numlist" data-reveal>
-${RECOVERY.steps.map((s, i) => `        <li><em>0${i + 1}</em><b>${esc(s.label)}</b><p>${esc(s.text)}</p></li>`).join('\n')}
-      </ul>
-      <div class="roles mt-28" data-reveal>
-${RECOVERY.methods.map((m, i) => `        <div>${icon(i === 0 ? 'drop' : 'filter', 30)}<b>${esc(m.label)}</b><p>${esc(m.text)}</p></div>`).join('\n')}
-      </div>
-      <p class="note mt-14" data-reveal>${esc(DEWATER_NOTE)}</p>
-      <p class="mt-14" data-reveal><a class="tlink" href="process.html#dewater">탈수 과정 자세히 보기 ${arrow(14)}</a></p>
-    </div>
-  </section>
-
-  <!-- 관련 업무 -->
-  <section class="section section--soft">
-    <div class="wrap">
-      <div class="head">
-        <div data-reveal><h2>관련 업무</h2></div>
-        <div class="head__aside head__aside--end" data-reveal data-delay="90">
-          <a class="tlink" href="services.html">사업분야 전체 보기 ${arrow(14)}</a>
-        </div>
-      </div>
-      <div class="grid grid--3">
-${SERVICES.filter((s) => s.tech).map((s, i) => `        <a class="scard" href="${s.file}" data-reveal data-delay="${i * 70}">
-          <span class="scard__ico">${icon(s.icon, 40)}</span>
-          <h3>${esc(s.title)}</h3>
-          <p>${esc(s.card)}</p>
-          <span class="scard__go">자세히 보기 ${arrow(14)}</span>
-        </a>`).join('\n')}
-      </div>
 ${SRC_LINE}    </div>
   </section>
 
