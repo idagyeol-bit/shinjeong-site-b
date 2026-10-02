@@ -435,10 +435,13 @@ ${g.rows.map(([name, spec, use, qty, rnd]) => `            <tr><td class="eqtbl_
           </tbody>
         </table>`;
   return `      <div class="eqgroup${g.photos.length ? ' eqgroup--photo' : ''}" id="${g.id}" data-reveal>
-        <div class="eqgroup__head"><h3>${esc(g.title)}</h3>${sv ? `<a class="glance__more" href="${sv.file}" aria-label="${esc(sv.title)} 업무 보기">이 업무 보기 ${arrow(14)}</a>` : ''}</div>
+        <div class="eqgroup__head"><h3>${esc(g.title)}</h3></div>
         <p class="eqgroup__desc">${esc(g.desc)}</p>
         <div class="eqgroup__body">
-        ${table}
+        <div class="eqgroup__main">
+        ${table}${sv ? `
+        <a class="glance__more" href="${sv.file}">${esc(sv.title)} 소개 보기 ${arrow(14)}</a>` : ''}
+        </div>
 ${g.photos.length ? `        <div class="eqgroup__photos">
 ${pcards(g.photos, g.titles)}
         </div>

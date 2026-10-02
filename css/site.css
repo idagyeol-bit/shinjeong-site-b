@@ -919,7 +919,8 @@ html:not(.js-on) [data-reveal] { opacity: 1; transform: none; }
 .eqgroup { margin-top: 48px; }
 .eqgroup__head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 16px; margin-bottom: 8px; }
 .eqgroup__head h3 { font-size: var(--fs-h4); }
-.eqgroup__head .glance__more { margin-left: 0; }
+.eqgroup__main { min-width: 0; }   /* 표와 '소개 보기' 링크를 한 덩어리로(사진 묶음에서는 왼쪽 칸) */
+.eqgroup__main > .glance__more { display: flex; width: fit-content; margin: 16px 0 0; }   /* 표 바로 아래 왼쪽, 간격 16px */
 .eqgroup__desc { margin-bottom: 16px; font-size: var(--fs-body); line-height: 1.75; color: var(--text); max-width: var(--measure); }
 .eqgroup__body { display: block; }
 .eqgroup--photo .eqgroup__body { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 28px; align-items: start; }
