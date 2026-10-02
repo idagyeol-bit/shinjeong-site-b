@@ -635,8 +635,8 @@ ${g.items.map((i) => `            <li><a href="${i.href}">${esc(i.label)}</a></l
 /* 현장 진행 방식·장비·로봇·회사 소개 본문 맨 아래에 넣는 출처 한 줄 */
 const SRC_LINE = '      <p class="note mt-block">출처: (주)신정개발 회사소개서(2024) · 기술소개서(2025)</p>\n';
 
-/* 업무 카드 바로 아래 한 줄 — 어느 업무인지 모를 때 (메인·사업분야 공통) */
-const SVC_HELP = '      <p class="svc-help mt-28" data-reveal>어느 업무인지 모르시면 → <a href="contact.html">현장 문의</a></p>';
+/* 메인 업무 카드 아래 버튼 — 어느 업무인지 모를 때. "수행 이력 N건 모두 보기"와 같은 버튼 */
+const SVC_CTA = `      <div class="svc-cta" data-reveal><a class="btn btn--line btn--sm" href="contact.html">어느 업무인지 모르겠다면 문의하기 ${arrow(18)}</a></div>`;
 
 
 const MAIN_END = '</main>\n\n';
@@ -856,7 +856,7 @@ ${TRUST.map((t) => t.t
       <div class="grid grid--5">
 ${serviceCards(true, true)}
       </div>
-${SVC_HELP}
+${SVC_CTA}
 
     </div>
   </section>
@@ -965,7 +965,6 @@ pages['services.html'] = () => head({
       <div class="grid grid--3">
 ${serviceCards(true, true)}
       </div>
-${SVC_HELP}
     </div>
   </section>
 

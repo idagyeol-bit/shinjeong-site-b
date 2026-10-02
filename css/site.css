@@ -852,8 +852,8 @@ html:not(.js-on) [data-reveal] { opacity: 1; transform: none; }
 @media (min-width: 1181px) {
   .grid--5 > .scard--chips h3 { min-height: calc(2em * 1.42); }
 }
-.svc-help { text-align: center; font-size: var(--fs-sm); color: var(--muted); }
-.svc-help a { font-weight: 600; color: var(--brand); text-decoration: underline; text-underline-offset: 3px; }
+/* 메인 업무 카드 아래 버튼: 카드와의 간격을 "주요 수행 이력" 목록→버튼 간격(14px + 안내 문장 한 줄 + 24px)과 같게 */
+.svc-cta { margin-top: calc(38px + var(--fs-sm) * 1.75); }
 
 
 /* ========== 16. 번호 없는 단계 목록 (10차 — 세대 목록처럼 이름에 숫자가 이미 있을 때) ========== */
