@@ -907,3 +907,7 @@ html:not(.js-on) [data-reveal] { opacity: 1; transform: none; }
 @media (max-width: 720px) {
   .trust__sites { flex-direction: column; align-items: flex-start; }
 }
+
+/* ========== 20. 메인 "현장 진행 방식" 요약 (18차) ========== */
+.numlist--tight li { padding: 12px 0; }
+.section--navy .split__cap--strong { font-size: var(--fs-sm); color: #dce8f1; }

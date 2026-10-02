@@ -878,26 +878,25 @@ ${feat.map((p) => recRow(p)).join('\n')}
     </div>
   </section>
 
-  <!-- ===== 작업 방식 (다크) ===== -->
+  <!-- ===== 현장 진행 방식 요약 (다크) — 18차: 단계 이름은 현장 진행 방식 페이지와 같은 데이터(PROCESS.steps) ===== -->
   <section class="section section--navy">
     <div class="wrap">
       <div class="head">
         <div data-reveal>
-          <h2>설비 밖에서 조종하는<br>무인 작업 시스템</h2>
-        </div>
-        <div class="head__aside head__aside--end" data-reveal data-delay="90">
-          <a class="tlink" href="technology.html">장비·로봇 자세히 보기 ${arrow(14)}</a>
-          <a class="tlink ml-16" href="process.html">현장 진행 방식 보기 ${arrow(14)}</a>
+          <h2>현장 진행 방식</h2>
         </div>
       </div>
 
       <div class="split split--top" data-reveal>
         <figure class="split__media">
           <div class="split__fig">${photo(P('R27'), '(max-width:960px) 92vw, 620px')}</div>
-          <figcaption class="split__cap">${esc(P('R27').cap)}</figcaption>
+          <figcaption class="split__cap split__cap--strong">로봇은 설비 안에서, 흡입차는 밖에서 호스로 연결해 작업합니다.</figcaption>
         </figure>
-        <div class="roles">
-${TECH.system.map((r) => `          <div>${icon(r.icon, 30)}<b>${esc(r.label)}</b><p>${esc(r.text)}</p></div>`).join('\n')}
+        <div>
+          <ol class="numlist numlist--tight">
+${PROCESS.steps.map((st, i) => `            <li><em>${String(i + 1).padStart(2, '0')}</em><b>${esc(st.t)}</b></li>`).join('\n')}
+          </ol>
+          <div class="mt-24"><a class="btn btn--ghost btn--sm" href="process.html">현장 진행 방식 자세히 보기 ${arrow(18)}</a></div>
         </div>
       </div>
     </div>
