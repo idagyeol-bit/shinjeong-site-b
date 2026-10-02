@@ -852,3 +852,10 @@ html:not(.js-on) [data-reveal] { opacity: 1; transform: none; }
 .svc-help { text-align: center; font-size: var(--fs-sm); color: var(--muted); }
 .svc-help a { font-weight: 600; color: var(--brand); text-decoration: underline; text-underline-offset: 3px; }
 
+
+/* ========== 16. 번호 없는 단계 목록 (10차 — 세대 목록처럼 이름에 숫자가 이미 있을 때) ========== */
+.steps--plain li { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+.steps--plain li::before { display: none; }
+.steps--plain p { grid-column: 1; }
+.steps--plain b { padding-top: 0; }
+

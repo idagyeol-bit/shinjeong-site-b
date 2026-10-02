@@ -139,7 +139,7 @@
       var what = btn.getAttribute('data-copy');
       var text = what === 'mail' ? MAIL : (box ? box.textContent : '');
       if (!text) {
-        say('복사할 내용이 아직 없습니다. 먼저 [문의 내용 만들기]를 눌러 주세요.');
+        say('복사할 내용이 아직 없습니다. 먼저 [메일로 문의 보내기]를 눌러 주세요.');
         return;
       }
 
