@@ -923,3 +923,8 @@ html:not(.js-on) [data-reveal] { opacity: 1; transform: none; }
 /* ========== 23. 본사 사진 설명 · 메인 회사 소개 숫자 줄 ========== */
 .split__cap--sm { font-size: var(--fs-sm); }     /* 본사 사진(M02) 설명만 한 단계 크게, 색은 그대로 */
 .stats--flush .stat { padding-left: 0; padding-right: 0; }   /* 메인 회사 소개 숫자 줄: 제목과 같은 왼쪽 선 (15차 .trust .stat 과 같은 방식) */
+
+/* ========== 24. 한눈에 보기 표의 "장비 보기" 링크 (21차) — 주요 장비 값 바로 뒤에 이어서 ========== */
+.glance__more { display: inline-flex; align-items: center; gap: 7px; margin-left: 12px; white-space: nowrap; font-size: var(--fs-sm); font-weight: 600; color: var(--brand); text-underline-offset: 4px; }
+.glance__more svg { flex: 0 0 auto; }
+.glance__more:hover, .glance__more:focus-visible { text-decoration: underline; }

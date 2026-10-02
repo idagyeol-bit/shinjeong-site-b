@@ -113,15 +113,15 @@ const SERVICES = [
   {
     id: 'S01', file: 'service-equipment-cleaning.html', icon: 'tank', title: '설비 클리닝', en: 'EQUIPMENT CLEANING',
     summary: '탱크와 Pond, 배수로 등 산업설비의 잔류물과 퇴적물을 다루는 클리닝 작업.',
-    short: '탱크·Pond부터 배수로·R.T.O까지, 설비 안의 잔류물을 걷어냅니다',
+    short: '탱크·Pond·배수로·R.T.O 등 산업설비 내부의 잔류물을 제거합니다',
     card: '탱크·Pond·배수로·R.T.O 내부의 잔류물과 퇴적물을 제거합니다.',
     body: '탱크·Pond 내부 클리닝, 공장 배수로, R.T.O 유지보수·클리닝, Filter Press 세정과 Bag Filter 교체까지 수행합니다. 필요한 현장에는 로봇을 먼저 투입해 작업자가 위험 물질에 노출되는 시간을 줄입니다.',
     desc: '탱크·Pond 내부 클리닝, 공장 배수로, R.T.O 유지보수·클리닝, Filter Press 세정과 Bag Filter 교체까지 수행합니다. 전남 여수 (주)신정개발.', // 검색 설명: 도입 문단 첫 문장(80자 미만이면 둘째 문장까지) + 지역·회사명, 80~120자
     equip: ['진공흡입차', '흡입 로봇', '제어 차량'], // 한눈에 보기 표의 '주요 장비'
-    targets: ['Tank', 'Pond', '공장 내부 배수로', 'R.T.O', 'Filter Press 세정', 'Bag Filter 교체'],
+    targets: ['탱크', 'Pond', '공장 내부 배수로', 'R.T.O', 'Filter Press 세정', 'Bag Filter 교체'],
     topTargets: ['Tank', 'Pond', '공장 내부 배수로'],
     inquiryHint: ['대상 설비', '작업 목적', '알고 있는 크기·구조·잔류물 정보'],
-    worktime: '저장탱크 개방검사 기간의 클리닝', // 한눈에 보기 표의 '작업 시기' — 회사소개서(2024) 실적표 p.39~41
+    worktime: '저장탱크 개방검사 기간', // 한눈에 보기 표의 '작업 시기' — 회사소개서(2024) 실적표 p.39~41
     projects: ['P07', 'P02', 'P12'], tech: true,
     photo: Object.assign({}, P('W01'), { note: '산업설비 현장에 배치된 흡입차와 연결 호스의 모습입니다.' }),
     gallery: { ids: ['P01', 'W07', 'W09'], titles: ['탱크 내부 세척 작업', '진공흡입차', '현장의 작업 차량과 작업자'],
@@ -986,8 +986,7 @@ SERVICES.forEach((s, idx) => {
 
     /* 한눈에 보기 — 사진 1장 + 4줄 표. 표 내용은 모두 분야 데이터(targets·equip·projects·inquiryHint)에서 가져온다 */
     const links = [];
-    if (s.concept) links.push(`<a class="tlink" href="technology.html">작업 시스템 자세히 보기 ${arrow(14)}</a>`);   // 촉매: '작업 시스템의 역할' 섹션 대신
-    else if (s.tech) links.push(`<a class="tlink" href="technology.html">장비·로봇 보기 ${arrow(14)}</a>`);     // 관련 기술
+    /* 21차: 장비 링크는 표의 '주요 장비' 줄 안(.glance__more)으로 옮겼다. 표 아래에는 준설의 탈수 과정 링크만 남는다 */
     if (s.recovery) links.push(`<a class="tlink" href="process.html#dewater">탈수 과정 자세히 보기 ${arrow(14)}</a>`); // 준설: '회수 이후의 과정' 섹션 대신
     sections.push(`  <section class="section">
     <div class="wrap">
@@ -1000,7 +999,7 @@ SERVICES.forEach((s, idx) => {
         <div data-reveal data-delay="90">
           <dl class="glance__tbl">
             <div><dt>대상 설비</dt><dd>${s.targets.map(esc).join(' · ')}</dd></div>
-            <div><dt>주요 장비</dt><dd>${s.equip.map(esc).join(' · ')}</dd></div>
+            <div><dt>주요 장비</dt><dd>${s.equip.map(esc).join(' · ')}<a class="glance__more" href="technology.html#equipment">장비 보기 ${arrow(14)}</a></dd></div>
 ${s.worktime ? `            <div><dt>작업 시기</dt><dd>${esc(s.worktime)}</dd></div>\n` : ''}            <div><dt>관련 이력</dt><dd>${rel.length ? rel.map((p) => `${esc(p.title)} (${esc(p.period)})`).join(' · ') : '이 홈페이지의 수행 이력에는 이 업무로 분류된 항목이 없습니다.'}</dd></div>
             <div><dt>문의 시 필요한 정보</dt><dd>${s.inquiryHint.map(esc).join(' · ')}</dd></div>
           </dl>
