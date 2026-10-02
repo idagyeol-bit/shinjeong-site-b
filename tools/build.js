@@ -286,14 +286,22 @@ const PROCESS = {
   filterpress: ['원액 투입', '여과판 압착', '여과액 배출', 'Cake 탈거', '여과판 세척'],
   dewaterEffect: ['폐기물 처리량 감량', '폐기물 처리비용 감소', '폐기물 처리시간 단축'],
   /* p.7~8 로봇 세대·기타 장비 */
+  /* 25차: 무인 흡입 로봇(Vacuum) 세대별 비교(기술소개서 2025 p.7) — 세대 · 방식 · 적용 대상 · 수중 작업 · 구동 · 비고 */
   generations: [
-    { g: '1세대', d: '흡입형 · Pond, Tank(관로) · 수중 작업 가능 · 유압 구동' },
-    { g: '2세대', d: '파쇄 흡입형 · Pond, Open Ditch · 수중 작업 불가 · 전기·유압 구동' },
-    { g: '3세대', d: '파쇄 흡입형 · Pond, Tank · 수중 작업 가능 · 유압 구동' },
-    { g: '4세대', d: '흡입형 · Pond, Tank · 수중 작업 가능 · 유압 구동 · 소형화' },
-    { g: '5세대', d: '파쇄형 · Pond, Reactor · 수중 작업 가능 · 유압 구동 · 소형화' }
+    ['1세대', '흡입형', 'Pond, Tank(관로)', '가능', '유압', '—'],
+    ['2세대', '파쇄 흡입형', 'Pond, Open Ditch', '불가', '전기·유압', '—'],
+    ['3세대', '파쇄 흡입형', 'Pond, Tank', '가능', '유압', '—'],
+    ['4세대', '흡입형', 'Pond, Tank', '가능', '유압', '소형화'],
+    ['5세대', '파쇄형', 'Pond, Reactor', '가능', '유압', '소형화']
   ],
-  gen5: ['방폭 지역 작업 조건 적용 — 방폭 카메라로 원격 감시, 알루미늄 본체, 비철(Non-steel) 스크류, 유압 구동', '전면부 Jet Nozzle 장착', '원격 조종', '스크류형·체인형 바퀴로 유동체 위 작업', 'Tank·Reactor 내부의 액체·슬러지 제거'],
+  /* 25차: 5세대 무인 클리닝 로봇 주요 사양(p.13~15) — 항목 · 내용 */
+  gen5: [
+    ['방폭 대응', '방폭 카메라로 원격 감시 · 알루미늄 본체 · 비철(Non-steel) 스크류 · 유압 구동'],
+    ['세척', '전면부 Jet Nozzle 장착'],
+    ['조종', '원격 조종'],
+    ['주행', '스크류형·체인형 바퀴 (유동체 위 작업 가능)'],
+    ['용도', 'Tank·Reactor 내부의 액체·슬러지 제거']
+  ],
   /* 24차: 기타 클리닝 로봇 표(기술소개서 2025 p.8) — 로봇 · 대상 · 조종 · 구동 · 수중 작업 */
   others: [
     ['무인 로더(大)', '토사·슬러지 (실외)', '원격 조종', '전기·유압', '불가'],
@@ -307,6 +315,20 @@ const PROCESS = {
     ['흡입/준설 (Grinding Mobile Robot)', '490 × 1,010 × 260mm', '81kg (분쇄기 19.8kg 포함)', '유압 최대 140bar, 스크류', '조이스틱 · 카메라 자율 제어'],
     ['파쇄 (Splinter Robot, Caterpillar Type)', '415 × 1,140 × 400mm', '79.2kg', '유압 최대 140bar, 캐터필러', '조이스틱'],
     ['파쇄 (Splinter Robot, Screw Type)', '490 × 1,010 × 260mm', '87.5kg', '유압 최대 140bar, 스크류', '조이스틱']
+  ],
+  /* 25차: 연구개발 과제(p.38~40) — 과제 · 활용 · 주요 성능 지표 · 구동 */
+  projects: [
+    ['능동형 촉매 적재장치', '촉매 반응탑 내 고체 촉매의 고밀도 적층', '밀집도 17% 이상 · 적재량 22㎥/hr 이상 · 적재 범위 직경 5m 이상 · 중량 15kg 이하', '공압'],
+    ['석유화학 저장탱크 협업형 클리닝 시스템', '고위험물 저장탱크 내부 세정', '세척율 100% · 세척 속도 벽면 0.8m/s, 천장면 0.5m/s · 모니터링 범위 25m · 무게 100kg 이하 · 부착력 100kg 이상', '유압'],
+    ['수중 슬러지 수거 무인 자율 이동 로봇 시스템', '하수도 슬러지 제거', '크기 1×0.6×0.5m 이내 · 속도 0.1m/s 이상 · 중량 80kg 이하 · 방수 IPx7 · 위치 정확도 10cm 이하', '유압']
+  ],
+  /* 25차: 등록 특허(p.6) — 특허 명칭 · 등록 연도 */
+  patents: [
+    ['정합식 맨홀', '2017'],
+    ['관내부 무인 준설 처리 시스템', '2017'],
+    ['스크류 바퀴를 구비한 수륙양용 준설로봇', '2020'],
+    ['소형관로 준설로봇 및 그 운전방법', '2020'],
+    ['워터젯 유닛을 구비한 세정로봇 장치', '2020']
   ]
 };
 
@@ -417,16 +439,23 @@ ${pcards(g.photos, g.titles)}
       </div>`;
 }
 
-/* 무인 로봇 시스템 구역의 표 (24차): 기타 클리닝 로봇(기술소개서 2025 p.8), 로봇 시제품 사양(p.42·47·48·53·54) */
-function robotTable(caption, heads, rows) {
-  return `<table class="eqtbl eqtbl--robot">
+/* 무인 로봇 시스템 구역의 표 (24차, 25차에 칸 이름(data-label)과 칸 폭 추가).
+   cols: 칸 폭 목록(없으면 내용에 맞춤). 휴대폰에서는 값 앞에 칸 이름을 작은 글로 붙여 쌓는다 */
+function robotTable(caption, heads, rows, cols) {
+  return `<table class="eqtbl eqtbl--robot${cols ? ' eqtbl--cols' : ''}">
           <caption class="sr-only">${esc(caption)}</caption>
-          <thead><tr>${heads.map((h) => `<th scope="col">${esc(h)}</th>`).join('')}</tr></thead>
+${cols ? `          <colgroup>${cols.map((w) => `<col${w ? ` style="width:${w}"` : ''}>`).join('')}</colgroup>\n` : ''}          <thead><tr>${heads.map((h) => `<th scope="col">${esc(h)}</th>`).join('')}</tr></thead>
           <tbody>
-${rows.map((r) => `            <tr>${r.map((v, i) => `<td${i ? '' : ' class="eqtbl__name"'}>${esc(v)}</td>`).join('')}</tr>`).join('\n')}
+${rows.map((r) => `            <tr>${r.map((v, i) => `<td${i ? ` data-label="${esc(heads[i])}"` : ' class="eqtbl__name"'}>${esc(v)}</td>`).join('')}</tr>`).join('\n')}
           </tbody>
         </table>`;
 }
+/* 무인 로봇 시스템 구역의 묶음 하나: 소제목 → 설명 → 표 (24차 .eqgroup 틀) */
+const rndGroup = (title, desc, table) => `      <div class="eqgroup" data-reveal>
+        <div class="eqgroup__head"><h3>${esc(title)}</h3></div>
+        <p class="eqgroup__desc">${esc(desc)}</p>
+        ${table}
+      </div>`;
 
 const FAQ = [
   { q: '로봇이 모든 작업을 진행하나요?', a: '아닙니다. 로봇이 설비 내부의 위험 물질을 먼저 회수하고, 위험이 줄어든 뒤 작업자가 들어가 최종 잔여물을 제거합니다. 로봇을 적용하는 범위는 설비와 작업 조건에 따라 달라집니다.' },
@@ -1187,38 +1216,24 @@ ${EQUIP_GROUPS.map(eqGroup).join('\n')}
   </section>
 
 
-  <!-- 02 자체 개발 · 세대별 발전 · 5세대 특징 -->
+  <!-- 02 자체 개발한 무인 로봇 시스템 (25차: 숫자 요약 4칸 + 소제목·설명·표 6묶음) -->
   <section class="section section--soft" id="rnd">
     <div class="wrap">
       <div class="head">
         <div data-reveal><h2>자체 개발해 온<br>무인 로봇 시스템</h2></div>
       </div>
-      <div class="roles" data-reveal>
-        <div>${icon('doc', 30)}<b>기업부설연구소</b><p>2017년 11월 설립. 로봇 시스템의 개발과 시제품 제작을 맡습니다.</p></div>
-        <div>${icon('shield', 30)}<b>등록 특허</b><p>정합식 맨홀(2017) · 관내부 무인 준설 처리 시스템(2017) · 스크류 바퀴를 구비한 수륙양용 준설로봇(2020) · 소형관로 준설로봇 및 그 운전방법(2020) · 워터젯 유닛을 구비한 세정로봇 장치(2020)</p></div>
-        <div>${icon('robot', 30)}<b>연구개발 과제</b><p>능동형 촉매 적재장치 · 석유화학 저장탱크 협업형 클리닝 시스템 · 수중 슬러지 수거 무인 자율 이동 로봇 시스템</p></div>
-        <div>${icon('scan', 30)}<b>시제품과 성능시험</b><p>벽면/천장 부착형 · 흡입/준설 · 파쇄 무인 로봇 시제품을 제작했고, 벽면/천장 부착형 로봇은 공인시험기관(KCL) 입회 성능시험을 거쳤습니다.</p></div>
+      <div class="stats stats--flush" data-reveal>
+        <div class="stat"><b><span data-count="2017">2017</span></b><span>기업부설연구소 설립</span></div>
+        <div class="stat"><b><span data-count="${PROCESS.patents.length}">${PROCESS.patents.length}</span><i>건</i></b><span>등록 특허</span></div>
+        <div class="stat"><b><span data-count="${PROCESS.projects.length}">${PROCESS.projects.length}</span><i>건</i></b><span>연구개발 과제</span></div>
+        <div class="stat"><b><span data-count="${PROCESS.protos.length}">${PROCESS.protos.length}</span><i>종</i></b><span>로봇 시제품</span></div>
       </div>
-      <div class="grid grid--2 mt-24">
-        <div class="panel panel--line" data-reveal>
-          <h3>무인 흡입 로봇(Vacuum)의 세대별 발전</h3>
-          <ol class="steps steps--tight steps--plain mt-16">
-${PROCESS.generations.map((g) => `            <li><b>${esc(g.g)}</b><p>${esc(g.d)}</p></li>`).join('\n')}
-          </ol>
-        </div>
-        <div class="panel panel--line" data-reveal data-delay="80">
-          <h3>5세대 무인 클리닝 로봇의 주요 특징</h3>
-          <ul class="targets mt-16">${PROCESS.gen5.map((x) => `<li>${esc(x)}</li>`).join('')}</ul>
-        </div>
-      </div>
-      <div class="eqgroup" data-reveal>
-        <div class="eqgroup__head"><h3>기타 클리닝 로봇</h3></div>
-        ${robotTable('기타 클리닝 로봇', ['로봇', '대상', '조종', '구동', '수중 작업'], PROCESS.others)}
-      </div>
-      <div class="eqgroup" data-reveal>
-        <div class="eqgroup__head"><h3>로봇 시제품 사양</h3></div>
-        ${robotTable('로봇 시제품 사양', ['로봇', '크기 (폭×길이×높이)', '무게', '구동', '조종'], PROCESS.protos)}
-      </div>
+${rndGroup('무인 흡입 로봇(Vacuum) 세대별 비교', '탱크·Pond용 무인 흡입 로봇은 1세대부터 5세대까지 개발했습니다.', robotTable('무인 흡입 로봇(Vacuum) 세대별 비교', ['세대', '방식', '적용 대상', '수중 작업', '구동', '비고'], PROCESS.generations))}
+${rndGroup('5세대 무인 클리닝 로봇 주요 사양', '5세대 무인 클리닝 로봇의 사양입니다.', robotTable('5세대 무인 클리닝 로봇 주요 사양', ['항목', '내용'], PROCESS.gen5, ['9.5em', '']))}
+${rndGroup('기타 클리닝 로봇', '흡입 로봇 외에 토사·슬러지 작업과 고압 세척에 쓰는 로봇입니다.', robotTable('기타 클리닝 로봇', ['로봇', '대상', '조종', '구동', '수중 작업'], PROCESS.others))}
+${rndGroup('연구개발 과제', '기업부설연구소가 수행한 과제와 과제별 성능 지표입니다.', robotTable('연구개발 과제', ['과제', '활용', '주요 성능 지표', '구동'], PROCESS.projects, ['25%', '25%', '41.67%', '8.33%']))}
+${rndGroup('로봇 시제품 사양', '기업부설연구소에서 제작한 시제품의 사양입니다. 벽면/천장 부착형은 공인시험기관(KCL) 입회 성능시험을 거쳤습니다.', robotTable('로봇 시제품 사양', ['로봇', '크기 (폭×길이×높이)', '무게', '구동', '조종'], PROCESS.protos))}
+${rndGroup('등록 특허', '로봇과 준설 관련 등록 특허입니다.', robotTable('등록 특허', ['특허 명칭', '등록 연도'], PROCESS.patents, ['', '8em']))}
     </div>
   </section>
 

@@ -943,7 +943,8 @@ html:not(.js-on) [data-reveal] { opacity: 1; transform: none; }
 .eqtbl td { padding: 12px 12px 12px 0; text-align: left; vertical-align: top; font-size: var(--fs-sm); line-height: 1.6; color: var(--text); border-bottom: 1px solid var(--line); }
 .eqtbl td.eqtbl__name { font-weight: 600; color: var(--ink); }
 .eqtbl .glance__more { margin-left: 10px; }
-.eqtbl--robot { table-layout: auto; }   /* 무인 로봇 시스템 구역의 표 두 개: 칸 폭은 내용에 맞춘다 */
+.eqtbl--robot { table-layout: auto; }   /* 무인 로봇 시스템 구역의 표: 칸 폭은 내용에 맞춘다 */
+.eqtbl--robot.eqtbl--cols { table-layout: fixed; }   /* 25차: 칸 폭을 정한 표(5세대 사양 · 연구개발 과제 · 등록 특허) */
 @media (max-width: 960px) {
   .eqgroup--photo .eqgroup__body { grid-template-columns: 1fr; gap: 20px; }
   .eqgroup__photos { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -960,8 +961,8 @@ html:not(.js-on) [data-reveal] { opacity: 1; transform: none; }
   .eqtbl td.eqtbl__spec--none, .eqtbl td.eqtbl__qty--none { display: none; }   /* '—'인 칸은 휴대폰에서 빼고 잇는다 */
   .eqtbl td.eqtbl__spec--none + td.eqtbl__use::before { content: none; }
   .eqtbl tr > td.eqtbl__spec { margin-top: 2px; }
-  /* 로봇 표: 첫 칸 아래에 나머지 값을 ' · '로 잇는다 */
-  .eqtbl--robot td + td { display: inline; font-size: var(--fs-xs); }
-  .eqtbl--robot td + td + td::before { content: " · "; }
+  /* 로봇 구역 표(25차): 첫 칸 아래에 값마다 칸 이름을 작은 글로 붙여 한 줄씩 쌓는다 */
+  .eqtbl--robot td + td { margin-top: 4px; font-size: var(--fs-sm); }
+  .eqtbl--robot td[data-label]::before { content: attr(data-label); display: inline-block; margin-right: 8px; font-size: var(--fs-xs); font-weight: 600; color: var(--muted); }
   .eqgroup__photos { grid-template-columns: 1fr; }
 }
