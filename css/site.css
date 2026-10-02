@@ -859,3 +859,9 @@ html:not(.js-on) [data-reveal] { opacity: 1; transform: none; }
 .steps--plain p { grid-column: 1; }
 .steps--plain b { padding-top: 0; }
 
+
+/* ========== 17. 사진 한 쌍 (11차 — 현장 진행 방식 비교 사진. 사진 한 장 최대 560px, 휴대폰은 세로로 쌓기) ========== */
+.grid--pair { grid-template-columns: repeat(2, minmax(0, 560px)); }
+@media (max-width: 720px) {
+  .grid--pair { grid-template-columns: minmax(0, 560px); }
+}

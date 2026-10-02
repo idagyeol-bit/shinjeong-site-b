@@ -97,7 +97,15 @@ const PHOTOS = {
   R25: { id: 'R25', w: 1000, h: 667, sizes: [640, 1000, 1600], alt: '본사 앞에서 제어 차량과 호스로 연결된 궤도형 장비', cap: '본사 앞 — 제어 차량과 호스로 연결된 궤도형 장비' },
   R27: { id: 'R27', w: 1000, h: 667, sizes: [640, 1000, 1600], alt: '야외에서 흡입차와 호스로 연결된 로봇', cap: '흡입차와 호스로 연결된 로봇' },
   R34: { id: 'R34', w: 1000, h: 667, sizes: [640, 1000, 1600], alt: '차량에 실린 제어 장치를 다루는 작업자와 발밑의 소형 주행 장비', cap: '차량의 제어 장치와 소형 주행 장비' },
-  R42: { id: 'R42', w: 1000, h: 667, sizes: [640, 1000, 1600], alt: '카메라 헤드와 바퀴를 갖춘 소형 주행 장비', cap: '카메라 헤드를 갖춘 소형 주행 장비' }
+  R42: { id: 'R42', w: 1000, h: 667, sizes: [640, 1000, 1600], alt: '카메라 헤드와 바퀴를 갖춘 소형 주행 장비', cap: '카메라 헤드를 갖춘 소형 주행 장비' },
+  /* P 사진(11차, 이다결 님 결정으로 '사진은 ZIP에서만' 규칙의 예외): 회사소개서(2024)·기술소개서(2025) PDF에 실린 작업 사진.
+     파일은 준비된 것을 그대로 쓴다(다시 만들거나 크기를 바꾸지 않음). sizes는 실제 있는 파일 폭만. 출처는 tools/photo-plan.json */
+  P01: { id: 'P01', w: 1000, h: 667, sizes: [640, 800], alt: '탱크 안에서 고압 세척을 하는 작업자 두 명', cap: '탱크 내부 세척 작업' },
+  P03: { id: 'P03', w: 1000, h: 667, sizes: [640, 1000, 1600], alt: '촉매가 쌓인 반응기 안에 투입된 흡입 로봇과 호스', cap: '반응기 안에서 촉매를 제거하는 로봇' },
+  P06: { id: 'P06', w: 1000, h: 667, sizes: [640], alt: '진공흡입차 앞에서 호스 작업을 지켜보는 신정개발 작업자', cap: '흡입차와 신정개발 작업자' },
+  P08: { id: 'P08', w: 1000, h: 667, sizes: [640, 800], alt: '도로 위에서 GPR 장비를 밀며 조사하는 작업자', cap: '도로 GPR 조사' },
+  P10: { id: 'P10', w: 1000, h: 667, sizes: [640, 1000], alt: '방호복을 입고 탱크 안에서 흡입 호스를 다루는 작업자', cap: '기존 작업 · 작업자가 탱크 안에서 직접 흡입' },
+  P11: { id: 'P11', w: 1000, h: 667, sizes: [640, 960], alt: '탱크 바닥에서 흡입 호스를 끌고 작업하는 로봇', cap: '무인장비 적용 · 로봇이 탱크 안에서 흡입' }
 };
 const P = (id) => PHOTOS[id];
 
@@ -114,9 +122,9 @@ const SERVICES = [
     topTargets: ['Tank', 'Pond', '공장 내부 배수로'],
     inquiryHint: ['대상 설비', '작업 목적', '알고 있는 크기·구조·잔류물 정보'],
     worktime: '저장탱크 개방검사 기간의 클리닝', // 한눈에 보기 표의 '작업 시기' — 회사소개서(2024) 실적표 p.39~41
-    projects: ['P02'], tech: true,
+    projects: ['P07', 'P02', 'P12'], tech: true,
     photo: Object.assign({}, P('W01'), { note: '산업설비 현장에 배치된 흡입차와 연결 호스의 모습입니다.' }),
-    gallery: { ids: ['W07', 'W09', 'R25'], titles: ['진공흡입차', '현장의 작업 차량과 작업자', '제어 차량과 로봇의 연결'],
+    gallery: { ids: ['P01', 'W07', 'W09'], titles: ['탱크 내부 세척 작업', '진공흡입차', '현장의 작업 차량과 작업자'],
       lead: '설비 클리닝에 쓰는 진공흡입차와 호스, 그리고 로봇을 호스로 연결한 구성을 사진으로 보여 드립니다.' }
   },
   {
@@ -131,7 +139,7 @@ const SERVICES = [
     topTargets: ['촉매 제거·교체', '충진물 제거·교체', '하역·충진 범위 상담'],
     inquiryHint: ['설비 종류', '충진물 특성', '요청 범위', '희망 일정'],
     worktime: '정기보수 · 대정비 기간의 촉매·충진물 교체', // 한눈에 보기 표의 '작업 시기' — 회사소개서(2024) 실적표 p.40·43·45·46
-    projects: ['P01'], tech: true,
+    projects: ['P09', 'P10', 'P01'], tech: true,
     concept: [
       { icon: 'suction', label: '흡입', text: '촉매·충진물을 호스로 흡입해 회수하는 역할' },
       { icon: 'separate', label: '분리', text: '회수한 물질을 작업에 맞게 분리하는 역할' },
@@ -139,7 +147,7 @@ const SERVICES = [
     ],
     photo: Object.assign({}, P('W05'), {
       note: '전면 스크루와 궤도를 갖춘 장비의 외형입니다.' }),
-    gallery: { ids: ['R10', 'R13', 'R01'], titles: ['전면 작업 헤드를 갖춘 궤도형 장비', '소형 주행 장비와 흡입 헤드', '차량과 로봇 장비'],
+    gallery: { ids: ['P03', 'R10', 'R13'], titles: ['반응기 안에서 촉매를 제거하는 로봇', '전면 작업 헤드를 갖춘 궤도형 장비', '소형 주행 장비와 흡입 헤드'],
       lead: '회사소개서의 촉매 처리 작업 구성(Robot · Vacuum Car · Separator · Control Car)에 쓰이는 장비의 외형과 차량 구성입니다.' }
   },
   {
@@ -167,9 +175,9 @@ const SERVICES = [
     targets: ['하수도 퇴적물', '하수처리시설', '오수관', '폐수처리장 슬러지'],
     topTargets: ['하수도 퇴적물', '오수관', '폐수처리장 슬러지'],
     inquiryHint: ['시설 종류', '대상 물질', '현장 상태', '희망 작업 시기'],
-    projects: ['P03', 'P06'], tech: true, recovery: true,
+    projects: ['P08', 'P03', 'P06'], tech: true, recovery: true,
     photo: Object.assign({}, P('W10'), { note: '맨홀 주변에서 호스를 다루는 작업 장면입니다.' }),
-    gallery: { ids: ['W03', 'W06', 'R15'], titles: ['맨홀 호스 작업', '파쇄 장치를 갖춘 궤도형 장비', '스키드 로더와 소형 굴삭기'],
+    gallery: { ids: ['P06', 'W03', 'R15'], titles: ['흡입차와 신정개발 작업자', '맨홀 호스 작업', '스키드 로더와 소형 굴삭기'],
       lead: '무인준설로봇(파쇄형·흡입형), 무인로더, 스키드 로더, 소형 굴삭기 등 준설 장비를 보유하고 있습니다.' }
   },
   {
@@ -185,7 +193,7 @@ const SERVICES = [
     inquiryHint: ['대상 구간', '조사·보수 목적', '보유 자료', '희망 일정'],
     projects: ['P04'], tech: false,
     photo: Object.assign({}, P('W04'), { note: '도로 위 맨홀 주변에서 진행한 맨홀 교체 공사의 현장 장면입니다.' }),
-    gallery: { ids: ['R42', 'R34', 'R20'], titles: ['카메라 헤드를 갖춘 소형 주행 장비', '차량의 제어 장치와 소형 주행 장비', '스키드 로더'],
+    gallery: { ids: ['P08', 'R42', 'R34'], titles: ['도로 GPR 조사', '카메라 헤드를 갖춘 소형 주행 장비', '차량의 제어 장치와 소형 주행 장비'],
       lead: 'CCTV 조사차량, 관로 CCTV 로봇, 맨홀 보수 작업용 스키드 로더를 보유하고 있습니다.' },
     rows: [
       { icon: 'cctv', label: '관로 CCTV 조사', text: '관로 내부를 대상으로 하는 CCTV 조사 업무입니다.' },
@@ -328,17 +336,27 @@ const PROJECTS = [
   /* P05 분류: 회사소개서 9쪽 사업분야 표에서 열교환기(HEATER EXCHANGERS)·보일러 TUBE는 "화학세정" 항목에 속하므로 그 기준을 따랐습니다.
      (원본 실적표에는 세정 방식이 적혀 있지 않으므로 발주처 확인 후 '설비 클리닝'으로 바꿀 수 있습니다.) */
   { id: 'P05', title: '정기보수 APH·열교환기 튜브 Cleaning', period: '2022.05~2022.06', cat: '화학세정', robot: 'unknown', summary: '정기보수 기간에 APH와 열교환기 튜브의 Cleaning을 수행한 이력입니다.', svc: 'S03' },
-  { id: 'P06', title: '공정 내 배수로 슬러지 준설', period: '2023.07', cat: '준설·슬러지', robot: 'unknown', summary: '공정 내 배수로의 슬러지를 준설한 이력입니다.', svc: 'S04' }
+  { id: 'P06', title: '공정 내 배수로 슬러지 준설', period: '2023.07', cat: '준설·슬러지', robot: 'unknown', summary: '공정 내 배수로의 슬러지를 준설한 이력입니다.', svc: 'S04' },
+  /* P07~P12 (11차): 회사소개서(2024) 실적표 p.39~46. 발주처·공장 이름은 빼고 줄였다. 로봇 적용 표시 없음 */
+  { id: 'P07', title: 'Pond Cleaning 단가계약', period: '2020~2023', cat: '설비 클리닝', robot: 'unknown', summary: 'Pond Cleaning을 단가계약으로 해마다 수행한 이력입니다.', svc: 'S01' },          // p.39·42·44·46
+  { id: 'P08', title: '준설작업 단가계약', period: '2020~2023', cat: '준설·슬러지', robot: 'unknown', summary: '준설작업을 단가계약으로 해마다 수행한 이력입니다.', svc: 'S04' },                  // p.39·42·44·46
+  { id: 'P09', title: '건조제 교체', period: '2023.03~2023.06', cat: '촉매·충진물', robot: 'unknown', summary: '공장의 건조제를 교체한 이력입니다.', svc: 'S02' },                                   // p.46
+  { id: 'P10', title: '흡착제 교체', period: '2023.03', cat: '촉매·충진물', robot: 'unknown', summary: '설비의 흡착제를 교체한 이력입니다.', svc: 'S02' },                                            // p.46
+  { id: 'P11', title: '대정비 촉매 교체', period: '2022.05', cat: '촉매·충진물', robot: 'unknown', summary: '대정비 기간에 반응기 촉매를 교체한 이력입니다.', svc: 'S02' },                           // p.45
+  { id: 'P12', title: '위험물 저장탱크 개방검사 Cleaning', period: '2020.05~2020.11', cat: '설비 클리닝', robot: 'unknown', summary: '위험물 저장탱크 개방검사에 맞춰 내부를 Cleaning한 이력입니다.', svc: 'S01' } // p.40
 ];
+/* 수행 이력 페이지의 표시 순서 (11차 지시 순서). 단가계약(2020~2023)을 맨 앞에 둔다 */
+const PROJECT_ORDER = ['P07', 'P08', 'P03', 'P06', 'P02', 'P09', 'P10', 'P01', 'P05', 'P11', 'P04', 'P12'];
 /* 필터 분류는 사업분야 5개와 1:1로 맞춥니다. (예전의 '설비 세정'은 사업분야에 없는 여섯 번째 분류였음) */
 const PROJECT_CATS = ['설비 클리닝', '촉매·충진물', '화학세정', '준설·슬러지', '관로·지하 조사'];
 /* 메인 신뢰 숫자 띠 — 200회: 기술소개서(2025) p.4 · 170여 건: 회사소개서(2024) 2020~2023 실적표
-   · 등록 특허 8건, ISO 9001 · 14001 · KOSHA-MS: 회사소개서(2024) (CREDS 참고) */
+   · 등록 특허 8건, 면허·허가·등록 6종: 회사소개서(2024) (CREDS 참고)
+   · 11차: 인증(ISO·KOSHA-MS)은 원본 인증서 유효기간이 지나 갱신 여부를 확인하지 못해 면허·허가·등록으로 바꿨다 */
 const TRUST = [
   { n: 200, unit: '회', l: '연간 밀폐공간 작업' },
   { n: 170, unit: '여 건', l: '수행 실적 (2020~2023)' },
   { n: 8, unit: '건', l: '등록 특허' },
-  { t: 'ISO 9001 · 14001 · KOSHA-MS', l: '품질·환경·안전보건 인증' }
+  { n: CREDS.licenses.length + CREDS.permits.length, unit: '종', l: '면허·허가·등록' }
 ];
 const TRUST_SRC = '회사소개서(2024) · 기술소개서(2025)';
 
@@ -347,10 +365,12 @@ const PROJECT_SUMMARY = {
   n: 170, unit: '여 건', l: '2020~2023년 수행 실적 (회사소개서 2024)',
   sectors: ['석유화학·정유·산업가스 플랜트', '발전 설비', '지자체·공공기관 상·하수도', '건설 현장']
 };
-/* 이력이 10건을 넘을 때만 분야 탭·로봇 적용 체크·검색창을 보여 준다 */
+/* 이력이 10건을 넘을 때만 분야 탭을 보여 준다.
+   로봇 적용 체크·검색창은 계속 숨긴다(11차 — 결과가 비는 검색창을 만들지 않는다는 4차 결정) */
 const SHOW_FILTERS = PROJECTS.length > 10;
+const SHOW_SEARCH = false;
 
-const FEATURED = ['P01', 'P02', 'P04'];
+const FEATURED = ['P07', 'P01', 'P08'];
 
 /* 메인 첫 화면 제목 — 하는 일 다섯 가지. 표시 글자만 여기서 정하고, 연결 주소는 SERVICES에서 가져온다.
    br: true 인 항목 뒤에서 PC 줄을 나눈다(휴대폰에서는 자연 줄바꿈). */
@@ -1210,11 +1230,14 @@ ${pcards(['R25', 'R07', 'R27'], ['제어 차량과 로봇의 연결', '설비 �
         <div data-reveal><h2>사람이 없는 곳에<br>인명 사고도 없다</h2></div>
         <div class="head__aside" data-reveal data-delay="90"><p class="lead">${esc(PROCESS.factsNote)}</p><p class="note">${esc(PROCESS.factsSrc)}</p></div>
       </div>
+      <p class="note mb-16" data-reveal>무인 로봇 시스템 개발 배경 · 신정개발 연간 작업 기준</p>
       <div class="facts" data-reveal>
 ${PROCESS.facts.map((f) => `        <div><b>${esc(f.n)}</b><span>${esc(f.l)}</span></div>`).join('\n')}
       </div>
-      <p class="note mt-14" data-reveal>신정개발 연간 작업 기준 · 기술소개서(2025)</p>
       <h3 class="mt-block mb-16">밀폐공간 작업 위험성 비교</h3>
+      <div class="grid grid--2 grid--pair mb-16">
+${pcards(['P10', 'P11'], null, '(max-width:720px) 92vw, 560px')}
+      </div>
 ${cmpTable(PROCESS.risk, '주요 위험성', '위험 노출', '위험 회피')}
       <details class="fold mt-block">
         <summary>효율성 비교 표 보기</summary>
@@ -1263,7 +1286,7 @@ ${SRC_LINE}    </div>
 pages['projects.html'] = () => head({
   file: 'projects.html', page: 'projects',
   title: `수행 이력 | ${C.brand}`,
-  desc: '석유화학·정유 플랜트, 발전 설비, 상·하수도 현장에서 신정개발이 수행한 대표 이력입니다.' + (SHOW_FILTERS ? ' 분야를 선택하거나 검색해 살펴볼 수 있습니다.' : '') // 필터를 숨기면 안내 문장도 뺀다
+  desc: '석유화학·정유 플랜트, 발전 설비, 상·하수도 현장에서 신정개발이 수행한 대표 이력입니다.' + (SHOW_SEARCH ? ' 분야를 선택하거나 검색해 살펴볼 수 있습니다.' : '') // 검색창을 숨기면 안내 문장도 뺀다
 }) + header('projects') + `
 <main id="main">
 ` + phero({
@@ -1285,7 +1308,7 @@ ${SHOW_FILTERS ? `      <div class="filters" role="group" aria-label="분야 선
 ${PROJECT_CATS.map((c) => `        <button type="button" data-filter="${esc(c)}" aria-pressed="false">${esc(c)}</button>`).join('\n')}
       </div>
 
-      <div class="toolbar" data-reveal>
+${SHOW_SEARCH ? `      <div class="toolbar" data-reveal>
         <label class="check"><input type="checkbox" id="recRobot"> 로봇 적용이 명시된 이력만</label>
         <div class="field toolbar__search">
           <label class="sr-only" for="recSearch">이력 검색</label>
@@ -1293,11 +1316,11 @@ ${PROJECT_CATS.map((c) => `        <button type="button" data-filter="${esc(c)}"
         </div>
       </div>
 
-` : ''}      <p class="note" data-reveal>표시 중인 이력 <b id="recCount" class="ink">${PROJECTS.length}</b>건</p>
+` : ''}` : ''}      <p class="note" data-reveal>표시 중인 이력 <b id="recCount" class="ink">${PROJECTS.length}</b>건</p>
       <p class="note mt-6" data-reveal>2020~2023년 4년간 170여 건의 작업을 수행했습니다. 발주처는 석유화학·정유·산업가스 플랜트, 발전 설비, 지방자치단체·공공기관의 상·하수도 사업, 건설 현장 등입니다. 이 가운데 4개 발주처와는 4년 동안 매년 단가계약으로 작업했습니다. 아래는 그중 대표 이력이며, 전체 목록은 문의 시 안내합니다.</p>
 
       <ul class="rec mt-10" id="recList" data-reveal>
-${PROJECTS.slice().sort((a, b) => (a.period < b.period ? 1 : -1)).map((p) => `        <li class="rec__row" data-cat="${esc(p.cat)}" data-robot="${p.robot}" data-search="${esc(p.title + ' ' + p.cat + ' ' + p.summary)}">
+${PROJECT_ORDER.map(prj).map((p) => `        <li class="rec__row" data-cat="${esc(p.cat)}" data-robot="${p.robot}" data-search="${esc(p.title + ' ' + p.cat + ' ' + p.summary)}">
           <span class="rec__date">${esc(p.period)}</span>
           <span class="rec__name">${esc(p.title)}${p.robot === 'stated' ? ' <span class="chip">로봇 적용</span>' : ''}</span>
           <span class="rec__cat">${esc(p.cat)}</span>
@@ -1370,6 +1393,7 @@ ${h.items.map((it) => `              <li><em>${it.m}</em><span>${esc(it.label)}<
         <div data-reveal data-delay="70">
           <h3>경영시스템 · 기업 인증</h3>
           <ul>${CREDS.certs.map((x) => `<li>${esc(x)}</li>`).join('')}</ul>
+          <p class="creds__sub">회사소개서(2024) 수록 기준</p>
         </div>
         <div data-reveal data-delay="140">
           <h3>수상 · 특허</h3>
