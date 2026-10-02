@@ -757,14 +757,14 @@ function serviceCards(reveal, chips) {
 }
 
 /* 사진 카드 묶음 (3열). titles[i]가 있으면 굵은 제목으로, 없으면 사진 설명을 제목으로 쓴다 */
-function pcards(ids, titles, sizesAttr) {
+function pcards(ids, titles, sizesAttr, subs) {   // subs[i]가 있으면 설명 둘째 줄(작은 회색 글)로 넣는다 (19차, 메인 "현장의 장면")
   const sz = sizesAttr || '(max-width:720px) 92vw, 420px';
   return ids.map((id, i) => {
     const p = P(id);
     const t = titles && titles[i] ? titles[i] : p.cap;
     return `        <figure class="pcard" data-reveal${i ? ` data-delay="${i * 80}"` : ''}>
           <div class="pcard__fig">${photo(p, sz)}</div>
-          <figcaption><b>${esc(t)}</b></figcaption>
+          <figcaption><b>${esc(t)}</b>${subs && subs[i] ? `<span>${esc(subs[i])}</span>` : ''}</figcaption>
         </figure>`;
   }).join('\n');
 }
@@ -910,8 +910,8 @@ ${PROCESS.steps.map((st, i) => `            <li><em>${String(i + 1).padStart(2, 
           <h2>현장의 장면</h2>
         </div>
       </div>
-      <div class="grid grid--3">
-${pcards(['W10', 'W05', 'R07', 'W07', 'W06', 'R01'], ['맨홀 호스 작업', '스크루 궤도형 흡입 로봇', '제어 차량 (원격 조종·CCTV)', '진공흡입차', '파쇄 장치를 갖춘 장비', '차량과 로봇 장비'])}
+      <div class="grid grid--3 grid--3row">
+${pcards(['W10', 'W07', 'W05'], ['맨홀 호스 작업', '산업설비 현장의 진공흡입차', '스크루 궤도형 흡입 로봇'], null, ['준설·슬러지', '설비 클리닝', '촉매·충진물'])}
       </div>
     </div>
   </section>
