@@ -867,9 +867,6 @@ ${SVC_HELP}
         <div data-reveal>
           <h2>주요 수행 이력</h2>
         </div>
-        <div class="head__aside head__aside--end" data-reveal data-delay="90">
-          <a class="tlink" href="projects.html">수행 이력 전체 보기 ${arrow(14)}</a>
-        </div>
       </div>
 ${REC_HEAD}
       <ul class="rec" data-reveal>
