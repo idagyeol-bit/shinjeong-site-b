@@ -806,13 +806,6 @@ html:not(.js-on) [data-reveal] { opacity: 1; transform: none; }
 .glance__tbl dd { font-size: var(--fs-sm); line-height: 1.75; color: var(--text); }
 .glance__links { display: flex; flex-wrap: wrap; gap: 8px 22px; }
 
-/* 장비·로봇 — 용도별 보유 장비 (칩) */
-.eqgrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
-.eqgrid > div { padding: 20px 22px; background: var(--soft); border-radius: var(--radius-lg); }
-.eqgrid b { display: block; margin-bottom: 12px; font-size: 15px; font-weight: 700; color: var(--ink); }
-.chips { display: flex; flex-wrap: wrap; gap: 6px; }
-.chips li { padding: 5px 11px; background: var(--white); border: 1px solid var(--line); border-radius: 100px; font-size: 13px; line-height: 1.5; color: var(--text); }
-
 /* 현장 진행 방식 — 접어 둔 표 */
 .fold summary {
   display: inline-flex; align-items: center; gap: 10px; min-height: 44px; padding: 0 18px;
@@ -824,11 +817,7 @@ html:not(.js-on) [data-reveal] { opacity: 1; transform: none; }
 .fold[open] summary::after { content: "\2212"; }
 .fold summary:hover { border-color: var(--navy); }
 
-@media (max-width: 960px) {
-  .eqgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-}
 @media (max-width: 720px) {
-  .eqgrid { grid-template-columns: 1fr; }
   .glance__tbl > div { grid-template-columns: 1fr; gap: 4px; }
 }
 
@@ -928,3 +917,41 @@ html:not(.js-on) [data-reveal] { opacity: 1; transform: none; }
 .glance__more { display: inline-flex; align-items: center; gap: 7px; margin-left: 12px; white-space: nowrap; font-size: var(--fs-sm); font-weight: 600; color: var(--brand); text-underline-offset: 4px; }
 .glance__more svg { flex: 0 0 auto; }
 .glance__more:hover, .glance__more:focus-visible { text-decoration: underline; }
+
+/* ========== 25. 장비·로봇 — 업무별 보유 장비 표 (23차) ========== */
+/* 바로 가기: 수행 이력 분야 탭과 같은 알약 모양, 선택 상태 없음 */
+.eqnav { display: flex; flex-wrap: wrap; gap: 8px; }
+.eqnav a {
+  display: inline-flex; align-items: center; min-height: 42px; padding: 0 17px; border: 1px solid var(--line); border-radius: 100px;
+  font-size: var(--fs-sm); font-weight: 500; color: var(--text); background: var(--white);
+  transition: border-color 0.2s, color 0.2s;
+}
+.eqnav a:hover, .eqnav a:focus-visible { border-color: #c4ccd3; color: var(--ink); }
+.eqgroup { margin-top: 48px; }
+.eqgroup h3 { font-size: var(--fs-h4); margin-bottom: 14px; }
+.eqgroup__body { display: block; }
+.eqgroup--photo .eqgroup__body { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 28px; align-items: start; }
+.eqgroup__photos { display: grid; gap: 16px; }
+/* 표: 수행 이력 표와 같은 느낌 — 맨 위 진한 선, 줄마다 옅은 선, 머리글은 작은 글 */
+.eqtbl { width: 100%; border-collapse: collapse; table-layout: fixed; border-top: 1px solid var(--ink); }
+.eqtbl__c1 { width: 35.7%; } .eqtbl__c2 { width: 28.6%; } .eqtbl__c3 { width: 35.7%; }
+.eqtbl th { padding: 10px 12px 10px 0; text-align: left; font-size: var(--fs-xs); font-weight: 600; color: var(--text); border-bottom: 1px solid var(--line); }
+.eqtbl td { padding: 12px 12px 12px 0; text-align: left; vertical-align: top; font-size: var(--fs-sm); line-height: 1.6; color: var(--text); border-bottom: 1px solid var(--line); }
+.eqtbl td.eqtbl__name { font-weight: 600; color: var(--ink); }
+.eqtbl .glance__more { margin-left: 10px; }
+@media (max-width: 960px) {
+  .eqgroup--photo .eqgroup__body { grid-template-columns: 1fr; gap: 20px; }
+  .eqgroup__photos { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 720px) {
+  .eqtbl, .eqtbl tbody, .eqtbl tr, .eqtbl td { display: block; width: 100%; }
+  .eqtbl colgroup, .eqtbl thead { display: none; }
+  .eqtbl tr { padding: 12px 0; border-bottom: 1px solid var(--line); }
+  .eqtbl td { padding: 0; border: 0; }
+  .eqtbl td.eqtbl__spec, .eqtbl td.eqtbl__use { display: inline; font-size: var(--fs-xs); }
+  .eqtbl td.eqtbl__spec + td.eqtbl__use::before { content: " · "; }
+  .eqtbl td.eqtbl__spec--none { display: none; }                 /* 규격이 '—'이면 휴대폰에서는 용도만 */
+  .eqtbl td.eqtbl__spec--none + td.eqtbl__use::before { content: none; }
+  .eqtbl tr > td.eqtbl__spec { margin-top: 2px; }
+  .eqgroup__photos { grid-template-columns: 1fr; }
+}

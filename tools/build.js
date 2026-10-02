@@ -134,7 +134,7 @@ const SERVICES = [
     card: '반응기의 촉매·충진물을 제거하고 교체합니다.',
     body: 'Reactor·Tank 내부의 촉매·충진물을 제거하고 교체합니다. 질소 분위기와 방폭 지역 조건에 맞춘 장비를 운용하고, 흡입·분리·원격 모니터링 시스템을 함께 구성합니다.',
     desc: 'Reactor·Tank 내부의 촉매·충진물을 제거하고 교체하며, 흡착제·건조제 교체도 수행합니다. 질소 분위기와 방폭 지역 조건에 맞춘 장비를 운용하고, 흡입·분리·원격 모니터링 시스템을 함께 구성합니다. 전남 여수 (주)신정개발.', // 검색 설명: 도입 문단 첫 문장(80자 미만이면 둘째 문장까지) + 지역·회사명, 80~120자
-    equip: ['흡입 로봇', '흡입차', '분리장치', '제어 차량'], // 한눈에 보기 표의 '주요 장비'
+    equip: ['진공흡입차(건식)', '흡입 로봇', '제어 차량', '분리장치'], // 한눈에 보기 표의 '주요 장비'
     targets: ['촉매 제거·교체', '충진물 제거·교체', '흡착제·건조제 교체', '하역·충진 관련 작업의 범위 상담'],
     topTargets: ['촉매 제거·교체', '충진물 제거·교체', '하역·충진 범위 상담'],
     inquiryHint: ['설비 종류', '충진물 특성', '요청 범위', '희망 일정'],
@@ -308,15 +308,91 @@ const CREDS = {
   quals: ['산업안전기사 · 산업안전산업기사 · 위험물산업기사', '토목기사 · 토목 중급/초급기술자 · 기계 중급기술자', '가스시설시공관리자 · 난방시공업 인정기능사', '용접기능사 · 특수용접기능사 · 설비보전기능사', '화학분석기능사 · 건설재료시험기능사 · 전기기능사', '굴삭기운전기능사 · 지게차운전기능사 · 건설기계조종사']
 };
 
-/* ===================== 보유 장비 구성 (회사소개서 p.21~24, 수량은 상담 시 안내) ===================== */
-const EQUIP = [
-  { g: '흡입 · 운반 차량', d: '진공흡입차(습식 7.5/12㎥ · 건식 12㎥), 고압 살수차, 카고크레인, 지게차' },
-  { g: '고압 세척', d: '고압 JET-CLEANER 1,000bar, 소형 JET-CLEANER 200~400bar, 온수·스팀 JET-CLEANER, 고압세척유닛' },
-  { g: '촉매 · 충진물 작업', d: 'AUTO SEPARATOR(5㎥/3㎥), 원형·다단 선별기, 집진기, 백필터 집진기' },
-  { g: '무인 로봇 · 준설', d: '무인준설로봇(파쇄형·흡입형), 박스무인준설로봇, 무인로더, 무인궤도로더, 스키드 로더, 미니 포크레인(SV-08), 소형 굴삭기(1.8톤), 유압 트래시 펌프, 오수 배수 펌프' },
-  { g: '관로 조사', d: 'CCTV 조사차량(D=250~600mm), 관로 CCTV 로봇, 탈취제거 SYSTEM' },
-  { g: '화학세정 · 탈수', d: '화학세정용 내산장비(50HP/20HP), 데칸타(슬러지 탈수용), HYDRONIC PUMP' }
+/* ===================== 보유 장비 — 업무별 표 (23차) =====================
+   장비명·규격·용도는 회사소개서(2024) p.21~24 장비표 그대로(2026-10-03 대조). 규격 '—'은 원본에 없거나 단위 확인 전.
+   보유 대수는 적지 않는다(수량은 상담 시 안내). 원본 오타 JEY-CLEANER·AUTO SEPAPRTPR은 사이트 표기(JET-CLEANER·AUTO SEPARATOR)로.
+   rnd: true 인 줄은 원본 장비표에 없는 안내 줄 — 분야 페이지의 이름(흡입 로봇·제어 차량·분리장치)을 '무인 로봇 시스템' 구역으로 잇는다 */
+const EQUIP_GROUPS = [
+  { id: 'eq-cleaning', svc: 'S01', title: '설비 클리닝',
+    photos: ['R25'], titles: ['제어 차량과 로봇의 연결'],
+    rows: [
+      ['진공흡입차(습식)', '7.5 / 12㎥', '폐기물 수집·운반, 준설'],
+      ['고압 JET-CLEANER', '1,000bar × 100ℓ/min', '세척'],
+      ['소형 JET-CLEANER', '200 · 250 · 400bar × 100ℓ/min', '세척'],
+      ['온수·스팀 JET-CLEANER', '—', '세척'],
+      ['고압세척유닛', '—', '세척'],
+      ['고압세척기', '—', '세척'],
+      ['흡입 로봇 · 제어 차량', '—', '설비 내부 작업과 설비 밖 원격 조종', true]
+    ] },
+  { id: 'eq-catalyst', svc: 'S02', title: '촉매·충진물 작업',
+    photos: ['R10', 'R13'], titles: ['전면 작업 헤드를 갖춘 궤도형 장비', '소형 주행 장비와 흡입 헤드'],
+    rows: [
+      ['진공흡입차(건식)', '12㎥', '촉매 교체'],
+      ['AUTO SEPARATOR', '5㎥ / 3㎥', '촉매 교체'],
+      ['원형 선별기', '—', '촉매 교체'],
+      ['다단 선별기', '—', '촉매 교체'],
+      ['집진기', '—', '촉매 교체'],
+      ['백필터 집진기', '—', '분진 회수'],
+      ['흡입 로봇 · 제어 차량 · 분리장치', '—', '반응기 내부 작업과 설비 밖 원격 조종', true]
+    ] },
+  { id: 'eq-chemical', svc: 'S03', title: '화학세정', photos: [],
+    rows: [
+      ['화학세정용 내산장비', '50HP / 20HP', '세관']
+    ] },
+  { id: 'eq-dredging', svc: 'S04', title: '준설·슬러지 회수',
+    photos: ['R15'], titles: ['스키드 로더와 소형 굴삭기'],
+    rows: [
+      ['무인준설로봇(파쇄형·흡입형)', '—', '준설'],
+      ['박스무인준설로봇', '—', '준설'],
+      ['무인로더', '—', '준설'],
+      ['무인궤도로더', '—', '준설'],
+      ['스키드 로더', '—', '준설'],
+      ['미니 포크레인', 'SV-08', '준설'],
+      ['소형 굴삭기', '1.8톤', '준설'],
+      ['진공흡입차(습식)', '7.5 / 12㎥', '폐기물 수집·운반, 준설'],
+      ['데칸타', '10마력', '슬러지 탈수 (혐기성 오니)'],
+      ['유압 트래시 펌프', '—', '준설'],
+      ['오수 배수 펌프', '220LPM', '준설']
+    ] },
+  { id: 'eq-inspection', svc: 'S05', title: '관로·지하 조사 및 보수',
+    photos: ['R20', 'R42'], titles: ['스키드 로더', '카메라 헤드를 갖춘 소형 주행 장비'],
+    rows: [
+      ['CCTV 조사차량', 'D=250~600mm', '관로 조사'],
+      ['관로 CCTV 로봇', '—', '관로 조사'],
+      ['탈취제거 SYSTEM', '—', '관로 조사'],
+      ['스키드 로더', '—', '맨홀 보수 작업']
+    ] },
+  { id: 'eq-common', title: '공통 (운반·지원)', nav: '공통', photos: [],
+    rows: [
+      ['카고크레인', '5톤', '자재 운반'],
+      ['지게차', '3톤 외', '자재 운반'],
+      ['고압 살수차', '8.5톤', '노면 청소'],
+      ['HYDRONIC PUMP', '—', '자재 운반']
+    ] }
 ];
+/* 분야 페이지 '장비 보기'의 도착지 */
+const EQ_ANCHOR = (svcId) => (EQUIP_GROUPS.find((g) => g.svc === svcId) || {}).id || 'equipment';
+
+/* 보유 장비 묶음 하나: 소제목 → 표 → (사진) */
+function eqGroup(g) {
+  const table = `<table class="eqtbl">
+          <caption class="sr-only">${esc(g.title)} 보유 장비</caption>
+          <colgroup><col class="eqtbl__c1"><col class="eqtbl__c2"><col class="eqtbl__c3"></colgroup>
+          <thead><tr><th scope="col">장비명</th><th scope="col">규격</th><th scope="col">용도</th></tr></thead>
+          <tbody>
+${g.rows.map(([name, spec, use, rnd]) => `            <tr><td class="eqtbl__name">${esc(name)}</td><td class="eqtbl__spec${spec === '—' ? ' eqtbl__spec--none' : ''}">${esc(spec)}</td><td class="eqtbl__use">${esc(use)}${rnd ? `<a class="glance__more" href="#rnd">무인 로봇 시스템 보기 ${arrow(14)}</a>` : ''}</td></tr>`).join('\n')}
+          </tbody>
+        </table>`;
+  return `      <div class="eqgroup${g.photos.length ? ' eqgroup--photo' : ''}" id="${g.id}" data-reveal>
+        <h3>${esc(g.title)}</h3>
+        <div class="eqgroup__body">
+        ${table}
+${g.photos.length ? `        <div class="eqgroup__photos">
+${pcards(g.photos, g.titles)}
+        </div>
+` : ''}        </div>
+      </div>`;
+}
 
 const FAQ = [
   { q: '로봇이 모든 작업을 진행하나요?', a: '아닙니다. 로봇이 설비 내부의 위험 물질을 먼저 회수하고, 위험이 줄어든 뒤 작업자가 들어가 최종 잔여물을 제거합니다. 로봇을 적용하는 범위는 설비와 작업 조건에 따라 달라집니다.' },
@@ -998,7 +1074,7 @@ SERVICES.forEach((s, idx) => {
         <div data-reveal data-delay="90">
           <dl class="glance__tbl">
             <div><dt>대상 설비</dt><dd>${s.targets.map(esc).join(' · ')}</dd></div>
-            <div><dt>주요 장비</dt><dd>${s.equip.map(esc).join(' · ')}<a class="glance__more" href="technology.html#equipment">장비 보기 ${arrow(14)}</a></dd></div>
+            <div><dt>주요 장비</dt><dd>${s.equip.map(esc).join(' · ')}<a class="glance__more" href="technology.html#${EQ_ANCHOR(s.id)}">장비 보기 ${arrow(14)}</a></dd></div>
 ${s.worktime ? `            <div><dt>작업 시기</dt><dd>${esc(s.worktime)}</dd></div>\n` : ''}            <div><dt>관련 이력</dt><dd>${rel.length ? rel.map((p) => `${esc(p.title)} (${esc(p.period)})`).join(' · ') : '이 홈페이지의 수행 이력에는 이 업무로 분류된 항목이 없습니다.'}</dd></div>
             <div><dt>문의 시 필요한 정보</dt><dd>${s.inquiryHint.map(esc).join(' · ')}</dd></div>
           </dl>
@@ -1066,16 +1142,12 @@ pages['technology.html'] = () => head({
   h1: '장비·로봇',
   crumbs: [{ label: '장비·로봇' }]
 }) + `
-  <!-- 01 보유 장비 (차량·장비 사진 + 용도별 장비 목록) -->
+  <!-- 01 보유 장비 (23차: 업무별 표 6묶음 + 사진) -->
   <section class="section" id="equipment">
     <div class="wrap">
       <div class="head head--solo" data-reveal><div><h2>보유 장비</h2></div></div>
-      <div class="grid grid--3">
-${pcards(['R01', 'R25', 'R10', 'R13', 'R20', 'R42'], ['차량과 로봇 장비', '제어 차량과 로봇의 연결', '전면 작업 헤드를 갖춘 궤도형 장비', '소형 주행 장비와 흡입 헤드', '스키드 로더', '카메라 헤드를 갖춘 소형 주행 장비'])}
-      </div>
-      <div class="eqgrid mt-block" data-reveal>
-${EQUIP.map((e) => `        <div><b>${esc(e.g)}</b><ul class="chips">${e.d.split(/, (?![^(]*\))/).map((x) => `<li>${esc(x)}</li>`).join('')}</ul></div>`).join('\n')}
-      </div>
+      <nav class="eqnav" aria-label="업무별 보유 장비" data-reveal>${EQUIP_GROUPS.map((g) => `<a href="#${g.id}">${esc(g.nav || g.title)}</a>`).join('')}</nav>
+${EQUIP_GROUPS.map(eqGroup).join('\n')}
       <p class="note mt-14">보유 수량과 가동 상태는 문의 시 안내합니다.</p>
     </div>
   </section>
