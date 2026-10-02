@@ -919,3 +919,7 @@ html:not(.js-on) [data-reveal] { opacity: 1; transform: none; }
 /* ========== 22. 메인 "현장의 장면" 설명 글자 (20차) — 이 구역(grid--3row)에서만 한 단계 크게 ========== */
 .grid--3row .pcard b { font-size: var(--fs-body); }
 .grid--3row .pcard span { font-size: var(--fs-sm); }
+
+/* ========== 23. 본사 사진 설명 · 메인 회사 소개 숫자 줄 ========== */
+.split__cap--sm { font-size: var(--fs-sm); }     /* 본사 사진(M02) 설명만 한 단계 크게, 색은 그대로 */
+.stats--flush .stat { padding-left: 0; padding-right: 0; }   /* 메인 회사 소개 숫자 줄: 제목과 같은 왼쪽 선 (15차 .trust .stat 과 같은 방식) */

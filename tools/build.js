@@ -74,7 +74,7 @@ const C = {
    설명(alt/cap)은 사진에 보이는 것만 적습니다. 모델명·세대·성능·발주처는 적지 않습니다. */
 const PHOTOS = {
   /* 모든 사진은 3:2로 크롭했고, 크롭·번호판/얼굴 흐림 외의 합성은 없습니다. 원본 대응: tools/photo-plan.json */
-  M02: { id: 'M02', w: 1200, h: 800, sizes: [720, 1200], alt: '신정개발 상호가 보이는 본사 건물과 차량', cap: '신정개발 상호가 보이는 본사 건물' },
+  M02: { id: 'M02', w: 1200, h: 800, sizes: [720, 1200], alt: '신정개발 상호가 보이는 본사 건물과 차량', cap: '여수 본사 · ' + C.address },   // 설명의 주소는 푸터와 같은 C.address
   M04: { id: 'M04', w: 980, h: 653, sizes: [640, 980], alt: '해질녘 산업단지 전경', cap: '산업단지 전경' },
   M05: { id: 'M05', w: 1400, h: 933, sizes: [800, 1400], alt: '산업설비 현장에 설치된 안전 구획과 차량', cap: '산업설비 현장의 안전 구획과 차량' },
   M06: { id: 'M06', w: 1000, h: 667, sizes: [640, 1000, 1600], alt: '안전제일 표시가 있는 작업자의 안전모', cap: '작업자의 안전모' },
@@ -927,11 +927,11 @@ ${pcards(['P01', 'P03', 'W10'], ['탱크 내부 고압 세척', '반응기 안 �
         </div>
         <figure class="split__media" data-reveal data-delay="90">
           <div class="split__fig">${photo(P('M02'), '(max-width:960px) 92vw, 620px')}</div>
-          <figcaption class="split__cap">${esc(P('M02').cap)}</figcaption>
+          <figcaption class="split__cap split__cap--sm">${esc(P('M02').cap)}</figcaption>
         </figure>
       </div>
 
-      <div class="stats mt-block" data-reveal>
+      <div class="stats stats--flush mt-block" data-reveal>
         <div class="stat"><b><span data-count="${C.founded}">${C.founded}</span></b><span>설립</span></div>
         <div class="stat"><b><span data-count="2007">2007</span></b><span>법인 전환</span></div>
         <div class="stat"><b><span data-count="2017">2017</span></b><span>기업부설연구소 설립</span></div>
@@ -1369,7 +1369,7 @@ ${h.items.map((it) => `              <li><em>${it.m}</em><span>${esc(it.label)}<
         </div>
         <figure class="split__media" data-reveal data-delay="90">
           <div class="split__fig">${photo(P('M02'), '(max-width:960px) 92vw, 620px')}</div>
-          <figcaption class="split__cap">${esc(P('M02').cap)}</figcaption>
+          <figcaption class="split__cap split__cap--sm">${esc(P('M02').cap)}</figcaption>
         </figure>
       </div>
     </div>
