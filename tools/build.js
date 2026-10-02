@@ -359,6 +359,8 @@ const TRUST = [
   { n: CREDS.licenses.length + CREDS.permits.length, unit: '종', l: '면허·허가·등록' }
 ];
 const TRUST_SRC = '회사소개서(2024) · 기술소개서(2025)';
+/* 숫자 띠 아래 "주요 현장" 칩 (3차 문구 그대로, 15차에 칩 모양으로) — 링크 아님 */
+const TRUST_SITES = ['석유화학·정유 플랜트', '발전 설비', '상·하수도'];
 
 /* 수행 이력 요약 띠 — 회사소개서(2024) 2020~2023 실적표 */
 const PROJECT_SUMMARY = {
@@ -836,8 +838,10 @@ ${TRUST.map((t) => t.t
     ? `        <div class="stat stat--text"><b>${t.t.split(' · ').map(esc).join('&nbsp;· ')}</b><span>${esc(t.l)}</span></div>`
     : `        <div class="stat"><b><span data-count="${t.n}">${t.n}</span><i>${esc(t.unit)}</i></b><span>${esc(t.l)}</span></div>`).join('\n')}
       </div>
-      <p class="note mt-14" data-reveal><b class="ink">주요 현장</b> — 석유화학·정유 플랜트 · 발전 설비 · 상·하수도</p>
-      <p class="note mt-6" data-reveal>${esc(TRUST_SRC)}</p>
+      <div class="trust__info" data-reveal>
+        <div class="trust__sites"><b>주요 현장</b><ul class="trust__chips" aria-label="주요 현장">${TRUST_SITES.map((x) => `<li class="chip">${esc(x)}</li>`).join('')}</ul></div>
+        <p class="trust__src">출처: ${esc(TRUST_SRC)}</p>
+      </div>
     </div>
   </section>
 
