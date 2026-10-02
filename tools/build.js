@@ -1097,6 +1097,7 @@ pages['services.html'] = () => head({
 <main id="main">
 ` + phero({
   h1: '사업분야',
+  keepLead: '신정개발은 산업설비와 환경시설 안의 잔류물·퇴적물·촉매를 제거하고, 세정하고, 준설합니다. 업무는 다섯 가지로 나뉩니다.',
   crumbs: [{ label: '사업분야' }]
 }) + tabs(null) + `
   <section class="section">
@@ -1210,6 +1211,7 @@ pages['technology.html'] = () => head({
 <main id="main">
 ` + phero({
   h1: '장비·로봇',
+  keepLead: '신정개발이 보유한 장비를 업무별로 정리했습니다. 위험한 설비 내부 작업에는 기업부설연구소에서 자체 개발한 무인 로봇을 투입합니다.',
   crumbs: [{ label: '장비·로봇' }]
 }) + `
   <!-- 01 보유 장비 (23차: 업무별 표 6묶음 + 사진) -->
@@ -1285,7 +1287,8 @@ pages['process.html'] = () => head({
 }) + header('process') + `
 <main id="main">
 ` + phero({
-  h1: '현장에서는<br>이렇게 진행합니다',
+  h1: '현장 진행 방식',
+  keepLead: '작업은 현장 검토에서 시작해 회수물 처리로 끝납니다. 위험한 구간에는 로봇이 먼저 들어가고, 작업자는 위험 물질이 줄어든 뒤에 투입됩니다.',
   crumbs: [{ label: '현장 진행 방식' }]
 }) + `
   <!-- 01 진행 순서 -->
@@ -1388,6 +1391,7 @@ pages['projects.html'] = () => head({
 <main id="main">
 ` + phero({
   h1: '수행 이력',
+  keepLead: '2020~2023년 4년간 170여 건의 작업을 수행했습니다. 이 가운데 4개 발주처와는 4년 연속 단가계약을 맺었습니다. 아래는 그중 대표 이력입니다.',
   crumbs: [{ label: '수행 이력' }]
 }) + `
   <section class="section">
@@ -1414,7 +1418,7 @@ ${SHOW_SEARCH ? `      <div class="toolbar" data-reveal>
       </div>
 
 ` : ''}` : ''}      <p class="note" data-reveal>표시 중인 이력 <b id="recCount" class="ink">${PROJECTS.length}</b>건</p>
-      <p class="note mt-6" data-reveal>2020~2023년 4년간 170여 건의 작업을 수행했습니다. 발주처는 석유화학·정유·산업가스 플랜트, 발전 설비, 지방자치단체·공공기관의 상·하수도 사업, 건설 현장 등입니다. 이 가운데 4개 발주처와는 4년 동안 매년 단가계약으로 작업했습니다. 아래는 그중 대표 이력이며, 전체 목록은 문의 시 안내합니다.</p>
+      <p class="note mt-6" data-reveal>전체 목록은 문의 시 안내합니다.</p>
 
 ${REC_HEAD.replace('class="rec__head"', 'class="rec__head mt-10"')}
       <ul class="rec" id="recList" data-reveal>
@@ -1439,7 +1443,8 @@ pages['company.html'] = () => head({
 }) + header('company') + `
 <main id="main">
 ` + phero({
-  h1: `${C.founded}년부터<br>쌓아 온 현장 경험`,
+  h1: '회사 소개',
+  keepLead: '신정개발은 1992년 설립 이후 풍부한 현장 경험과 숙련된 직원들의 노력으로 유틸리티·환경 분야 유지보수 공사를 수행해 왔습니다. 작업 방법의 개선과 환경·안전·보건에 힘써 공사의 질을 높이겠습니다.',
   crumbs: [{ label: '회사 소개' }]
 }) + `
   <section class="section">
