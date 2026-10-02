@@ -104,22 +104,24 @@
   <section class="section" id="equipment">
     <div class="wrap">
       <div class="head head--solo" data-reveal><div><h2>보유 장비</h2></div></div>
-      <nav class="eqnav" aria-label="업무별 보유 장비" data-reveal><a href="#eq-cleaning">설비 클리닝</a><a href="#eq-catalyst">촉매·충진물 작업</a><a href="#eq-chemical">화학세정</a><a href="#eq-dredging">준설·슬러지 회수</a><a href="#eq-inspection">관로·지하 조사 및 보수</a><a href="#eq-common">공통</a></nav>
+      <div class="filters eqtabs" role="group" aria-label="업무별 보유 장비" data-reveal><a href="#equipment" data-eq="equipment">전체</a><a href="#eq-cleaning" data-eq="eq-cleaning">설비 클리닝</a><a href="#eq-catalyst" data-eq="eq-catalyst">촉매·충진물 작업</a><a href="#eq-chemical" data-eq="eq-chemical">화학세정</a><a href="#eq-dredging" data-eq="eq-dredging">준설·슬러지 회수</a><a href="#eq-inspection" data-eq="eq-inspection">관로·지하 조사 및 보수</a><a href="#eq-common" data-eq="eq-common">공통</a></div>
+      <p class="note">보유 대수는 회사소개서(2024) 수록 기준이며, 현재 수량과 가동 상태는 문의 시 안내합니다.</p>
       <div class="eqgroup eqgroup--photo" id="eq-cleaning" data-reveal>
-        <h3>설비 클리닝</h3>
+        <div class="eqgroup__head"><h3>설비 클리닝</h3><a class="glance__more" href="service-equipment-cleaning.html" aria-label="설비 클리닝 업무 보기">이 업무 보기 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M13 6.5l5.5 5.5L13 17.5"/></svg></a></div>
+        <p class="eqgroup__desc">진공흡입차로 잔류물을 흡입하고 고압 JET-CLEANER로 세척합니다. 위험한 내부 작업에는 흡입 로봇을 먼저 투입하고, 작업자는 설비 밖 제어 차량에서 조종합니다.</p>
         <div class="eqgroup__body">
         <table class="eqtbl">
           <caption class="sr-only">설비 클리닝 보유 장비</caption>
-          <colgroup><col class="eqtbl__c1"><col class="eqtbl__c2"><col class="eqtbl__c3"></colgroup>
-          <thead><tr><th scope="col">장비명</th><th scope="col">규격</th><th scope="col">용도</th></tr></thead>
+          <colgroup><col class="eqtbl__c1"><col class="eqtbl__c2"><col class="eqtbl__c3"><col class="eqtbl__c4"></colgroup>
+          <thead><tr><th scope="col">장비명</th><th scope="col">규격</th><th scope="col">용도</th><th scope="col">보유</th></tr></thead>
           <tbody>
-            <tr><td class="eqtbl__name">진공흡입차(습식)</td><td class="eqtbl__spec">7.5 / 12㎥</td><td class="eqtbl__use">폐기물 수집·운반, 준설</td></tr>
-            <tr><td class="eqtbl__name">고압 JET-CLEANER</td><td class="eqtbl__spec">1,000bar × 100ℓ/min</td><td class="eqtbl__use">세척</td></tr>
-            <tr><td class="eqtbl__name">소형 JET-CLEANER</td><td class="eqtbl__spec">200 · 250 · 400bar × 100ℓ/min</td><td class="eqtbl__use">세척</td></tr>
-            <tr><td class="eqtbl__name">온수·스팀 JET-CLEANER</td><td class="eqtbl__spec eqtbl__spec--none">—</td><td class="eqtbl__use">세척</td></tr>
-            <tr><td class="eqtbl__name">고압세척유닛</td><td class="eqtbl__spec eqtbl__spec--none">—</td><td class="eqtbl__use">세척</td></tr>
-            <tr><td class="eqtbl__name">고압세척기</td><td class="eqtbl__spec eqtbl__spec--none">—</td><td class="eqtbl__use">세척</td></tr>
-            <tr><td class="eqtbl__name">흡입 로봇 · 제어 차량</td><td class="eqtbl__spec eqtbl__spec--none">—</td><td class="eqtbl__use">설비 내부 작업과 설비 밖 원격 조종<a class="glance__more" href="#rnd">무인 로봇 시스템 보기 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M13 6.5l5.5 5.5L13 17.5"/></svg></a></td></tr>
+            <tr><td class="eqtbl__name">진공흡입차(습식)</td><td class="eqtbl__spec">7.5 / 12㎥</td><td class="eqtbl__use">폐기물 수집·운반, 준설</td><td class="eqtbl__qty">5대</td></tr>
+            <tr><td class="eqtbl__name">고압 JET-CLEANER</td><td class="eqtbl__spec">1,000bar × 100ℓ/min</td><td class="eqtbl__use">세척</td><td class="eqtbl__qty">3대</td></tr>
+            <tr><td class="eqtbl__name">소형 JET-CLEANER</td><td class="eqtbl__spec">200 · 250 · 400bar × 100ℓ/min</td><td class="eqtbl__use">세척</td><td class="eqtbl__qty">6대</td></tr>
+            <tr><td class="eqtbl__name">온수·스팀 JET-CLEANER</td><td class="eqtbl__spec eqtbl__spec--none">—</td><td class="eqtbl__use">세척</td><td class="eqtbl__qty">3대</td></tr>
+            <tr><td class="eqtbl__name">고압세척유닛</td><td class="eqtbl__spec eqtbl__spec--none">—</td><td class="eqtbl__use">세척</td><td class="eqtbl__qty">3대</td></tr>
+            <tr><td class="eqtbl__name">고압세척기</td><td class="eqtbl__spec eqtbl__spec--none">—</td><td class="eqtbl__use">세척</td><td class="eqtbl__qty">1대</td></tr>
+            <tr><td class="eqtbl__name">흡입 로봇 · 제어 차량</td><td class="eqtbl__spec eqtbl__spec--none">—</td><td class="eqtbl__use">설비 내부 작업과 설비 밖 원격 조종<a class="glance__more" href="#rnd">무인 로봇 시스템 보기 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M13 6.5l5.5 5.5L13 17.5"/></svg></a></td><td class="eqtbl__qty eqtbl__qty--none">—</td></tr>
           </tbody>
         </table>
         <div class="eqgroup__photos">
@@ -131,20 +133,21 @@
         </div>
       </div>
       <div class="eqgroup eqgroup--photo" id="eq-catalyst" data-reveal>
-        <h3>촉매·충진물 작업</h3>
+        <div class="eqgroup__head"><h3>촉매·충진물 작업</h3><a class="glance__more" href="service-catalyst-media.html" aria-label="촉매·충진물 작업 업무 보기">이 업무 보기 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M13 6.5l5.5 5.5L13 17.5"/></svg></a></div>
+        <p class="eqgroup__desc">건식 진공흡입차, AUTO SEPARATOR, 선별기로 촉매를 회수·선별하고, 집진기로 분진을 회수합니다. 반응기 내부 작업에는 흡입 로봇을 투입합니다.</p>
         <div class="eqgroup__body">
         <table class="eqtbl">
           <caption class="sr-only">촉매·충진물 작업 보유 장비</caption>
-          <colgroup><col class="eqtbl__c1"><col class="eqtbl__c2"><col class="eqtbl__c3"></colgroup>
-          <thead><tr><th scope="col">장비명</th><th scope="col">규격</th><th scope="col">용도</th></tr></thead>
+          <colgroup><col class="eqtbl__c1"><col class="eqtbl__c2"><col class="eqtbl__c3"><col class="eqtbl__c4"></colgroup>
+          <thead><tr><th scope="col">장비명</th><th scope="col">규격</th><th scope="col">용도</th><th scope="col">보유</th></tr></thead>
           <tbody>
-            <tr><td class="eqtbl__name">진공흡입차(건식)</td><td class="eqtbl__spec">12㎥</td><td class="eqtbl__use">촉매 교체</td></tr>
-            <tr><td class="eqtbl__name">AUTO SEPARATOR</td><td class="eqtbl__spec">5㎥ / 3㎥</td><td class="eqtbl__use">촉매 교체</td></tr>
-            <tr><td class="eqtbl__name">원형 선별기</td><td class="eqtbl__spec eqtbl__spec--none">—</td><td class="eqtbl__use">촉매 교체</td></tr>
-            <tr><td class="eqtbl__name">다단 선별기</td><td class="eqtbl__spec eqtbl__spec--none">—</td><td class="eqtbl__use">촉매 교체</td></tr>
-            <tr><td class="eqtbl__name">집진기</td><td class="eqtbl__spec eqtbl__spec--none">—</td><td class="eqtbl__use">촉매 교체</td></tr>
-            <tr><td class="eqtbl__name">백필터 집진기</td><td class="eqtbl__spec eqtbl__spec--none">—</td><td class="eqtbl__use">분진 회수</td></tr>
-            <tr><td class="eqtbl__name">흡입 로봇 · 제어 차량 · 분리장치</td><td class="eqtbl__spec eqtbl__spec--none">—</td><td class="eqtbl__use">반응기 내부 작업과 설비 밖 원격 조종<a class="glance__more" href="#rnd">무인 로봇 시스템 보기 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M13 6.5l5.5 5.5L13 17.5"/></svg></a></td></tr>
+            <tr><td class="eqtbl__name">진공흡입차(건식)</td><td class="eqtbl__spec">12㎥</td><td class="eqtbl__use">촉매 교체</td><td class="eqtbl__qty">4대</td></tr>
+            <tr><td class="eqtbl__name">AUTO SEPARATOR</td><td class="eqtbl__spec">5㎥ / 3㎥</td><td class="eqtbl__use">촉매 교체</td><td class="eqtbl__qty">6SET</td></tr>
+            <tr><td class="eqtbl__name">원형 선별기</td><td class="eqtbl__spec eqtbl__spec--none">—</td><td class="eqtbl__use">촉매 교체</td><td class="eqtbl__qty">1대</td></tr>
+            <tr><td class="eqtbl__name">다단 선별기</td><td class="eqtbl__spec eqtbl__spec--none">—</td><td class="eqtbl__use">촉매 교체</td><td class="eqtbl__qty">1대</td></tr>
+            <tr><td class="eqtbl__name">집진기</td><td class="eqtbl__spec eqtbl__spec--none">—</td><td class="eqtbl__use">촉매 교체</td><td class="eqtbl__qty">1대</td></tr>
+            <tr><td class="eqtbl__name">백필터 집진기</td><td class="eqtbl__spec eqtbl__spec--none">—</td><td class="eqtbl__use">분진 회수</td><td class="eqtbl__qty">1대</td></tr>
+            <tr><td class="eqtbl__name">흡입 로봇 · 제어 차량 · 분리장치</td><td class="eqtbl__spec eqtbl__spec--none">—</td><td class="eqtbl__use">반응기 내부 작업과 설비 밖 원격 조종<a class="glance__more" href="#rnd">무인 로봇 시스템 보기 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M13 6.5l5.5 5.5L13 17.5"/></svg></a></td><td class="eqtbl__qty eqtbl__qty--none">—</td></tr>
           </tbody>
         </table>
         <div class="eqgroup__photos">
@@ -160,37 +163,39 @@
         </div>
       </div>
       <div class="eqgroup" id="eq-chemical" data-reveal>
-        <h3>화학세정</h3>
+        <div class="eqgroup__head"><h3>화학세정</h3><a class="glance__more" href="service-chemical-cleaning.html" aria-label="화학세정 업무 보기">이 업무 보기 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M13 6.5l5.5 5.5L13 17.5"/></svg></a></div>
+        <p class="eqgroup__desc">배관·열교환기·보일러 튜브 계통의 세관 작업에 내산장비를 씁니다.</p>
         <div class="eqgroup__body">
         <table class="eqtbl">
           <caption class="sr-only">화학세정 보유 장비</caption>
-          <colgroup><col class="eqtbl__c1"><col class="eqtbl__c2"><col class="eqtbl__c3"></colgroup>
-          <thead><tr><th scope="col">장비명</th><th scope="col">규격</th><th scope="col">용도</th></tr></thead>
+          <colgroup><col class="eqtbl__c1"><col class="eqtbl__c2"><col class="eqtbl__c3"><col class="eqtbl__c4"></colgroup>
+          <thead><tr><th scope="col">장비명</th><th scope="col">규격</th><th scope="col">용도</th><th scope="col">보유</th></tr></thead>
           <tbody>
-            <tr><td class="eqtbl__name">화학세정용 내산장비</td><td class="eqtbl__spec">50HP / 20HP</td><td class="eqtbl__use">세관</td></tr>
+            <tr><td class="eqtbl__name">화학세정용 내산장비</td><td class="eqtbl__spec">50HP / 20HP</td><td class="eqtbl__use">세관</td><td class="eqtbl__qty">2대</td></tr>
           </tbody>
         </table>
         </div>
       </div>
       <div class="eqgroup eqgroup--photo" id="eq-dredging" data-reveal>
-        <h3>준설·슬러지 회수</h3>
+        <div class="eqgroup__head"><h3>준설·슬러지 회수</h3><a class="glance__more" href="service-dredging-sludge.html" aria-label="준설·슬러지 회수 업무 보기">이 업무 보기 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M13 6.5l5.5 5.5L13 17.5"/></svg></a></div>
+        <p class="eqgroup__desc">무인준설로봇과 무인로더를 원격으로 조종해 퇴적물을 준설하고, 회수한 슬러지는 데칸타로 탈수합니다.</p>
         <div class="eqgroup__body">
         <table class="eqtbl">
           <caption class="sr-only">준설·슬러지 회수 보유 장비</caption>
-          <colgroup><col class="eqtbl__c1"><col class="eqtbl__c2"><col class="eqtbl__c3"></colgroup>
-          <thead><tr><th scope="col">장비명</th><th scope="col">규격</th><th scope="col">용도</th></tr></thead>
+          <colgroup><col class="eqtbl__c1"><col class="eqtbl__c2"><col class="eqtbl__c3"><col class="eqtbl__c4"></colgroup>
+          <thead><tr><th scope="col">장비명</th><th scope="col">규격</th><th scope="col">용도</th><th scope="col">보유</th></tr></thead>
           <tbody>
-            <tr><td class="eqtbl__name">무인준설로봇(파쇄형·흡입형)</td><td class="eqtbl__spec eqtbl__spec--none">—</td><td class="eqtbl__use">준설</td></tr>
-            <tr><td class="eqtbl__name">박스무인준설로봇</td><td class="eqtbl__spec eqtbl__spec--none">—</td><td class="eqtbl__use">준설</td></tr>
-            <tr><td class="eqtbl__name">무인로더</td><td class="eqtbl__spec eqtbl__spec--none">—</td><td class="eqtbl__use">준설</td></tr>
-            <tr><td class="eqtbl__name">무인궤도로더</td><td class="eqtbl__spec eqtbl__spec--none">—</td><td class="eqtbl__use">준설</td></tr>
-            <tr><td class="eqtbl__name">스키드 로더</td><td class="eqtbl__spec eqtbl__spec--none">—</td><td class="eqtbl__use">준설</td></tr>
-            <tr><td class="eqtbl__name">미니 포크레인</td><td class="eqtbl__spec">SV-08</td><td class="eqtbl__use">준설</td></tr>
-            <tr><td class="eqtbl__name">소형 굴삭기</td><td class="eqtbl__spec">1.8톤</td><td class="eqtbl__use">준설</td></tr>
-            <tr><td class="eqtbl__name">진공흡입차(습식)</td><td class="eqtbl__spec">7.5 / 12㎥</td><td class="eqtbl__use">폐기물 수집·운반, 준설</td></tr>
-            <tr><td class="eqtbl__name">데칸타</td><td class="eqtbl__spec">10마력</td><td class="eqtbl__use">슬러지 탈수 (혐기성 오니)</td></tr>
-            <tr><td class="eqtbl__name">유압 트래시 펌프</td><td class="eqtbl__spec eqtbl__spec--none">—</td><td class="eqtbl__use">준설</td></tr>
-            <tr><td class="eqtbl__name">오수 배수 펌프</td><td class="eqtbl__spec">220LPM</td><td class="eqtbl__use">준설</td></tr>
+            <tr><td class="eqtbl__name">무인준설로봇(파쇄형·흡입형)</td><td class="eqtbl__spec eqtbl__spec--none">—</td><td class="eqtbl__use">준설</td><td class="eqtbl__qty">2대</td></tr>
+            <tr><td class="eqtbl__name">박스무인준설로봇</td><td class="eqtbl__spec eqtbl__spec--none">—</td><td class="eqtbl__use">준설</td><td class="eqtbl__qty">1대</td></tr>
+            <tr><td class="eqtbl__name">무인로더</td><td class="eqtbl__spec eqtbl__spec--none">—</td><td class="eqtbl__use">준설</td><td class="eqtbl__qty">1대</td></tr>
+            <tr><td class="eqtbl__name">무인궤도로더</td><td class="eqtbl__spec eqtbl__spec--none">—</td><td class="eqtbl__use">준설</td><td class="eqtbl__qty">1대</td></tr>
+            <tr><td class="eqtbl__name">스키드 로더</td><td class="eqtbl__spec eqtbl__spec--none">—</td><td class="eqtbl__use">준설</td><td class="eqtbl__qty">1대</td></tr>
+            <tr><td class="eqtbl__name">미니 포크레인</td><td class="eqtbl__spec">SV-08</td><td class="eqtbl__use">준설</td><td class="eqtbl__qty">1대</td></tr>
+            <tr><td class="eqtbl__name">소형 굴삭기</td><td class="eqtbl__spec">1.8톤</td><td class="eqtbl__use">준설</td><td class="eqtbl__qty">1대</td></tr>
+            <tr><td class="eqtbl__name">진공흡입차(습식)</td><td class="eqtbl__spec">7.5 / 12㎥</td><td class="eqtbl__use">폐기물 수집·운반, 준설</td><td class="eqtbl__qty">5대</td></tr>
+            <tr><td class="eqtbl__name">데칸타</td><td class="eqtbl__spec">10마력</td><td class="eqtbl__use">슬러지 탈수 (혐기성 오니)</td><td class="eqtbl__qty">1대</td></tr>
+            <tr><td class="eqtbl__name">유압 트래시 펌프</td><td class="eqtbl__spec eqtbl__spec--none">—</td><td class="eqtbl__use">준설</td><td class="eqtbl__qty">1대</td></tr>
+            <tr><td class="eqtbl__name">오수 배수 펌프</td><td class="eqtbl__spec">220LPM</td><td class="eqtbl__use">준설</td><td class="eqtbl__qty">2대</td></tr>
           </tbody>
         </table>
         <div class="eqgroup__photos">
@@ -202,17 +207,18 @@
         </div>
       </div>
       <div class="eqgroup eqgroup--photo" id="eq-inspection" data-reveal>
-        <h3>관로·지하 조사 및 보수</h3>
+        <div class="eqgroup__head"><h3>관로·지하 조사 및 보수</h3><a class="glance__more" href="service-inspection-repair.html" aria-label="관로·지하 조사 및 보수 업무 보기">이 업무 보기 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M13 6.5l5.5 5.5L13 17.5"/></svg></a></div>
+        <p class="eqgroup__desc">CCTV 조사차량과 관로 CCTV 로봇으로 관로 내부를 조사합니다. 맨홀 보수에는 스키드 로더를 씁니다.</p>
         <div class="eqgroup__body">
         <table class="eqtbl">
           <caption class="sr-only">관로·지하 조사 및 보수 보유 장비</caption>
-          <colgroup><col class="eqtbl__c1"><col class="eqtbl__c2"><col class="eqtbl__c3"></colgroup>
-          <thead><tr><th scope="col">장비명</th><th scope="col">규격</th><th scope="col">용도</th></tr></thead>
+          <colgroup><col class="eqtbl__c1"><col class="eqtbl__c2"><col class="eqtbl__c3"><col class="eqtbl__c4"></colgroup>
+          <thead><tr><th scope="col">장비명</th><th scope="col">규격</th><th scope="col">용도</th><th scope="col">보유</th></tr></thead>
           <tbody>
-            <tr><td class="eqtbl__name">CCTV 조사차량</td><td class="eqtbl__spec">D=250~600mm</td><td class="eqtbl__use">관로 조사</td></tr>
-            <tr><td class="eqtbl__name">관로 CCTV 로봇</td><td class="eqtbl__spec eqtbl__spec--none">—</td><td class="eqtbl__use">관로 조사</td></tr>
-            <tr><td class="eqtbl__name">탈취제거 SYSTEM</td><td class="eqtbl__spec eqtbl__spec--none">—</td><td class="eqtbl__use">관로 조사</td></tr>
-            <tr><td class="eqtbl__name">스키드 로더</td><td class="eqtbl__spec eqtbl__spec--none">—</td><td class="eqtbl__use">맨홀 보수 작업</td></tr>
+            <tr><td class="eqtbl__name">CCTV 조사차량</td><td class="eqtbl__spec">D=250~600mm</td><td class="eqtbl__use">관로 조사</td><td class="eqtbl__qty">2대</td></tr>
+            <tr><td class="eqtbl__name">관로 CCTV 로봇</td><td class="eqtbl__spec eqtbl__spec--none">—</td><td class="eqtbl__use">관로 조사</td><td class="eqtbl__qty">1대</td></tr>
+            <tr><td class="eqtbl__name">탈취제거 SYSTEM</td><td class="eqtbl__spec eqtbl__spec--none">—</td><td class="eqtbl__use">관로 조사</td><td class="eqtbl__qty">1SET</td></tr>
+            <tr><td class="eqtbl__name">스키드 로더</td><td class="eqtbl__spec eqtbl__spec--none">—</td><td class="eqtbl__use">맨홀 보수 작업</td><td class="eqtbl__qty">1대</td></tr>
           </tbody>
         </table>
         <div class="eqgroup__photos">
@@ -228,22 +234,22 @@
         </div>
       </div>
       <div class="eqgroup" id="eq-common" data-reveal>
-        <h3>공통 (운반·지원)</h3>
+        <div class="eqgroup__head"><h3>공통 (운반·지원)</h3></div>
+        <p class="eqgroup__desc">자재 운반과 현장 지원에 쓰는 장비입니다.</p>
         <div class="eqgroup__body">
         <table class="eqtbl">
           <caption class="sr-only">공통 (운반·지원) 보유 장비</caption>
-          <colgroup><col class="eqtbl__c1"><col class="eqtbl__c2"><col class="eqtbl__c3"></colgroup>
-          <thead><tr><th scope="col">장비명</th><th scope="col">규격</th><th scope="col">용도</th></tr></thead>
+          <colgroup><col class="eqtbl__c1"><col class="eqtbl__c2"><col class="eqtbl__c3"><col class="eqtbl__c4"></colgroup>
+          <thead><tr><th scope="col">장비명</th><th scope="col">규격</th><th scope="col">용도</th><th scope="col">보유</th></tr></thead>
           <tbody>
-            <tr><td class="eqtbl__name">카고크레인</td><td class="eqtbl__spec">5톤</td><td class="eqtbl__use">자재 운반</td></tr>
-            <tr><td class="eqtbl__name">지게차</td><td class="eqtbl__spec">3톤 외</td><td class="eqtbl__use">자재 운반</td></tr>
-            <tr><td class="eqtbl__name">고압 살수차</td><td class="eqtbl__spec">8.5톤</td><td class="eqtbl__use">노면 청소</td></tr>
-            <tr><td class="eqtbl__name">HYDRONIC PUMP</td><td class="eqtbl__spec eqtbl__spec--none">—</td><td class="eqtbl__use">자재 운반</td></tr>
+            <tr><td class="eqtbl__name">카고크레인</td><td class="eqtbl__spec">5톤</td><td class="eqtbl__use">자재 운반</td><td class="eqtbl__qty">1대</td></tr>
+            <tr><td class="eqtbl__name">지게차</td><td class="eqtbl__spec">3톤 외</td><td class="eqtbl__use">자재 운반</td><td class="eqtbl__qty">8대</td></tr>
+            <tr><td class="eqtbl__name">고압 살수차</td><td class="eqtbl__spec">8.5톤</td><td class="eqtbl__use">노면 청소</td><td class="eqtbl__qty">1대</td></tr>
+            <tr><td class="eqtbl__name">HYDRONIC PUMP</td><td class="eqtbl__spec eqtbl__spec--none">—</td><td class="eqtbl__use">자재 운반</td><td class="eqtbl__qty">1SET</td></tr>
           </tbody>
         </table>
         </div>
       </div>
-      <p class="note mt-14">보유 수량과 가동 상태는 문의 시 안내합니다.</p>
     </div>
   </section>
 
@@ -274,8 +280,33 @@
         <div class="panel panel--line" data-reveal data-delay="80">
           <h3>5세대 무인 클리닝 로봇의 주요 특징</h3>
           <ul class="targets mt-16"><li>방폭 지역 작업 조건 적용 — 방폭 카메라로 원격 감시, 알루미늄 본체, 비철(Non-steel) 스크류, 유압 구동</li><li>전면부 Jet Nozzle 장착</li><li>원격 조종</li><li>스크류형·체인형 바퀴로 유동체 위 작업</li><li>Tank·Reactor 내부의 액체·슬러지 제거</li></ul>
-          <p class="note mt-14"><b class="ink">기타 클리닝 로봇</b> · 무인 로더(大·小) — 원격 조종, 토사·슬러지(실외·협소 공간), 전기·유압 구동 / 무인 Jet Cleaner — 원격 조종, 설비 고압 세척(8+ Nozzle), 구동부 수중 작업 가능, 전기 구동</p>
         </div>
+      </div>
+      <div class="eqgroup" data-reveal>
+        <div class="eqgroup__head"><h3>기타 클리닝 로봇</h3></div>
+        <table class="eqtbl eqtbl--robot">
+          <caption class="sr-only">기타 클리닝 로봇</caption>
+          <thead><tr><th scope="col">로봇</th><th scope="col">대상</th><th scope="col">조종</th><th scope="col">구동</th><th scope="col">수중 작업</th></tr></thead>
+          <tbody>
+            <tr><td class="eqtbl__name">무인 로더(大)</td><td>토사·슬러지 (실외)</td><td>원격 조종</td><td>전기·유압</td><td>불가</td></tr>
+            <tr><td class="eqtbl__name">무인 로더(小)</td><td>토사·슬러지 (협소 공간)</td><td>원격 조종</td><td>전기·유압</td><td>불가</td></tr>
+            <tr><td class="eqtbl__name">무인 Jet Cleaner</td><td>설비 고압 세척 (8+ Nozzle)</td><td>원격 조종</td><td>전기</td><td>구동부 가능</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="eqgroup" data-reveal>
+        <div class="eqgroup__head"><h3>로봇 시제품 사양</h3></div>
+        <table class="eqtbl eqtbl--robot">
+          <caption class="sr-only">로봇 시제품 사양</caption>
+          <thead><tr><th scope="col">로봇</th><th scope="col">크기 (폭×길이×높이)</th><th scope="col">무게</th><th scope="col">구동</th><th scope="col">조종</th></tr></thead>
+          <tbody>
+            <tr><td class="eqtbl__name">벽면/천장 부착형 (Wall/Ceiling Mobile Robot)</td><td>480 × 660 × 325mm</td><td>59.5kg</td><td>유압 140bar, 캐터필러</td><td>조이스틱 · 카메라 자율 제어</td></tr>
+            <tr><td class="eqtbl__name">흡입/준설 (Screw Mobile Robot)</td><td>490 × 730 × 260mm</td><td>61.2kg</td><td>유압 최대 140bar, 스크류</td><td>조이스틱 · 카메라 자율 제어</td></tr>
+            <tr><td class="eqtbl__name">흡입/준설 (Grinding Mobile Robot)</td><td>490 × 1,010 × 260mm</td><td>81kg (분쇄기 19.8kg 포함)</td><td>유압 최대 140bar, 스크류</td><td>조이스틱 · 카메라 자율 제어</td></tr>
+            <tr><td class="eqtbl__name">파쇄 (Splinter Robot, Caterpillar Type)</td><td>415 × 1,140 × 400mm</td><td>79.2kg</td><td>유압 최대 140bar, 캐터필러</td><td>조이스틱</td></tr>
+            <tr><td class="eqtbl__name">파쇄 (Splinter Robot, Screw Type)</td><td>490 × 1,010 × 260mm</td><td>87.5kg</td><td>유압 최대 140bar, 스크류</td><td>조이스틱</td></tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </section>

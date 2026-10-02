@@ -142,6 +142,67 @@
       item.addEventListener('focusout', function (e) { if (!item.contains(e.relatedTarget)) item.classList.remove('is-esc'); });
     });
 
+    /* ---------- 5-3. 장비·로봇: 보유 장비 분야 탭 (24차) ---------- */
+    /* HTML에는 여섯 묶음이 모두 보이게 들어 있고, 여기서만 숨긴다(스크립트가 없으면 탭은 묶음으로 가는 링크). */
+    var eqSec = document.getElementById('equipment');
+    var eqTabs = eqSec && eqSec.querySelector('.eqtabs');
+    if (eqTabs) {
+      var eqGroups = Array.prototype.slice.call(eqSec.querySelectorAll('.eqgroup'));
+      var eqBtns = Array.prototype.slice.call(eqTabs.querySelectorAll('a[data-eq]'));
+      var isGroup = function (id) { return eqGroups.some(function (g) { return g.id === id; }); };
+      var eqShow = function (id) {
+        var all = !isGroup(id);
+        eqGroups.forEach(function (g) {
+          var on = all || g.id === id;
+          g.hidden = !on;
+          if (on) g.classList.add('is-in');      // 탭으로 나타난 묶음이 투명한 채로 남지 않게
+        });
+        eqBtns.forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-eq') === (all ? 'equipment' : id))); });
+      };
+      // 묶음 주소로 들어왔을 때: '보유 장비' 제목이 상단 메뉴 바로 아래에 보이게
+      var eqToTitle = function () {
+        var head = eqSec.querySelector('.head');
+        var hh = hdr ? hdr.offsetHeight : 0;
+        var top = head.getBoundingClientRect().top + window.pageYOffset - hh - 24;
+        var html = document.documentElement;
+        var prev = html.style.scrollBehavior;
+        html.style.scrollBehavior = 'auto';
+        window.scrollTo(0, Math.max(0, top));
+        html.style.scrollBehavior = prev;
+      };
+      var eqFromHash = function (scroll) {
+        var h = decodeURIComponent(location.hash.slice(1));
+        if (h && h !== 'equipment' && !isGroup(h)) return;   // #rnd, #recovery 등은 원래대로
+        eqShow(h);
+        if (scroll && h) eqToTitle();
+      };
+      eqBtns.forEach(function (b) {
+        b.setAttribute('role', 'button');
+        b.addEventListener('click', function (e) {
+          e.preventDefault();
+          var id = b.getAttribute('data-eq');
+          eqShow(id);
+          if (history.replaceState) history.replaceState(null, '', '#' + id);   // 화면이 튀지 않게, 뒤로 가기 기록도 늘리지 않음
+        });
+        b.addEventListener('keydown', function (e) {
+          if (e.key === ' ' || e.key === 'Spacebar') { e.preventDefault(); b.click(); }
+        });
+      });
+      eqFromHash(true);
+      // 브라우저가 주소의 위치로 늦게 스크롤하는 경우가 있어, 사용자가 직접 스크롤하기 전까지 몇 번 더 맞춘다
+      var eqUserMoved = false;
+      var eqMark = function () { eqUserMoved = true; };
+      ['wheel', 'touchstart', 'keydown', 'mousedown'].forEach(function (ev) { window.addEventListener(ev, eqMark, { passive: true, once: true }); });
+      var eqAgain = function () { if (!eqUserMoved && isGroup(decodeURIComponent(location.hash.slice(1)))) eqToTitle(); };
+      window.addEventListener('load', function () {
+        eqAgain();
+        requestAnimationFrame(eqAgain);
+        setTimeout(eqAgain, 120);
+        setTimeout(eqAgain, 400);
+      });
+      window.addEventListener('hashchange', function () { eqFromHash(true); });
+    }
+
     /* ---------- 6. 현재 연도 ---------- */
     var y = document.querySelector('[data-year]');
     if (y) y.textContent = String(new Date().getFullYear());
