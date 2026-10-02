@@ -867,14 +867,14 @@ ${SVC_CTA}
       <div class="head">
         <div data-reveal>
           <h2>주요 수행 이력</h2>
+          <p class="lead">4개 발주처와 2020~2023년 4년 연속 단가계약을 맺었습니다.</p>
         </div>
       </div>
 ${REC_HEAD}
       <ul class="rec" data-reveal>
 ${feat.map((p) => recRow(p)).join('\n')}
       </ul>
-      <p class="note mt-14" data-reveal>4개 발주처와 2020~2023년 매년 단가계약으로 작업했습니다.</p>
-      <div class="mt-24" data-reveal><a class="btn btn--line btn--sm" href="projects.html">수행 이력 ${PROJECTS.length}건 모두 보기 ${arrow(18)}</a></div>
+      <div class="mt-28" data-reveal><a class="btn btn--line btn--sm" href="projects.html">수행 이력 ${PROJECTS.length}건 모두 보기 ${arrow(18)}</a></div>
     </div>
   </section>
 

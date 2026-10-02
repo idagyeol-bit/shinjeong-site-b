@@ -406,14 +406,14 @@ body[data-page="home"] .hdr:not(.is-scrolled) .hdr__cta:hover { background: #fff
 /* ========== 6. 리스트 · 표 ========== */
 .rec { border-top: 1px solid var(--ink); }
 .rec__row {
-  display: grid; grid-template-columns: 150px minmax(0, 1fr) 170px;
+  display: grid; grid-template-columns: 150px minmax(0, 5fr) minmax(170px, 3fr);
   gap: 8px 24px; align-items: center;
-  padding: 24px 4px; border-bottom: 1px solid var(--line);
+  padding: 16px 0; border-bottom: 1px solid var(--line);
   transition: padding 0.25s var(--ease);
 }
 .rec__date { font-size: var(--fs-sm); color: var(--muted); font-variant-numeric: tabular-nums; }
 .rec__name { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; font-size: var(--fs-h4); font-weight: 600; color: var(--ink); letter-spacing: -0.025em; }
-.rec__cat { justify-self: end; display: inline-flex; align-items: center; gap: 7px; min-height: 40px; padding: 8px 2px; font-size: var(--fs-sm); font-weight: 600; color: var(--brand); text-underline-offset: 4px; }
+.rec__cat { justify-self: start; display: inline-flex; align-items: center; gap: 7px; min-height: 40px; padding: 8px 0; font-size: var(--fs-sm); font-weight: 600; color: var(--brand); text-underline-offset: 4px; }
 .rec__cat svg { flex: 0 0 auto; transition: transform 0.25s var(--ease); }
 .rec__cat:hover, .rec__cat:focus-visible { text-decoration: underline; }
 .rec__cat:hover svg, .rec__cat:focus-visible svg { transform: translate(3px, 0); }
@@ -624,7 +624,7 @@ html:not(.js-on) [data-reveal] { opacity: 1; transform: none; }
   .grid--5 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .grid--4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .rec__row { grid-template-columns: 132px minmax(0, 1fr) 150px; }
+  .rec__row { grid-template-columns: 132px minmax(0, 5fr) minmax(150px, 3fr); }
 }
 
 @media (max-width: 960px) {
@@ -654,7 +654,7 @@ html:not(.js-on) [data-reveal] { opacity: 1; transform: none; }
   .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 16px; }
   .targets { grid-template-columns: 1fr; }
   .rec__row { grid-template-columns: 1fr; gap: 6px; padding: 20px 2px; }
-  .rec__cat { justify-self: start; min-height: 44px; font-size: var(--fs-xs); }
+  .rec__cat { justify-self: start; min-height: 44px; padding-inline: 2px; font-size: var(--fs-xs); }
   .dtable > div { grid-template-columns: 1fr; }
   .hist > li { grid-template-columns: 74px minmax(0, 1fr); gap: 14px; }
   .hist b { font-size: 19px; }
@@ -872,16 +872,15 @@ html:not(.js-on) [data-reveal] { opacity: 1; transform: none; }
 /* ========== 18. 수행 이력 머리글 줄 · 제목 줄 링크 오른쪽 정렬 (13차) ========== */
 /* 머리글 줄은 목록(ul) 바깥의 보이는 글자. 굵은 선은 머리글 위, 가는 선은 머리글 아래 */
 .rec__head {
-  display: grid; grid-template-columns: 150px minmax(0, 1fr) 170px; gap: 8px 24px;
-  padding: 12px 4px; border-top: 1px solid var(--ink); border-bottom: 1px solid var(--line);
+  display: grid; grid-template-columns: 150px minmax(0, 5fr) minmax(170px, 3fr); gap: 8px 24px;
+  padding: 12px 0; border-top: 1px solid var(--ink); border-bottom: 1px solid var(--line);
   font-size: var(--fs-xs); font-weight: 600; color: var(--text);
 }
-.rec__head span:last-child { text-align: right; }
 .rec__head + .rec { border-top: 0; }
 /* 링크만 들어 있는 제목 줄 오른쪽 칸: 링크를 본문 폭의 오른쪽 끝으로 */
 .head__aside--end { align-items: flex-end; justify-self: end; }
 @media (max-width: 1180px) {
-  .rec__head { grid-template-columns: 132px minmax(0, 1fr) 150px; }
+  .rec__head { grid-template-columns: 132px minmax(0, 5fr) minmax(150px, 3fr); }
 }
 @media (max-width: 960px) {
   .head__aside--end { align-items: flex-start; justify-self: start; }
