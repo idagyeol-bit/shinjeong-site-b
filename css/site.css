@@ -834,19 +834,24 @@ html:not(.js-on) [data-reveal] { opacity: 1; transform: none; }
 }
 
 /* ========== 15. 업무 카드의 설비 칩 (8차) ========== */
-/* 메인·사업분야 카드는 제목·칩·"자세히 보기"만 링크 (카드 전체 링크 아님) */
+/* 메인·사업분야 카드: 제목 링크(.scard__link) 하나가 카드 전체를 덮는다(16차). 칩과 "자세히 보기"는 표시만 */
 .scard--chips h3 a { color: inherit; }
-.scard--chips h3 a:hover, .scard--chips h3 a:focus-visible { color: var(--brand); }
+.scard--chips:hover h3 a, .scard--chips h3 a:focus-visible { color: var(--brand); }
+.scard__link::after { content: ""; position: absolute; inset: 0; z-index: 1; border-radius: inherit; }
+.scard--chips h3 a:focus-visible { outline: none; }
+.scard--chips h3 a:focus-visible::after { outline: 3px solid var(--focus); outline-offset: -3px; border-radius: var(--radius-lg); }
 .scard--chips .scard__ico { margin-top: 0; }
-.scard__chips { margin-top: auto; padding-top: 20px; display: flex; flex-wrap: wrap; gap: 6px; }
-.scard__chips a {
-  display: inline-flex; align-items: center; min-height: 36px; padding: 0 12px;
-  border: 1px solid var(--line); border-radius: 100px; background: var(--soft);
-  font-size: 12.5px; font-weight: 500; line-height: 1.35; color: var(--text);
-  transition: border-color 0.2s, color 0.2s;
+.scard__chips { margin-top: 16px; display: flex; flex-wrap: wrap; gap: 6px; }
+.scard__chips li {
+  display: inline-flex; align-items: center; min-height: 28px; padding: 0 10px;
+  border-radius: 100px; background: var(--soft);
+  font-size: 12px; font-weight: 500; line-height: 1.35; color: var(--text);
 }
-.scard__chips a:hover, .scard__chips a:focus-visible { border-color: var(--brand); color: var(--brand); }
-.scard--chips .scard__go { align-self: flex-start; }
+.scard--chips .scard__go { align-self: flex-start; margin-top: auto; padding-top: 18px; }
+/* 카드가 5칸으로 놓일 때만 제목 자리를 두 줄 높이로 맞춘다 (설명 시작 높이 통일) */
+@media (min-width: 1181px) {
+  .grid--5 > .scard--chips h3 { min-height: calc(2em * 1.42); }
+}
 .svc-help { text-align: center; font-size: var(--fs-sm); color: var(--muted); }
 .svc-help a { font-weight: 600; color: var(--brand); text-decoration: underline; text-underline-offset: 3px; }
 

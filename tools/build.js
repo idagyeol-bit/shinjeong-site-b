@@ -735,15 +735,15 @@ ${rows.map((r) => `          <tr><td>${esc(r.r)}</td><td data-h="인원 투입">
 }
 
 /* ===================== 공통 블록 ===================== */
-/* chips: true 이면(메인·사업분야) 카드 전체 링크 대신 제목·설비 칩·"자세히 보기"만 링크로 두고, 위쪽 번호는 뺀다 */
+/* chips: true 이면(메인·사업분야) 위쪽 번호를 빼고 설비 칩을 넣는다. 16차: 제목 링크 하나가 카드 전체를 덮는다(칩·"자세히 보기"는 표시만) */
 function serviceCards(reveal, chips) {
   if (chips) {
     return SERVICES.map((s, i) => `      <article class="scard scard--chips"${reveal ? ` data-reveal data-delay="${i * 70}"` : ''}>
         <span class="scard__ico">${icon(s.icon, 40)}</span>
-        <h3><a href="${s.file}">${esc(s.title)}</a></h3>
+        <h3><a class="scard__link" href="${s.file}">${esc(s.title)}</a></h3>
         <p>${esc(s.card)}</p>
-        <ul class="scard__chips" aria-label="${esc(s.title)} 대상 설비">${CARD_CHIPS[s.id].map((c) => `<li><a href="${s.file}">${esc(c)}</a></li>`).join('')}</ul>
-        <a class="scard__go" href="${s.file}">자세히 보기 ${arrow(14)}</a>
+        <ul class="scard__chips" aria-label="${esc(s.title)} 대상 설비">${CARD_CHIPS[s.id].map((c) => `<li>${esc(c)}</li>`).join('')}</ul>
+        <span class="scard__go" aria-hidden="true">자세히 보기 ${arrow(14)}</span>
       </article>`).join('\n');
   }
   return SERVICES.map((s, i) => `      <a class="scard" href="${s.file}"${reveal ? ` data-reveal data-delay="${i * 70}"` : ''}>
@@ -851,9 +851,6 @@ ${TRUST.map((t) => t.t
       <div class="head">
         <div data-reveal>
           <h2>사업분야</h2>
-        </div>
-        <div class="head__aside head__aside--end" data-reveal data-delay="90">
-          <a class="tlink" href="services.html">사업분야 전체 보기 ${arrow(14)}</a>
         </div>
       </div>
       <div class="grid grid--5">
