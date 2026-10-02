@@ -911,7 +911,7 @@ ${PROCESS.steps.map((st, i) => `            <li><em>${String(i + 1).padStart(2, 
         </div>
       </div>
       <div class="grid grid--3 grid--3row">
-${pcards(['W10', 'W07', 'W05'], ['맨홀 호스 작업', '산업설비 현장의 진공흡입차', '스크루 궤도형 흡입 로봇'], null, ['준설·슬러지', '설비 클리닝', '촉매·충진물'])}
+${pcards(['P01', 'P03', 'W10'], ['탱크 내부 고압 세척', '반응기 안 촉매 흡입 로봇', '맨홀 호스 작업'], null, ['설비 클리닝', '촉매·충진물', '준설·슬러지'])}
       </div>
     </div>
   </section>

@@ -915,3 +915,7 @@ html:not(.js-on) [data-reveal] { opacity: 1; transform: none; }
 @media (min-width: 721px) {
   .grid--3row { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
+
+/* ========== 22. 메인 "현장의 장면" 설명 글자 (20차) — 이 구역(grid--3row)에서만 한 단계 크게 ========== */
+.grid--3row .pcard b { font-size: var(--fs-body); }
+.grid--3row .pcard span { font-size: var(--fs-sm); }
