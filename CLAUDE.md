@@ -32,6 +32,14 @@
 - 영어판 생성 때 `쓰이지 않은 번역 8개`가 나오는 것은 정상이다(검색엔진용 회사 정보의 문장). 사전에서 지우지 않는다.
 - **정식 오픈 때:** `PREVIEW`를 `false`로 바꾸고 `node tools/build.js` → `node tools/build-en.js`. 이다결 님이 말하기 전에는 `false`로 바꾸지 않는다.
 
+## 검토 자료 (38차)
+- `guide/`는 클라이언트 검토 자료의 웹 페이지 판이다(주소 `…/guide/`). 생성기(`tools/build.js`, `tools/build-en.js`)가 만들지 않는 정적 폴더이고, 재생성해도 바뀌지 않아야 한다.
+- 이 폴더의 파일은 Cowork에서 만든 것을 그대로 넣는다. 직접 고치지 않는다(고칠 일이 있으면 이다결 님이 새 파일을 준다).
+- `guide/index.html`은 `assets/fonts/sub/PretendardVariable-0~7.woff2`와 `assets/logo/shinjeong-symbol.svg`를 빌려 쓴다. 이 파일들의 이름이나 자리를 바꾸면 `guide/`도 함께 확인한다.
+- 항상 검색 제외(`noindex, nofollow`)다. `PREVIEW`와 상관없다.
+- `guide/img/`의 그림은 이 사이트 화면을 찍은 것이고, `guide/shinjeong-homepage-review.pdf`는 검토 자료다(절대 규칙 2·5의 대상이 아니다).
+- **정식 오픈 때:** 이다결 님에게 확인한 뒤 `guide/` 폴더를 지운다.
+
 ## 자주 하는 작업
 - 미리보기: `powershell -ExecutionPolicy Bypass -File serve.ps1` → http://localhost:4173/ (또는 `python -m http.server 4173`)
 - 재생성: `node tools/build.js` 다음에 `node tools/build-en.js` (영어판)
