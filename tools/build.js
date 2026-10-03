@@ -471,10 +471,10 @@ const rndGroup = (title, desc, table) => `      <div class="eqgroup" data-reveal
       </div>`;
 
 const FAQ = [
-  { q: '로봇이 모든 작업을 진행하나요?', a: '아닙니다. 로봇이 설비 내부의 위험 물질을 먼저 회수하고, 위험이 줄어든 뒤 작업자가 들어가 최종 잔여물을 제거합니다. 로봇을 적용하는 범위는 설비와 작업 조건에 따라 달라집니다.' },
   { q: '어떤 정보를 보내면 상담에 도움이 되나요?', a: '대상 설비, 작업 목적, 현장 상태와 희망 일정을 알려 주세요. 크기·구조·사진·도면 등 알고 계신 정보를 함께 보내 주시면 더 정확하게 안내해 드릴 수 있습니다.' },
   { q: '우리 설비에 적용할 수 있는지 바로 알 수 있나요?', a: '출입구와 내부 구조, 잔류물 특성 등 현장 조건을 확인한 뒤에 알 수 있습니다. 관련 정보를 보내 주시면 적용할 수 있는 범위를 안내해 드립니다.' },
   { q: '회수한 슬러지의 후속 과정도 상담할 수 있나요?', a: '회수물의 특성과 현장 조건에 따른 탈수·분리 및 처리 연계 범위를 함께 문의할 수 있습니다.' },
+  { q: '로봇이 모든 작업을 진행하나요?', a: '아닙니다. 로봇이 설비 내부의 위험 물질을 먼저 회수하고, 위험이 줄어든 뒤 작업자가 들어가 최종 잔여물을 제거합니다. 로봇을 적용하는 범위는 설비와 작업 조건에 따라 달라집니다.' },
   { q: '밀폐공간 작업에서 로봇 투입이 왜 더 안전한가요?', a: '작업자가 들어가기 전에 로봇이 위험 물질을 먼저 제거하고, 작업자는 설비 밖 제어 차량에서 CCTV로 내부를 확인하며 조종합니다. 유독가스 질식, 고위험 물질 접촉, 협소 공간 부상 같은 위험에 노출되는 시간이 줄어듭니다.' },
   { q: '방폭 지역이나 질소 분위기의 설비에도 적용할 수 있나요?', a: '방폭 지역 작업 조건에 맞춘 장비(유압 구동, 방폭 카메라, Non-spark 재질)를 운용하며, Reactor·Tank 내부의 질소 분위기 충진물 제거 작업도 적용 범위에 포함됩니다.' }
 ];
@@ -967,7 +967,6 @@ pages['index.html'] = () => {
       <p class="hero__lead hero__lead--strong">산업설비 클리닝 전문기업, 신정개발</p>
       <div class="hero__act">
         <a class="btn btn--light" href="services.html">사업분야 보기 ${arrow(18)}</a>
-        <a class="btn btn--ghost" href="contact.html">현장 문의 ${arrow(18)}</a>
       </div>
     </div>
   </section>
@@ -1597,17 +1596,44 @@ pages['contact.html'] = () => head({
 }) + header('contact') + `
 <main id="main">
 ` + phero({
-  h1: '검토가 필요한 현장을<br>알려 주세요',
-  keepLead: '대상 설비 · 작업 목적 · 희망 일정을 알려 주세요.',
+  h1: '현장 문의',
+  keepLead: '대상 설비와 작업 목적, 희망 일정을 보내 주시면 가능한 작업 범위와 진행 방법을 안내해 드립니다.',
   crumbs: [{ label: '현장 문의' }]
 }) + `
-  <section class="section">
+  <!-- 01 문의 방법 (32차: 전화 · 이메일 · 문의 양식 세 칸) -->
+  <section class="section section--sm">
+    <div class="wrap">
+      <div class="head head--solo" data-reveal><div><h2>문의 방법</h2></div></div>
+      <div class="ct-ways" data-reveal>
+        <div>
+          <h3>전화</h3>
+          <p class="ct-ways__main"><a href="tel:${C.tel.replace(/-/g, '')}">${C.tel}</a></p>
+          <p class="ct-ways__sub">문의 가능 시간 ${esc(C.hours)}</p>
+          <p class="ct-ways__sub">팩스 ${C.fax}</p>
+        </div>
+        <div>
+          <h3>이메일</h3>
+          <p class="ct-ways__main"><a href="mailto:${C.email}">${C.email}</a></p>
+          <p class="ct-ways__sub">사진·도면을 함께 보내실 때 편리합니다.</p>
+          <p class="ct-ways__act"><button class="btn btn--line btn--sm" type="button" data-copy="mail">이메일 주소 복사</button></p>
+        </div>
+        <div>
+          <h3>문의 양식</h3>
+          <p class="ct-ways__sub ct-ways__sub--lead">아래 양식을 채우면 문의 메일이 작성됩니다.</p>
+          <p class="ct-ways__act"><a class="btn btn--fill btn--sm" href="#inquiry">문의 양식 작성</a></p>
+        </div>
+      </div>
+      <p class="note mt-24" data-reveal>본사·지사의 주소와 지도는 <a class="ct-link" href="company.html#location">오시는 길</a>에 있습니다.</p>
+    </div>
+  </section>
+
+  <!-- 02 문의 양식 (32차: 대상 설비 칸 추가, 양식 옆 안내) -->
+  <section class="section section--soft" id="inquiry">
     <div class="wrap">
       <div class="split split--top split--wide">
 
         <div data-reveal>
-          <h2>문의 내용 작성</h2>
-          <p class="note mt-14">아래를 채우고 <b class="ink">메일로 문의 보내기</b>를 누르면 사용하시는 메일 앱이 열립니다.</p>
+          <h2>문의 양식</h2>
 
           <form class="form mt-28" id="inquiryForm" novalidate>
             <div class="form__row">
@@ -1629,37 +1655,40 @@ pages['contact.html'] = () => head({
                 <input type="tel" id="f-phone" name="phone" autocomplete="tel" inputmode="tel">
               </div>
               <div class="field">
-                <label for="f-service">문의 업무</label>
-                <select id="f-service" name="service">
-                  <option value="">선택하지 않음</option>
-${SERVICES.map((s) => `                  <option value="${s.id}">${esc(s.title)}</option>`).join('\n')}
-                  <option value="T01">장비·로봇</option>
-                  <option value="E01">회수 이후의 과정</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="form__row">
-              <div class="field">
-                <label for="f-place">현장 위치</label>
-                <input type="text" id="f-place" name="place" placeholder="예: 전남 여수">
-              </div>
-              <div class="field">
                 <label for="f-when">희망 일정</label>
                 <input type="text" id="f-when" name="when" placeholder="예: 2027년 상반기 정기보수">
               </div>
             </div>
 
+            <div class="form__row">
+              <div class="field">
+                <label for="f-service">문의 업무</label>
+                <select id="f-service" name="service">
+                  <option value="">선택하지 않음</option>
+${SERVICES.map((s) => `                  <option value="${s.id}">${esc(s.title)}</option>`).join('\n')}
+                </select>
+              </div>
+              <div class="field">
+                <label for="f-target">대상 설비</label>
+                <input type="text" id="f-target" name="target" placeholder="예: 탱크, 반응기, 관로">
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="f-place">현장 위치</label>
+              <input type="text" id="f-place" name="place" placeholder="예: 전남 여수">
+            </div>
+
             <div class="field">
               <label for="f-body">문의 내용 <em aria-hidden="true">*</em><span class="sr-only">(필수)</span></label>
-              <textarea id="f-body" name="body" required placeholder="대상 설비, 작업 목적, 현장 상태를 적어 주세요. 크기·구조·잔류물 정보를 알고 계시면 함께 적어 주세요."></textarea>
+              <textarea id="f-body" name="body" required placeholder="작업 목적과 현장 상태를 적어 주세요. 크기·구조·잔류물 정보를 알고 계시면 함께 적어 주세요."></textarea>
               <p class="field__err" hidden></p>
             </div>
 
+            <p class="ct-how"><b>보내는 방법</b> 아래 버튼을 누르면 사용하시는 메일 앱이 열리고 문의 내용이 채워집니다. 메일 앱이 열리지 않으면 버튼 아래에 나오는 문의 내용을 복사해 ${C.email} 으로 보내 주시거나 전화로 문의해 주세요.</p>
             <p class="note">입력하신 이름·연락처·이메일은 문의 답변에만 사용합니다.</p>
             <div class="form__act">
               <button class="btn btn--fill" type="submit">메일로 문의 보내기 ${arrow(18)}</button>
-              <button class="btn btn--line" type="button" data-copy="mail">이메일 주소 복사</button>
             </div>
             <p class="form__msg" id="formMsg" role="status" aria-live="polite"></p>
 
@@ -1671,39 +1700,32 @@ ${SERVICES.map((s) => `                  <option value="${s.id}">${esc(s.title)}
           </form>
         </div>
 
-        <div data-reveal data-delay="90">
-          <div class="panel">
-            <h3>연락처</h3>
-            <dl class="dtable dtable--soft mt-18">
-              <div><dt>대표 전화</dt><dd><a href="tel:${C.tel.replace(/-/g, '')}">${C.tel}</a></dd></div>
-              <div><dt>문의 가능 시간</dt><dd>${esc(C.hours)}</dd></div>
-              <div><dt>팩스</dt><dd>${C.fax}</dd></div>
-              <div><dt>이메일</dt><dd><a href="mailto:${C.email}">${C.email}</a></dd></div>
-              <div><dt>본사</dt><dd>${esc(C.address)} <a href="https://map.naver.com/p/search/${encodeURIComponent(C.address)}" target="_blank" rel="noopener">지도</a></dd></div>
-              <div><dt>지사</dt><dd>${esc(C.branch)}</dd></div>
-              <div><dt>회사명</dt><dd>${esc(C.name)}</dd></div>
-            </dl>
-          </div>
-
-          <div class="panel panel--line mt-16">
-            <h3>이렇게 알려 주시면 좋습니다</h3>
-            <ul class="numlist mt-16">
-              <li><em>01</em><b>대상 설비</b><p>탱크·반응기·관로 등 작업 대상</p></li>
-              <li><em>02</em><b>작업 목적</b><p>클리닝·제거·교체·조사 등</p></li>
-              <li><em>03</em><b>현장 상태</b><p>크기·구조·잔류물 정보, 사진·도면</p></li>
-              <li><em>04</em><b>희망 일정</b><p>정기보수 기간 등 가능한 시기</p></li>
-            </ul>
-          </div>
+        <div class="ct-guide" data-reveal data-delay="90">
+          <h3>적어 주시면 좋은 내용</h3>
+          <ul class="ct-guide__list">
+            <li><b>대상 설비</b><p>탱크·반응기·관로 등 작업 대상</p></li>
+            <li><b>작업 목적</b><p>클리닝·제거·교체·조사 등</p></li>
+            <li><b>현장 상태</b><p>크기·구조·잔류물 정보, 사진·도면</p></li>
+            <li><b>희망 일정</b><p>정기보수 기간 등 가능한 시기</p></li>
+          </ul>
+          <h3 class="mt-block-sm">문의 후 진행 순서</h3>
+          <ol class="ct-guide__steps">
+            <li><b>문의</b><p>전화, 이메일, 문의 양식 가운데 편한 방법으로 알려 주세요.</p></li>
+            <li><b>현장 조건 확인</b><p>출입구와 내부 구조, 잔류물 특성 등을 확인합니다.</p></li>
+            <li><b>적용 범위와 진행 방법 안내</b><p>가능한 작업 범위와 진행 방법을 안내해 드립니다.</p></li>
+          </ol>
+          <div class="mt-18"><a class="tlink" href="process.html">현장 진행 방식 보기 ${arrow(14)}</a></div>
         </div>
 
       </div>
     </div>
   </section>
 
-  <section class="section section--soft">
+  <!-- 03 자주 묻는 질문 -->
+  <section class="section">
     <div class="wrap">
       <div class="head">
-        <div data-reveal><h2>궁금한 점</h2></div>
+        <div data-reveal><h2>자주 묻는 질문</h2></div>
       </div>
 ${faqBlock()}
     </div>

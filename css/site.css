@@ -1123,3 +1123,28 @@ html:not(.js-on) [data-reveal] { opacity: 1; transform: none; }
   .co-org__row li { min-height: 42px; padding: 6px 2px; font-size: 12px; }
   .co-org__row li::after { left: -4px; right: -4px; }
 }
+/* 32차: 현장 문의 페이지 — 문의 방법 3칸, 양식 옆 안내(적어 주시면 좋은 내용 · 문의 후 진행 순서), 보내는 방법 안내 */
+.ct-ways { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px clamp(24px, 3vw, 48px); }
+.ct-ways > div { padding-top: 20px; border-top: 2px solid var(--ink); }
+.ct-ways h3 { font-size: var(--fs-h4); margin-bottom: 10px; }
+.ct-ways__main { font-size: clamp(20px, 1.8vw, 26px); font-weight: 600; letter-spacing: -0.02em; line-height: 1.35; color: var(--ink); overflow-wrap: anywhere; }
+.ct-ways__main a { color: inherit; }
+.ct-ways__main a:hover { color: var(--brand); }
+.ct-ways__sub { margin-top: 6px; font-size: var(--fs-sm); line-height: 1.7; color: var(--text); }
+.ct-ways__sub--lead { margin-top: 0; font-size: var(--fs-body); }
+.ct-ways__act { margin-top: 14px; }
+.ct-link { color: var(--brand); text-decoration: underline; text-underline-offset: 3px; }
+.ct-how { padding: 14px 16px; border-left: 3px solid var(--brand); background: var(--white); font-size: var(--fs-sm); line-height: 1.75; color: var(--text); }
+.ct-how b { margin-right: 8px; color: var(--ink); }
+.ct-guide h3 { padding-bottom: 12px; border-bottom: 1px solid var(--ink); font-size: var(--fs-h4); }
+.ct-guide h3.mt-block-sm { margin-top: clamp(28px, 3vw, 40px); }
+.ct-guide__list li, .ct-guide__steps li { padding: 13px 0; border-bottom: 1px solid var(--line); }
+.ct-guide__list b, .ct-guide__steps b { display: block; font-size: var(--fs-body); font-weight: 600; color: var(--ink); }
+.ct-guide__list p, .ct-guide__steps p { margin-top: 2px; font-size: var(--fs-sm); line-height: 1.65; color: var(--text); }
+.ct-guide__steps { margin: 0; padding: 0; list-style: none; counter-reset: ctstep; }
+.ct-guide__steps li { position: relative; padding-left: 38px; counter-increment: ctstep; }
+.ct-guide__steps li::before { content: counter(ctstep); position: absolute; left: 0; top: 13px; display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 50%; background: var(--brand-tint); color: var(--brand); font-size: 12.5px; font-weight: 700; }
+@media (max-width: 720px) {
+  .ct-ways { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+  .ct-ways .btn { width: auto; }
+}
