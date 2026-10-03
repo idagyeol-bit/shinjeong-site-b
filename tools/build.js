@@ -750,7 +750,7 @@ function cta(o) {
 function footer() {
   const map = [
     { h: '사업분야', items: SERVICES.map((s) => ({ href: s.file, label: s.title })) },
-    { h: '기술', items: [{ href: 'process.html', label: '현장 진행 방식' }, { href: 'technology.html', label: '장비·로봇' }, { href: 'process.html#dewater', label: '회수 이후의 과정' }] },
+    { h: '기술', items: [{ href: 'process.html', label: '현장 진행 방식' }, { href: 'technology.html', label: '장비·로봇' }, { href: 'process.html#dewater', label: '회수물 탈수 과정' }] },
     { h: '회사', items: [{ href: 'projects.html', label: '수행 이력' }, { href: 'company.html', label: '회사 소개' }, { href: DOC_PROFILE, label: '회사소개서 (PDF)', blank: true }, { href: DOC_TECH, label: '기술소개서 (PDF)', blank: true }] },
     { h: '문의', items: [{ href: 'contact.html', label: '현장 문의' }, { href: `mailto:${C.email}`, label: '이메일로 문의' }] }
   ];
@@ -1071,9 +1071,9 @@ ${pcards(['P01', 'P03', 'W10'], ['탱크 내부 고압 세척', '반응기 안 �
     <div class="wrap">
       <div class="split">
         <div data-reveal>
-          <h2>${C.founded}년부터<br>쌓아 온 현장 경험</h2>
+          <h2>회사 소개</h2>
           <p class="lead mt-20">${esc(C.intro)}</p>
-          <div class="mt-28"><a class="btn btn--line" href="company.html">회사 소개 ${arrow(18)}</a></div>
+          <div class="mt-28"><a class="btn btn--line" href="company.html">회사 소개 자세히 보기 ${arrow(18)}</a></div>
         </div>
         <figure class="split__media" data-reveal data-delay="90">
           <div class="split__fig">${photo(P('M02'), '(max-width:960px) 92vw, 620px')}</div>
@@ -1149,7 +1149,7 @@ SERVICES.forEach((s, idx) => {
         </figure>
         <div data-reveal data-delay="90">
           <dl class="glance__tbl">
-            <div><dt>대상 설비</dt><dd>${s.targets.map(esc).join(' · ')}</dd></div>
+            <div><dt>작업 범위</dt><dd>${s.targets.map(esc).join(' · ')}</dd></div>
             <div><dt>주요 장비</dt><dd>${s.equip.map(esc).join(' · ')}<a class="glance__more" href="technology.html#${EQ_ANCHOR(s.id)}">장비 보기 ${arrow(14)}</a></dd></div>
 ${s.worktime ? `            <div><dt>작업 시기</dt><dd>${esc(s.worktime)}</dd></div>\n` : ''}            <div><dt>관련 이력</dt><dd>${rel.length ? rel.map((p) => `${esc(p.title)} (${esc(p.period)})`).join(' · ') : '이 홈페이지의 수행 이력에는 이 업무로 분류된 항목이 없습니다.'}</dd></div>
             <div><dt>문의 시 필요한 정보</dt><dd>${s.inquiryHint.map(esc).join(' · ')}</dd></div>
@@ -1234,7 +1234,7 @@ ${EQUIP_GROUPS.map(eqGroup).join('\n')}
   <section class="section section--soft" id="rnd">
     <div class="wrap">
       <div class="head">
-        <div data-reveal><h2>자체 개발 무인 로봇</h2></div>
+        <div data-reveal><h2>자체 개발 무인 로봇</h2><p class="lead">기업부설연구소에서 개발해, 신정개발이 맡은 현장 작업에 직접 투입하는 장비입니다.</p></div>
       </div>
 ${rndGroup('무인 흡입 로봇(Vacuum) 세대별 비교', '탱크·Pond용 무인 흡입 로봇은 1세대부터 5세대까지 개발했습니다.', robotTable('무인 흡입 로봇(Vacuum) 세대별 비교', ['세대', '방식', '적용 대상', '수중 작업', '구동', '비고'], PROCESS.generations))}
 ${rndGroup('5세대 무인 클리닝 로봇 주요 사양', '5세대 무인 클리닝 로봇의 사양입니다.', robotTable('5세대 무인 클리닝 로봇 주요 사양', ['항목', '내용'], PROCESS.gen5, ['9.5em', '']))}
@@ -1301,7 +1301,7 @@ pages['process.html'] = () => head({
   <section class="section">
     <div class="wrap">
       <div class="head">
-        <div data-reveal><h2>현장 검토부터 회수물 처리까지,<br>일곱 단계</h2></div>
+        <div data-reveal><h2>작업 진행 일곱 단계</h2></div>
       </div>
       <div class="proc">
 ${PROCESS.steps.map((st, i) => `        <article data-reveal${i ? ` data-delay="${(i % 3) * 80}"` : ''}>
@@ -1385,7 +1385,7 @@ ${[['적용 범위', c.scope], ['장점', c.pros], ['유의점', c.cons]].map(([
   <section class="section" id="dewater">
     <div class="wrap">
       <div class="head">
-        <div data-reveal><h2>회수물은 탈수해<br>양을 줄입니다</h2></div>
+        <div data-reveal><h2>회수물 탈수 과정</h2></div>
         <div class="head__aside" data-reveal data-delay="90"><p class="lead">데칸타(원심분리)·필터프레스(여과·압착)로 탈수해 폐기물 처리량·비용·시간을 줄입니다.</p></div>
       </div>
       <div data-reveal>
