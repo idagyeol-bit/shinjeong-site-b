@@ -1154,3 +1154,45 @@ html:not(.js-on) [data-reveal] { opacity: 1; transform: none; }
 .co-doc small, .doc-meta { font-size: var(--fs-xs); font-weight: 400; color: var(--muted); }
 .co-docs__note { flex: 1 1 100%; font-size: var(--fs-xs); color: var(--muted); }
 .doc-link { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 12px; margin-top: clamp(28px, 3vw, 40px); padding-top: 20px; border-top: 1px solid var(--line); }
+/* 34차: 언어 전환(KOR | ENG) — 머리말 오른쪽. 모든 화면 크기에서 보인다 */
+.lang { display: inline-flex; align-items: center; flex: 0 0 auto; font-size: 13px; font-weight: 600; letter-spacing: 0.06em; line-height: 1; }
+.lang a { position: relative; display: inline-flex; align-items: center; min-height: 44px; padding: 0 8px; opacity: 0.55; transition: opacity 0.2s; }
+.lang a + a::before { content: ""; position: absolute; left: 0; top: 50%; width: 1px; height: 11px; margin-top: -5.5px; background: currentColor; opacity: 0.45; }
+.lang a.is-on { opacity: 1; font-weight: 700; }
+.lang a:hover, .lang a:focus-visible { opacity: 1; }
+.gnb a { white-space: nowrap; }   /* 언어 전환이 들어가 좁아져도 메뉴 글자가 두 줄로 꺾이지 않게 */
+@media (max-width: 1080px) {
+  /* 좁은 화면에서는 '바꿀 언어' 하나만 버튼으로 보여 준다 (한국어판: ENG / 영어판: KOR) */
+  .lang a.is-on { display: none; }
+  .lang a + a::before { display: none; }
+  .lang a { min-height: 0; height: 32px; padding: 0 10px; border: 1px solid currentColor; border-radius: var(--radius); opacity: 0.9; font-size: 12px; }
+}
+@media (max-width: 720px) {
+  .hdr { gap: 12px; }
+  .hdr__act { gap: 6px; }
+}
+@media (max-width: 359px) {
+  .hdr__brandtext > span { display: none; }   /* 아주 좁은 화면: 영문 작은 글씨를 빼고 버튼 자리를 만든다 */
+}
+
+/* 34차: 영어판(html[lang="en"]) — 글자가 길어지는 곳만 맞춘다. 색·여백·구성은 한국어판과 같다 */
+html[lang="en"] body { word-break: normal; overflow-wrap: break-word; }
+html[lang="en"] .hdr__brand b { font-size: 18px; letter-spacing: -0.01em; }
+html[lang="en"] .ftr__brand b { letter-spacing: -0.01em; }
+html[lang="en"] .gnb { gap: clamp(14px, 1.6vw, 32px); }
+html[lang="en"] .gnb a { font-size: 15px; letter-spacing: -0.01em; }
+html[lang="en"] .hero__br { display: none; }
+html[lang="en"] .hero__dot--brk { display: inline; }
+html[lang="en"] .hero .hero__svc { max-width: 24em; font-size: clamp(27px, 3.5vw, 46px); text-wrap: balance; }
+html[lang="en"] .glance__more { white-space: normal; }
+@media (max-width: 1240px) {
+  /* 영어 메뉴는 한국어보다 길어서 조금 더 일찍 접는다 (한국어판은 960px) */
+  html[lang="en"] .gnb { display: none; }
+  html[lang="en"] .burger { display: flex; }
+  html[lang="en"] .hdr__cta { display: none; }
+  html[lang="en"] .hdr__act { margin-left: auto; }
+}
+@media (max-width: 720px) {
+  html[lang="en"] .hdr__brand b { font-size: 15px; line-height: 1.14; white-space: normal; width: min-content; }
+  html[lang="en"] .hdr__brandtext > span { display: none; }
+}

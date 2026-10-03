@@ -618,7 +618,10 @@ function head(o) {
 <meta name="format-detection" content="telephone=no">
 <meta name="theme-color" content="#0e2e4a">
 <link rel="canonical" href="${SITE_URL}${o.file === 'index.html' ? '' : o.file}">
-<meta property="og:type" content="website">
+${o.file === '404.html' ? '' : `<link rel="alternate" hreflang="ko" href="${SITE_URL}${o.file === 'index.html' ? '' : o.file}">
+<link rel="alternate" hreflang="en" href="${SITE_URL}en/${o.file === 'index.html' ? '' : o.file}">
+<link rel="alternate" hreflang="x-default" href="${SITE_URL}${o.file === 'index.html' ? '' : o.file}">
+`}<meta property="og:type" content="website">
 <meta property="og:site_name" content="${esc(C.brand)}">
 <meta property="og:title" content="${esc(o.title)}">
 <meta property="og:description" content="${esc(o.desc)}">
@@ -640,8 +643,10 @@ ${o.jsonld ? `<script type="application/ld+json">${JSON.stringify(o.jsonld)}</sc
 }
 
 /* activeSvc: 분야 상세 페이지에서 하위 메뉴의 현재 분야를 표시하기 위한 id (S01-S05) */
-function header(page, activeSvc) {
+function header(page, activeSvc, file) {
   const cur = (id) => (id === activeSvc ? ' class="is-current"' : '');
+  const self = file || 'index.html';
+  const lang = `<div class="lang" role="group" aria-label="언어 선택"><a href="${self}" data-lang="ko" lang="ko" class="is-on" aria-current="true">KOR</a><a href="en/${self}" data-lang="en" lang="en">ENG</a></div>`;
   /* PC 하위 메뉴 패널 — 업무 이름·한 줄 설명·링크는 SERVICES에서 가져온다 */
   const svcPanel = `
         <div class="gnb__drop">
@@ -675,6 +680,7 @@ ${SERVICES.map((s) => `              <li><a href="${s.file}"${cur(s.id)}><b>${es
 ${nav}
   </nav>
   <div class="hdr__act">
+    ${lang}
     <a class="hdr__cta" href="contact.html"${page === 'contact' ? ' aria-current="page"' : ''}>현장 문의 ${arrow(14)}</a>
     <button class="burger" type="button" aria-expanded="false" aria-controls="drawer" aria-label="메뉴 열기"><i></i><i></i><i></i></button>
   </div>
@@ -955,7 +961,7 @@ pages['index.html'] = () => {
       address: { '@type': 'PostalAddress', addressCountry: 'KR', addressRegion: '전라남도', addressLocality: '여수시', streetAddress: '봉계2길 27' },
       description: C.seoDesc
     }
-  }) + header('home') + `
+  }) + header('home', null, 'index.html') + `
 <main id="main">
 
   <!-- ===== 히어로 ===== -->
@@ -1092,7 +1098,7 @@ pages['services.html'] = () => head({
   file: 'services.html', page: 'services',
   title: `사업분야 | ${C.brand}`,
   desc: '설비 클리닝, 촉매·충진물 작업, 화학세정, 준설·슬러지 회수, 관로·지하 조사 및 보수 — 신정개발이 다루는 다섯 가지 업무를 소개합니다.'
-}) + header('services') + `
+}) + header('services', null, 'services.html') + `
 <main id="main">
 ` + phero({
   h1: '사업분야',
@@ -1188,7 +1194,7 @@ ${pcards(s.gallery.ids, s.gallery.titles)}
         name: s.title, description: s.summary,
         provider: { '@type': 'Organization', name: C.name, url: SITE_URL }
       }
-    }) + header('services', s.id) + `
+    }) + header('services', s.id, s.file) + `
 <main id="main">
 ` + phero({
       h1: esc(s.title),
@@ -1206,7 +1212,7 @@ pages['technology.html'] = () => head({
   file: 'technology.html', page: 'technology',
   title: `장비·로봇 | ${C.brand}`,
   desc: '진공흡입차·고압 세척 장비·무인준설로봇 등 신정개발의 보유 장비와, 위험한 설비 내부 작업에 투입하는 자체 개발 무인 로봇 시스템을 소개합니다.'
-}) + header('technology') + `
+}) + header('technology', null, 'technology.html') + `
 <main id="main">
 ` + phero({
   h1: '장비·로봇',
@@ -1284,7 +1290,7 @@ pages['process.html'] = () => head({
   file: 'process.html', page: 'process',
   title: `현장 진행 방식 | ${C.brand}`,
   desc: '현장 검토부터 시스템 설치, 로봇 투입, 원격 모니터링, 최종 클리닝, 회수물 처리까지 — 신정개발이 현장에서 작업을 진행하는 순서를 소개합니다.'
-}) + header('process') + `
+}) + header('process', null, 'process.html') + `
 <main id="main">
 ` + phero({
   h1: '현장 진행 방식',
@@ -1398,7 +1404,7 @@ pages['projects.html'] = () => head({
   file: 'projects.html', page: 'projects',
   title: `수행 이력 | ${C.brand}`,
   desc: '석유화학·정유 플랜트, 발전 설비, 상·하수도 현장에서 신정개발이 수행한 대표 이력입니다.' + (SHOW_SEARCH ? ' 분야를 선택하거나 검색해 살펴볼 수 있습니다.' : '') // 검색창을 숨기면 안내 문장도 뺀다
-}) + header('projects') + `
+}) + header('projects', null, 'projects.html') + `
 <main id="main">
 ` + phero({
   h1: '수행 이력',
@@ -1451,7 +1457,7 @@ pages['company.html'] = () => head({
   file: 'company.html', page: 'company',
   title: `회사 소개 | ${C.brand}`,
   desc: C.intro
-}) + header('company') + `
+}) + header('company', null, 'company.html') + `
 <main id="main">
 ` + phero({
   h1: '회사 소개',
@@ -1598,7 +1604,7 @@ pages['contact.html'] = () => head({
   file: 'contact.html', page: 'contact',
   title: `현장 문의 | ${C.brand}`,
   desc: '대상 설비와 작업 목적, 희망 일정을 보내 주시면 가능한 작업 범위와 진행 방법을 안내해 드립니다.'
-}) + header('contact') + `
+}) + header('contact', null, 'contact.html') + `
 <main id="main">
 ` + phero({
   h1: '현장 문의',
@@ -1753,7 +1759,7 @@ pages['404.html'] = () => head({
 }) + `
   <section class="section">
     <div class="wrap">
-      <div class="head head--solo"><div><h2>이쪽으로 가 보세요</h2></div></div>
+      <div class="head head--solo"><div><h2>이쪽으로 가 보세요</h2><p class="lead" lang="en">Page not found. <a class="ct-link" href="en/index.html">Go to the English home page</a></p></div></div>
       <div class="grid grid--3">
         <a class="scard" href="index.html"><span class="scard__ico">${icon('shield', 40)}</span><h3>홈</h3><p>첫 화면으로 이동합니다.</p><span class="scard__go">이동 ${arrow(14)}</span></a>
         <a class="scard" href="services.html"><span class="scard__ico">${icon('tank', 40)}</span><h3>사업분야</h3><p>다섯 가지 업무를 확인합니다.</p><span class="scard__go">이동 ${arrow(14)}</span></a>

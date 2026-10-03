@@ -72,6 +72,9 @@
 | `assets/photos/` | 사진 24장의 웹용 축소본 — 전부 클라이언트 사진 ZIP 3개에서 고름(PDF 속 사진은 사용하지 않음), 3:2 크롭·완만한 보정. 원본 대응·크롭 좌표는 `tools/photo-plan.json` |
 | `assets/fonts/` | Pretendard 가변 폰트와 라이선스 |
 | `tools/build.js` | (선택) 모든 HTML을 다시 만드는 생성기 |
+| `tools/build-en.js` | 영어판 생성기 — 한국어 HTML을 읽어 `en/` 아래에 영어 페이지를 만든다 (`node tools/build.js` 다음에 실행) |
+| `tools/i18n/en.json` | 영어 번역 사전 (한국어 문장 → 영어 문장) |
+| `en/` | 영어판 HTML 12개와 `en/js/` — 생성되는 파일이므로 직접 고치지 않는다 |
 | `tools/photo-plan.json` | 사진 ID ↔ 원본 ZIP 파일 ↔ 크롭 좌표 대응표 |
 | `sitemap.xml`, `robots.txt` | 검색엔진 안내 |
 
