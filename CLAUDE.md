@@ -25,6 +25,13 @@
 - 영어판에만 필요한 모양은 `css/site.css`의 `html[lang="en"]` 규칙에만 둔다. 색·여백·구성은 한국어판과 같게 둔다.
 - 용어: 진공흡입차 = vacuum truck, 제어 차량 = control vehicle, 분리장치 = separator, 잔류물 = residue, 퇴적물 = sediment, 충진물 = packing media, 준설 = dredging, 단가계약 = unit-price contract, 정기보수 = scheduled maintenance, 대정비 = major turnaround, 밀폐공간 = confined space.
 
+## 시안 표시 (36차)
+- 이 주소는 지금 **검토용 시안**이다. 공식 홈페이지는 다른 업체가 만든 sjdevel.com 이다. `tools/build.js` 맨 위의 `PREVIEW = true` 인 동안 모든 페이지에 검색 제외(`noindex`), 제목 앞 `[시안]`(영어판 `[Draft]`), 맨 위 안내 한 줄(`.pvbar`)이 들어가고, 검색엔진용 회사 정보와 `sitemap.xml`은 만들지 않는다.
+- 시안 표시와 관계된 것은 모두 `PREVIEW`에 걸어 둔다. 본문은 `PREVIEW`와 상관없이 같아야 한다.
+- `robots.txt`로 읽기를 막지 않는다(막으면 검색엔진이 `noindex`를 읽지 못한다).
+- 영어판 생성 때 `쓰이지 않은 번역 8개`가 나오는 것은 정상이다(검색엔진용 회사 정보의 문장). 사전에서 지우지 않는다.
+- **정식 오픈 때:** `PREVIEW`를 `false`로 바꾸고 `node tools/build.js` → `node tools/build-en.js`. 이다결 님이 말하기 전에는 `false`로 바꾸지 않는다.
+
 ## 자주 하는 작업
 - 미리보기: `powershell -ExecutionPolicy Bypass -File serve.ps1` → http://localhost:4173/ (또는 `python -m http.server 4173`)
 - 재생성: `node tools/build.js` 다음에 `node tools/build-en.js` (영어판)
@@ -32,4 +39,4 @@
 - 검증: 재생성 후 모든 `<a href>`가 존재하는 파일을 가리키는지, `<img>`의 width/height 비율이 실제 파일과 같은지 확인한다.
 
 ## 도메인 확정 후 바꿀 것
-`tools/build.js` 맨 위 `SITE_URL`, 그리고 재생성되는 `robots.txt`·`sitemap.xml`·`og:url`·`og:image`.
+`tools/build.js` 맨 위 `SITE_URL`, 그리고 재생성되는 `robots.txt`·`sitemap.xml`·`og:url`·`og:image`. 그리고 `PREVIEW`를 `false`로 바꾼다(36차).

@@ -11,6 +11,10 @@ const path = require('path');
 
 const OUT = path.resolve(__dirname, '..');
 const SITE_URL = 'https://idagyeol-bit.github.io/shinjeong-site-b/'; // 배포 주소가 정해지면 이 줄만 바꾸세요
+/* 36차: 시안(검토용) 표시 스위치. true 인 동안 — 검색 제외(noindex), 제목 앞 [시안], 맨 위 안내 한 줄, 검색엔진용 회사 정보·사이트맵 없음.
+   정식 오픈 때 false 로 바꾸고 다시 생성하면 모두 원래대로 돌아간다. */
+const PREVIEW = true;
+const OFFICIAL_SITE = { url: 'https://sjdevel.com/', label: 'sjdevel.com' };   // 지금의 공식 홈페이지(시안 안내 줄에 쓴다)
 /* 33차: 내려받기용 소개서(공개용 — 개인정보·발주처 실명이 있는 쪽을 뺀 판). 원본 PDF는 사이트에 올리지 않는다 */
 const DOC_PROFILE = 'assets/docs/shinjeong-company-profile-2024-public.pdf';   // 회사소개서(2024) 공개용 · 24쪽 · 9.5MB
 const DOC_TECH = 'assets/docs/shinjeong-robot-cleaning-system-2025-public.pdf'; // 기술소개서(2025) 공개용 · 54쪽 · 9.1MB
@@ -608,12 +612,13 @@ const NAV = [
 ];
 
 function head(o) {
+  const title = (PREVIEW ? '[시안] ' : '') + o.title;
   return `<!doctype html>
-<html lang="ko">
+<html lang="ko"${PREVIEW ? ' class="is-preview"' : ''}>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>${esc(o.title)}</title>
+${PREVIEW ? '<meta name="robots" content="noindex, nofollow">\n' : ''}<title>${esc(title)}</title>
 <meta name="description" content="${esc(o.desc)}">
 <meta name="format-detection" content="telephone=no">
 <meta name="theme-color" content="#0e2e4a">
@@ -623,7 +628,7 @@ ${o.file === '404.html' ? '' : `<link rel="alternate" hreflang="ko" href="${SITE
 <link rel="alternate" hreflang="x-default" href="${SITE_URL}${o.file === 'index.html' ? '' : o.file}">
 `}<meta property="og:type" content="website">
 <meta property="og:site_name" content="${esc(C.brand)}">
-<meta property="og:title" content="${esc(o.title)}">
+<meta property="og:title" content="${esc(title)}">
 <meta property="og:description" content="${esc(o.desc)}">
 <meta property="og:url" content="${SITE_URL}${o.file === 'index.html' ? '' : o.file}">
 <meta property="og:locale" content="ko_KR">
@@ -636,10 +641,10 @@ ${o.file === '404.html' ? '' : `<link rel="alternate" hreflang="ko" href="${SITE
 <link rel="preload" href="assets/fonts/sub/PretendardVariable-0.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="css/tokens.css">
 <link rel="stylesheet" href="css/site.css">
-${o.jsonld ? `<script type="application/ld+json">${JSON.stringify(o.jsonld)}</script>\n` : ''}</head>
+${!PREVIEW && o.jsonld ? `<script type="application/ld+json">${JSON.stringify(o.jsonld)}</script>\n` : ''}</head>
 <body data-page="${o.page}">
 <a class="skip-link" href="#main">본문 바로가기</a>
-`;
+${PREVIEW ? `<div class="pvbar" role="note">검토용 시안입니다 · 공식 홈페이지 <a href="${OFFICIAL_SITE.url}" target="_blank" rel="noopener">${OFFICIAL_SITE.label}</a></div>\n` : ''}`;
 }
 
 /* activeSvc: 분야 상세 페이지에서 하위 메뉴의 현재 분야를 표시하기 위한 id (S01-S05) */
@@ -1782,12 +1787,18 @@ Object.keys(pages).forEach((file) => {
 
 /* sitemap · robots */
 const urls = Object.keys(pages).filter((f) => f !== '404.html');
-fs.writeFileSync(path.join(OUT, 'sitemap.xml'),
-  `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
-  urls.map((f) => `  <url><loc>${SITE_URL}${f === 'index.html' ? '' : f}</loc><changefreq>monthly</changefreq><priority>${f === 'index.html' ? '1.0' : '0.7'}</priority></url>`).join('\n') +
-  `\n</urlset>\n`, 'utf8');
+const smFile = path.join(OUT, 'sitemap.xml');
+if (PREVIEW) {
+  /* 시안: 사이트맵을 두지 않는다. robots.txt 는 읽기를 막지 않는다(막으면 검색엔진이 noindex 표시를 읽지 못한다) */
+  if (fs.existsSync(smFile)) fs.unlinkSync(smFile);
+  fs.writeFileSync(path.join(OUT, 'robots.txt'), `User-agent: *\nAllow: /\n`, 'utf8');
+} else {
+  fs.writeFileSync(smFile,
+    `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
+    urls.map((f) => `  <url><loc>${SITE_URL}${f === 'index.html' ? '' : f}</loc><changefreq>monthly</changefreq><priority>${f === 'index.html' ? '1.0' : '0.7'}</priority></url>`).join('\n') +
+    `\n</urlset>\n`, 'utf8');
+  fs.writeFileSync(path.join(OUT, 'robots.txt'),
+    `User-agent: *\nAllow: /\n\nSitemap: ${SITE_URL}sitemap.xml\n`, 'utf8');
+}
 
-fs.writeFileSync(path.join(OUT, 'robots.txt'),
-  `User-agent: *\nAllow: /\n\nSitemap: ${SITE_URL}sitemap.xml\n`, 'utf8');
-
-console.log(`생성 완료: HTML ${n}개 + sitemap.xml + robots.txt → ${OUT}`);
+console.log(`생성 완료: HTML ${n}개 + ${PREVIEW ? 'robots.txt (시안: 검색 제외, 사이트맵 없음)' : 'sitemap.xml + robots.txt'} → ${OUT}`);

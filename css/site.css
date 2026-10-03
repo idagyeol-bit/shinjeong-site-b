@@ -1196,3 +1196,11 @@ html[lang="en"] .glance__more { white-space: normal; }
   html[lang="en"] .hdr__brand b { font-size: 15px; line-height: 1.14; white-space: normal; width: min-content; }
   html[lang="en"] .hdr__brandtext > span { display: none; }
 }
+/* 36차: 시안(검토용) 표시 — tools/build.js 의 PREVIEW 가 true 일 때만 <html class="is-preview"> 와 .pvbar 가 생긴다.
+   머리말 높이 변수에 안내 줄 높이를 더해서, 머리말 아래에 맞춘 모든 자리(본문 시작, 고정 탭, 모바일 메뉴)가 함께 내려간다 */
+html.is-preview { --pv-h: 30px; --header-h: 110px; }
+html.is-preview .hdr { padding-top: var(--pv-h); }
+.pvbar { position: fixed; inset: 0 0 auto; z-index: 101; height: var(--pv-h); display: flex; align-items: center; justify-content: center; gap: 6px; padding-inline: var(--gutter); background: var(--navy); color: #fff; font-size: 12.5px; font-weight: 500; letter-spacing: 0; line-height: 1; white-space: nowrap; }
+.pvbar a { color: #fff; font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
+@media (max-width: 960px) { html.is-preview { --header-h: 94px; } }
+@media print { .pvbar { display: none; } }

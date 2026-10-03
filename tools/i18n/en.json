@@ -807,7 +807,8 @@
   "회사 소개 자세히 보기": "More about the company",
   "작업 진행 일곱 단계": "Seven Steps of the Work",
   "회수물 탈수 과정": "Dewatering of Recovered Material",
-  "기업부설연구소에서 개발해, 신정개발이 맡은 현장 작업에 직접 투입하는 장비입니다.": "Developed by our R&D center, these robots are equipment we use ourselves on the jobs we take on."
+  "기업부설연구소에서 개발해, 신정개발이 맡은 현장 작업에 직접 투입하는 장비입니다.": "Developed by our R&D center, these robots are equipment we use ourselves on the jobs we take on.",
+  "검토용 시안입니다 · 공식 홈페이지": "Draft · Official site:"
  },
  "page": {
   "index.html": {
@@ -889,5 +890,8 @@
  },
  "allow": [
   "(주)신정개발"
- ]
+ ],
+ "prefix": {
+  "[시안] ": "[Draft] "
+ }
 }

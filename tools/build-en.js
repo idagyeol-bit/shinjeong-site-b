@@ -1,5 +1,5 @@
 /* ============================================================
-   신정개발 홈페이지 — 영어판 생성기 (34차)
+   신정개발 홈페이지 — 영어판 생성기 (34차, 36차에서 prefix 추가)
    node tools/build-en.js          → 루트의 한국어 HTML을 읽어 en/ 아래에 영어 HTML을 만든다.
    node tools/build-en.js --list   → 번역이 없는 문장만 목록으로 보여 준다(파일을 쓰지 않는다).
 
@@ -33,6 +33,7 @@ const PLAIN = dict.plain || {};    // 한글이 없지만 영어판에서 바꿀
 const HREF = dict.href || {};      // 영어판에서 바꿀 링크 (tel: 등)
 const JS = dict.js || {};          // JS 파일 안에만 있는 한국어 문구 → 영어 (없으면 text 에서 찾는다)
 const LD = dict.jsonld || {};      // 검색엔진용 정보(JSON-LD)에서만 다르게 옮길 값
+const PREFIX = dict.prefix || {};  // 문장 앞에 붙는 표시 (예: "[시안] " → "[Draft] "). 표시를 떼고 나머지를 사전에서 찾는다
 
 const missing = [];                // { page, where, ko }
 const used = new Set();
@@ -44,6 +45,9 @@ function escHtml(s) { return s.replace(/&(?![a-zA-Z#][a-zA-Z0-9]*;)/g, '&amp;').
 function lookup(key, page) {
   if (TP[page] && Object.prototype.hasOwnProperty.call(TP[page], key)) { used.add(page + '::' + key); return TP[page][key]; }
   if (Object.prototype.hasOwnProperty.call(T, key)) { used.add(key); return T[key]; }
+  for (const p of Object.keys(PREFIX)) {
+    if (key.startsWith(p)) { const rest = lookup(key.slice(p.length), page); if (rest !== undefined) return PREFIX[p] + rest; }
+  }
   return undefined;
 }
 
@@ -273,4 +277,4 @@ if (fs.existsSync(smFile)) {
 /* 쓰이지 않은 번역은 알려만 준다(지워도 된다) */
 const unused = Object.keys(T).filter((k) => !used.has(k));
 console.log(`영어판 생성 완료: HTML ${Object.keys(results).length}개 + JS ${Object.keys(jsResults).length}개 → en/`);
-if (unused.length) console.log(`쓰이지 않은 번역 ${unused.length}개(지워도 됩니다): ` + unused.slice(0, 10).join(' / ') + (unused.length > 10 ? ' …' : ''));
+if (unused.length) console.log(`지금 페이지에 쓰이지 않은 번역 ${unused.length}개(시안 표시를 켜 둔 동안에는 검색엔진용 회사 정보 문장이 여기에 나온다 — 그 문장은 지우지 않는다): ` + unused.slice(0, 10).join(' / ') + (unused.length > 10 ? ' …' : ''));
