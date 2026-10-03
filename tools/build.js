@@ -250,14 +250,12 @@ const PROCESS = {
     { k: 'STEP 06', t: '최종 클리닝(Final Cleaning)', d: '위험 물질이 줄어든 뒤 작업자가 투입되어 내부 최종 잔여물을 제거합니다.', photo: 'W03', src: '기술소개서 p.19' },
     { k: 'STEP 07', t: '회수물·폐기물 처리', d: '회수물은 데칸타·필터프레스로 탈수해 폐기물량을 줄이고 처리 기간을 단축합니다.', icon: 'filter', src: '기술소개서 p.19·31' }
   ],
-  /* p.4 개발 배경 — 출처를 그대로 표기 */
-  facts: [
-    { n: '200회', l: '연간 밀폐공간 작업' },
-    { n: '800명', l: '연간 밀폐공간 투입 인원' },
-    { n: '1,200시간', l: '연간 밀폐공간 작업시간' }
+  /* p.4 무인 로봇 시스템 개발 배경 — 국내 통계와 신정개발 연간 작업을 두 묶음으로 (29차) */
+  bgfacts: [
+    { src: '고용노동부 산업재해조사 (2014~2023)', rows: [['밀폐공간 질식 재해', '100명당 50명 사망'], ['설비 관련 사고 가운데 청소 작업 중 사고', '23.7%']] },
+    { src: '신정개발 연간 작업 기준', rows: [['밀폐공간 작업', '200회'], ['밀폐공간 투입 인원', '800명'], ['밀폐공간 작업시간', '1,200시간']] }
   ],
-  factsNote: '고용노동부 산업재해조사(2014~2023)에 따르면 밀폐공간 질식 재해자 100명 중 50명이 사망했고, 설비 관련 사고의 23.7%가 청소 작업 중 일어났습니다. 신정개발의 로봇 시스템은 이 위험을 줄이기 위해 개발했습니다.',
-  factsSrc: '기술소개서(2025) 인용',
+  factsNote: '신정개발의 무인 로봇 시스템은 밀폐공간 작업의 위험을 줄이기 위해 개발했습니다.',
   /* p.23 위험성 비교 */
   risk: [
     { r: '유독가스에 의한 질식', m: '위험물질 사전 제거' },
@@ -866,6 +864,16 @@ ${rows.map((r) => `          <tr><td>${esc(r.r)}</td><td data-h="인원 투입">
       </table>`;
 }
 
+/* 2칸 비교표 — 기술소개서 p.23의 '비고' 칸만 남긴다 (29차, 위험성 비교) */
+function cmpTable2(rows, head, label) {
+  return `      <table class="cmp cmp--2" data-reveal>
+        <thead><tr><th>${esc(head)}</th><th>${esc(label)}</th></tr></thead>
+        <tbody>
+${rows.map((r) => `          <tr><td>${esc(r.r)}</td><td data-h="${esc(label)}">${esc(r.m)}</td></tr>`).join('\n')}
+        </tbody>
+      </table>`;
+}
+
 /* ===================== 공통 블록 ===================== */
 /* chips: true 이면(메인·사업분야) 위쪽 번호를 빼고 설비 칩을 넣는다. 16차: 제목 링크 하나가 카드 전체를 덮는다(칩·"자세히 보기"는 표시만) */
 function serviceCards(reveal, chips) {
@@ -1319,18 +1327,25 @@ ${pcards(['R07', 'R25', 'R27'], null, null, null, [
     <div class="wrap">
       <div class="head">
         <div data-reveal><h2>사람이 없는 곳에<br>인명 사고도 없다</h2></div>
-        <div class="head__aside" data-reveal data-delay="90"><p class="lead">${esc(PROCESS.factsNote)}</p><p class="note">${esc(PROCESS.factsSrc)}</p></div>
+        <div class="head__aside" data-reveal data-delay="90"><p class="lead">${esc(PROCESS.factsNote)}</p></div>
       </div>
-      <p class="note mb-16" data-reveal>무인 로봇 시스템 개발 배경 · 신정개발 연간 작업 기준</p>
-      <div class="facts" data-reveal>
-${PROCESS.facts.map((f) => `        <div><b>${esc(f.n)}</b><span>${esc(f.l)}</span></div>`).join('\n')}
+      <h3 class="mb-16" data-reveal>무인 로봇 시스템 개발 배경</h3>
+      <div class="bgfacts" data-reveal>
+${PROCESS.bgfacts.map((g) => `        <div class="bgfacts__col">
+          <p class="bgfacts__src">${esc(g.src)}</p>
+          <dl>
+${g.rows.map(([t, v]) => `            <div><dt>${esc(t)}</dt><dd>${esc(v)}</dd></div>`).join('\n')}
+          </dl>
+        </div>`).join('\n')}
       </div>
-      <h3 class="mt-block mb-16">밀폐공간 작업 위험성 비교</h3>
+      <h3 class="mt-block" data-reveal>밀폐공간 작업 위험성 비교</h3>
+      <p class="cmp-lead" data-reveal>작업자가 설비 안에 들어가면 아래 다섯 가지 위험에 노출됩니다. 로봇을 먼저 투입하면 이 위험을 피할 수 있습니다.</p>
       <div class="grid grid--2 grid--pair mb-16">
-${pcards(['P10', 'P11'], null, '(max-width:720px) 92vw, 560px')}
+${pcards(['P10', 'P11'], ['인원 투입 작업', '로봇 투입 작업'], '(max-width:720px) 92vw, 560px', ['작업자가 방호복을 입고 탱크 안에서 직접 흡입합니다.', '탱크 안에는 로봇과 흡입 호스만 있습니다.'])}
       </div>
-${cmpTable(PROCESS.risk, '주요 위험성', '위험 노출', '위험 회피')}
-      <details class="fold mt-block">
+${cmpTable2(PROCESS.risk, '주요 위험성', '로봇을 먼저 투입하면')}
+      <p class="cmp-after" data-reveal>로봇이 모든 작업을 대신하지는 않습니다. 위험 물질이 줄어든 뒤 최종 클리닝은 작업자가 합니다.</p>
+      <details class="fold mt-24">
         <summary>효율성 비교 표 보기</summary>
         <h3 class="mt-18 mb-16">밀폐공간 작업 효율성 비교</h3>
 ${cmpTable(PROCESS.eff, '주요 효율성', '제한', '가능')}

@@ -1011,3 +1011,23 @@ html:not(.js-on) [data-reveal] { opacity: 1; transform: none; }
   .eqtbl--robot td[data-label]::before { content: attr(data-label); display: inline-block; margin-right: 8px; font-size: var(--fs-xs); font-weight: 600; color: var(--muted); }
   .eqgroup__photos { grid-template-columns: 1fr; }
 }
+/* 29차: 현장 진행 방식 "개발 배경" — 국내 통계와 신정개발 연간 작업을 두 묶음으로 나란히 (기술소개서 p.4 구성) */
+.bgfacts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(20px, 3vw, 48px); align-items: start; }
+.bgfacts__col { border-top: 2px solid var(--ink); }
+.bgfacts__src { padding: 14px 0 12px; font-size: var(--fs-xs); font-weight: 700; letter-spacing: 0.02em; color: var(--brand); }
+.bgfacts dl { margin: 0; }
+.bgfacts dl > div { display: flex; align-items: baseline; justify-content: space-between; gap: 8px 20px; padding: 14px 0; border-top: 1px solid var(--line); }
+.bgfacts dt { font-size: var(--fs-body); color: var(--text); }
+.bgfacts dd { margin: 0 0 0 auto; flex: 0 0 auto; font-size: clamp(19px, 1.7vw, 24px); font-weight: 600; letter-spacing: -0.03em; color: var(--ink); white-space: nowrap; }
+/* 29차: 비교 제목 아래 결론 문장, 사진 한 쌍의 설명, 2칸 비교표 */
+.cmp-lead { max-width: var(--measure); margin: 10px 0 20px; font-size: var(--fs-body); line-height: 1.75; color: var(--text); }
+.grid--pair .pcard b { font-size: var(--fs-body); }
+.grid--pair .pcard span { font-size: var(--fs-sm); color: var(--text); }
+.cmp--2 th:first-child, .cmp--2 td:first-child { width: 46%; }
+.cmp--2 td:last-child { color: var(--text); }
+.cmp-after { margin-top: 16px; font-size: var(--fs-body); line-height: 1.75; color: var(--text); }
+@media (max-width: 720px) {
+  .bgfacts { grid-template-columns: 1fr; gap: 28px; }
+  .bgfacts dl > div { flex-wrap: wrap; }
+  .cmp--2 th:first-child, .cmp--2 td:first-child { width: auto; }
+}
