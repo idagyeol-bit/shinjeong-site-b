@@ -1031,3 +1031,29 @@ html:not(.js-on) [data-reveal] { opacity: 1; transform: none; }
   .bgfacts dl > div { flex-wrap: wrap; }
   .cmp--2 th:first-child, .cmp--2 td:first-child { width: auto; }
 }
+/* 30차: 현장 진행 방식 — 용도별 적용 범위(상자 4개 → 줄 목록), 탈수 절차(상자 2개 → 가로 흐름 두 줄), 이 페이지의 구역 여백 */
+.uses { border-top: 1px solid var(--ink); }
+.uses__row { display: grid; grid-template-columns: minmax(0, 250px) minmax(0, 1fr); gap: 12px clamp(24px, 3vw, 48px); padding: clamp(24px, 2.4vw, 34px) 0; border-bottom: 1px solid var(--line); }
+.uses__row h3 { font-size: var(--fs-h4); line-height: 1.4; }
+.uses__body { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr) minmax(0, 1fr); gap: 18px clamp(20px, 2.4vw, 40px); margin: 0; }
+.uses__body dt { margin-bottom: 8px; font-size: var(--fs-xs); font-weight: 700; letter-spacing: 0.02em; color: var(--brand); }
+.uses__body dd { margin: 0; }
+.uses__body li { position: relative; padding: 3px 0 3px 14px; font-size: var(--fs-sm); line-height: 1.65; color: var(--text); }
+.uses__body li::before { content: ""; position: absolute; left: 0; top: 0.85em; width: 4px; height: 4px; border-radius: 50%; background: var(--muted); }
+.dwlist { border-top: 1px solid var(--ink); }
+.dwlist__row { display: grid; grid-template-columns: minmax(0, 250px) minmax(0, 1fr); align-items: center; gap: 14px clamp(24px, 3vw, 48px); padding: clamp(20px, 2vw, 28px) 0; border-bottom: 1px solid var(--line); }
+.dwlist__name h3 { font-size: var(--fs-h4); line-height: 1.4; }
+.dwlist__name p { margin-top: 4px; font-size: var(--fs-sm); color: var(--muted); }
+.dwflow { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 0; margin: 0; padding: 0; list-style: none; counter-reset: flow; }
+.dwflow li { display: inline-flex; align-items: center; gap: 9px; font-size: var(--fs-body); font-weight: 600; letter-spacing: -0.02em; color: var(--ink); counter-increment: flow; }
+.dwflow li::before { content: counter(flow); flex: 0 0 auto; display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 50%; background: var(--brand-tint); color: var(--brand); font-size: 12.5px; font-weight: 700; }
+.dwflow li:not(:last-child)::after { content: "→"; margin: 0 14px 0 5px; font-weight: 400; color: var(--muted); }
+[data-page="process"] .section { padding-block: calc(var(--sec-y) * 0.8); }
+@media (max-width: 1080px) {
+  .uses__row, .dwlist__row { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 720px) {
+  .uses__body { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+  .dwflow { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .dwflow li:not(:last-child)::after { content: none; }
+}

@@ -799,16 +799,13 @@ ${(extraJs || []).map((f) => `<script src="js/${f}"></script>`).join('\n')}${ext
 /* 회수물 탈수 절차 — 기술소개서 p.32(데칸타) · p.35(필터프레스) */
 const DEWATER_NOTE = '처리량·함수율 등 사양은 대상 물질의 응집 상태에 따라 달라지므로 상담 시 안내합니다.';
 function dewaterDiagram() {
-  const col = (title, sub, steps) => `          <div class="panel panel--line">
-            <h3>${esc(title)}</h3>
-            <p class="note mt-6">${esc(sub)}</p>
-            <ol class="steps steps--tight mt-18">
-${steps.map((st, i) => `              <li><em>${i + 1}</em><b>${esc(st)}</b></li>`).join('\n')}
-            </ol>
-          </div>`;
-  return `          <div class="grid grid--2">
-${col('데칸타 (Screw Decanter)', '원심분리를 이용한 고액분리', PROCESS.decanter)}
-${col('필터프레스 (Filter-Press)', '여과·압착을 이용한 탈수', PROCESS.filterpress)}
+  const row = (title, sub, steps) => `          <div class="dwlist__row">
+            <div class="dwlist__name"><h3>${esc(title)}</h3><p>${esc(sub)}</p></div>
+            <ol class="dwflow">${steps.map((st) => `<li>${esc(st)}</li>`).join('')}</ol>
+          </div>`;   // 30차: 단계 번호와 화살표는 스타일(.dwflow)이 그린다
+  return `          <div class="dwlist">
+${row('데칸타 (Screw Decanter)', '원심분리를 이용한 고액분리', PROCESS.decanter)}
+${row('필터프레스 (Filter-Press)', '여과·압착을 이용한 탈수', PROCESS.filterpress)}
           </div>
           <p class="note mt-14">${esc(DEWATER_NOTE)}</p>`;
 }
@@ -1357,15 +1354,15 @@ ${cmpTable(PROCESS.eff, '주요 효율성', '제한', '가능')}
   <section class="section section--soft">
     <div class="wrap">
       <div class="head">
-        <div data-reveal><h2>용도별 적용 범위와<br>유의점</h2></div>
+        <div data-reveal><h2>용도별 적용 범위와 유의점</h2><p class="lead">무인 장비를 적용하는 대표 용도 네 가지의 적용 범위와 장점, 유의점입니다.</p></div>
       </div>
-      <div class="creds creds--4">
-${PROCESS.cases.map((c, i) => `        <div data-reveal${i ? ` data-delay="${i * 70}"` : ''}>
+      <div class="uses">
+${PROCESS.cases.map((c, i) => `        <article class="uses__row" data-reveal${i ? ` data-delay="${i * 70}"` : ''}>
           <h3>${esc(c.t)}</h3>
-          <ul>${c.pros.map((x) => `<li>${esc(x)}</li>`).join('')}</ul>
-          <p class="creds__sub"><b>적용 조건</b> · ${c.cons.map(esc).join(' · ')}</p>
-          <p class="creds__sub"><b>적용 범위</b> · ${c.scope.map(esc).join(' · ')}</p>
-        </div>`).join('\n')}
+          <dl class="uses__body">
+${[['적용 범위', c.scope], ['장점', c.pros], ['유의점', c.cons]].map(([k, xs]) => `            <div><dt>${k}</dt><dd><ul>${xs.map((x) => `<li>${esc(x)}</li>`).join('')}</ul></dd></div>`).join('\n')}
+          </dl>
+        </article>`).join('\n')}
       </div>
     </div>
   </section>
