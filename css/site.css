@@ -1148,3 +1148,9 @@ html:not(.js-on) [data-reveal] { opacity: 1; transform: none; }
   .ct-ways { grid-template-columns: minmax(0, 1fr); gap: 24px; }
   .ct-ways .btn { width: auto; }
 }
+/* 33차: 회사 자료(PDF) 링크 — 회사 소개 개요 표의 `회사 자료` 줄, 장비·로봇 끝의 기술소개서 링크 */
+.co-doc { flex: 1 1 100%; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; }
+.co-doc a { padding: 2px 0; font-weight: 600; }
+.co-doc small, .doc-meta { font-size: var(--fs-xs); font-weight: 400; color: var(--muted); }
+.co-docs__note { flex: 1 1 100%; font-size: var(--fs-xs); color: var(--muted); }
+.doc-link { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 12px; margin-top: clamp(28px, 3vw, 40px); padding-top: 20px; border-top: 1px solid var(--line); }

@@ -11,6 +11,9 @@ const path = require('path');
 
 const OUT = path.resolve(__dirname, '..');
 const SITE_URL = 'https://idagyeol-bit.github.io/shinjeong-site-b/'; // 배포 주소가 정해지면 이 줄만 바꾸세요
+/* 33차: 내려받기용 소개서(공개용 — 개인정보·발주처 실명이 있는 쪽을 뺀 판). 원본 PDF는 사이트에 올리지 않는다 */
+const DOC_PROFILE = 'assets/docs/shinjeong-company-profile-2024-public.pdf';   // 회사소개서(2024) 공개용 · 24쪽 · 9.5MB
+const DOC_TECH = 'assets/docs/shinjeong-robot-cleaning-system-2025-public.pdf'; // 기술소개서(2025) 공개용 · 54쪽 · 9.1MB
 
 /* ===================== 콘텐츠 데이터 =====================
    원본 js/data.js의 사실관계를 그대로 옮겼습니다.
@@ -742,7 +745,7 @@ function footer() {
   const map = [
     { h: '사업분야', items: SERVICES.map((s) => ({ href: s.file, label: s.title })) },
     { h: '기술', items: [{ href: 'process.html', label: '현장 진행 방식' }, { href: 'technology.html', label: '장비·로봇' }, { href: 'process.html#dewater', label: '회수 이후의 과정' }] },
-    { h: '회사', items: [{ href: 'projects.html', label: '수행 이력' }, { href: 'company.html', label: '회사 소개' }] },
+    { h: '회사', items: [{ href: 'projects.html', label: '수행 이력' }, { href: 'company.html', label: '회사 소개' }, { href: DOC_PROFILE, label: '회사소개서 (PDF)', blank: true }, { href: DOC_TECH, label: '기술소개서 (PDF)', blank: true }] },
     { h: '문의', items: [{ href: 'contact.html', label: '현장 문의' }, { href: `mailto:${C.email}`, label: '이메일로 문의' }] }
   ];
   return `<footer class="ftr">
@@ -763,7 +766,7 @@ function footer() {
 ${map.map((g) => `        <div>
           <h4>${esc(g.h)}</h4>
           <ul>
-${g.items.map((i) => `            <li><a href="${i.href}">${esc(i.label)}</a></li>`).join('\n')}
+${g.items.map((i) => `            <li><a href="${i.href}"${i.blank ? ' target="_blank" rel="noopener"' : ''}>${esc(i.label)}</a></li>`).join('\n')}
           </ul>
         </div>`).join('\n')}
       </nav>
@@ -1266,6 +1269,7 @@ ${TECH.conditions.map((c, i) => `          <li><em>0${i + 1}</em><b>${esc(c.labe
 ${rndGroup('연구개발 과제', '기업부설연구소가 수행한 과제와 과제별 성능 지표입니다.', robotTable('연구개발 과제', ['과제', '활용', '주요 성능 지표', '구동'], PROCESS.projects, ['25%', '25%', '41.67%', '8.33%']))}
 ${rndGroup('로봇 시제품 사양', '기업부설연구소에서 제작한 시제품의 사양입니다. 벽면/천장 부착형은 공인시험기관(KCL) 입회 성능시험을 거쳤습니다.', robotTable('로봇 시제품 사양', ['로봇', '크기 (폭×길이×높이)', '무게', '구동', '조종'], PROCESS.protos))}
 ${rndGroup('등록 특허', '로봇과 준설 관련 등록 특허입니다.', robotTable('등록 특허', ['특허 명칭', '등록 연도'], PROCESS.patents, ['', '8em']))}
+      <p class="doc-link" data-reveal><a class="tlink" href="${DOC_TECH}" target="_blank" rel="noopener">기술소개서 (2025) 보기 ${arrow(14)}</a><span class="doc-meta">PDF · 54쪽 · 9.1MB · 홈페이지 공개용</span></p>
 ${SRC_LINE}    </div>
   </section>
 
@@ -1479,6 +1483,7 @@ pages['company.html'] = () => head({
           <div><dt>사업장</dt><dd>여수 본사 · 서산 지사</dd></div>
           <div><dt>사업 분야</dt><dd class="co-links">${SERVICES.map((s) => `<a href="${s.file}">${esc(s.title)}</a>`).join('')}</dd></div>
           <div><dt>수행 실적</dt><dd>2020~2023년 170여 건 <a href="projects.html">수행 이력 보기</a></dd></div>
+          <div><dt>회사 자료</dt><dd><span class="co-doc"><a href="${DOC_PROFILE}" target="_blank" rel="noopener">회사소개서 (2024)</a><small>PDF · 24쪽 · 9.5MB</small></span><span class="co-doc"><a href="${DOC_TECH}" target="_blank" rel="noopener">기술소개서 (2025)</a><small>PDF · 54쪽 · 9.1MB</small></span><span class="co-docs__note">홈페이지 공개용으로 일부 쪽을 뺀 파일입니다.</span></dd></div>
         </dl>
         <figure class="split__media" data-reveal data-delay="90">
           <div class="split__fig">${photo(P('M02'), '(max-width:960px) 92vw, 620px')}</div>
