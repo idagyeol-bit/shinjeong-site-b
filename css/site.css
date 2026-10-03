@@ -701,6 +701,62 @@ html:not(.js-on) [data-reveal] { opacity: 1; transform: none; }
 .diagram { border: 1px solid var(--line); border-radius: var(--radius-lg); background: var(--white); padding: clamp(16px, 2.4vw, 32px); }
 .diagram svg { width: 100%; height: auto; display: block; }
 .diagram__note { margin-top: 12px; font-size: var(--fs-xs); color: var(--muted); }
+/* 28차: 현장 배치와 작업 순서 — 3D 애니메이션(js/process-scene.js). 3D가 안 되는 기기는 2D(js/process-scene-2d.js) */
+.scn-stage { position: relative; border-radius: var(--radius-lg); overflow: hidden; aspect-ratio: 2 / 1; background: linear-gradient(#dfe9f3 0%, #eef3f8 46%, #e6ebf0 46.2%, #e3e8ed 100%); cursor: grab; touch-action: pan-y; -webkit-user-select: none; user-select: none; }
+@supports not (aspect-ratio: 1) { .scn-stage { height: 0; padding-top: 50%; } }
+.scn-stage.is-drag { cursor: grabbing; }
+.scn-stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.scn-labels { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.scn-lb { position: absolute; left: 0; top: 0; white-space: nowrap; display: inline-flex; align-items: center; gap: 7px; padding: 4px 11px 4px 5px; border-radius: 100px; background: #fffffff0; box-shadow: 0 1px 2px #0e2e4a24, 0 4px 14px #0e2e4a1a; font-size: 14px; font-weight: 700; line-height: 1.3; color: var(--ink); will-change: transform; }
+.scn-lb--t { padding: 4px 12px; font-size: 13px; font-weight: 600; color: var(--text); }
+.scn-lb--s { padding: 3px 10px; font-size: 12.5px; font-weight: 600; color: var(--brand); background: #eaf1f7f2; box-shadow: none; }
+.scn-lb--d { left: auto; right: 16px; top: 16px; padding: 6px 14px 6px 8px; background: #47a948; color: #fff; opacity: 0; }
+.scn-lb--d i { display: inline-flex; align-items: center; justify-content: center; width: 20px; height: 20px; border-radius: 50%; background: #fff; color: #2f8a31; font-style: normal; font-size: 13px; }
+.scn-n { flex: 0 0 auto; display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; border-radius: 50%; background: var(--navy); color: #fff; font-size: 12.5px; font-weight: 700; line-height: 1; }
+.scn-n--b { background: var(--brand); }
+.scn-tip { position: absolute; right: 12px; bottom: 10px; padding: 3px 10px; border-radius: 100px; background: #ffffffd1; font-size: 12.5px; color: var(--muted); pointer-events: none; }
+.scn-nogl { display: none; position: absolute; inset: 0; align-items: center; justify-content: center; padding: 24px; text-align: center; font-size: var(--fs-sm); color: var(--muted); }
+.scn-stage.no-gl canvas, .scn-stage.no-gl .scn-labels, .scn-stage.no-gl .scn-tip,
+.scn-stage.is-2d canvas, .scn-stage.is-2d .scn-labels, .scn-stage.is-2d .scn-tip { display: none; }
+.scn-stage.no-fig .scn-nogl { display: flex; }
+/* 2D로 바뀌었을 때 */
+.scn-stage.is-2d { aspect-ratio: auto; height: auto; padding-top: 0; background: #eef2f6; cursor: default; touch-action: auto; }
+.scn-scroll { overflow-x: auto; }
+.scn-scroll svg { min-width: 900px; }
+.scn-hint { display: none; margin-top: 8px; font-size: var(--fs-xs); color: var(--muted); }
+/* 그림 아래: 버튼 · 단계 · 설명 한 문장 · 번호 설명 */
+.scn-ctrl { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 18px; margin-top: 18px; }
+.scn-ctrl button { font: inherit; font-size: 14px; font-weight: 600; min-height: 44px; padding: 0 18px; border: 1px solid var(--line); border-radius: 100px; background: var(--white); color: var(--ink); cursor: pointer; }
+.scn-ctrl button:hover { border-color: #c4ccd3; }
+.scn-steps { flex: 1 1 520px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin: 0; padding: 0; list-style: none; }
+.scn-steps li { padding-top: 10px; border-top: 3px solid var(--line); font-size: 13.5px; color: var(--muted); transition: color .3s, border-color .3s; }
+.scn-steps li b { display: block; font-size: 12px; font-weight: 700; color: inherit; }
+.scn-steps li.is-on { color: var(--ink); border-top-color: var(--brand); font-weight: 600; }
+.scn-steps li.is-on b { color: var(--brand); }
+.scn-steps li.is-done { border-top-color: #9db9d1; }
+.scn-say { min-height: 1.75em; margin-top: 16px; font-size: var(--fs-body); font-weight: 500; color: var(--ink); }
+.scn-legend { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; margin: 20px 0 0; padding: 0; list-style: none; border-top: 1px solid var(--ink); }
+.scn-legend li { padding: 18px 20px 4px 0; }
+.scn-legend b { display: flex; align-items: center; gap: 9px; font-size: 16px; font-weight: 700; color: var(--ink); }
+.scn-legend p { margin-top: 6px; font-size: 14.5px; line-height: 1.65; color: var(--text); }
+/* 사진 설명 앞의 번호 */
+.pcard--num b { display: flex; align-items: center; gap: 8px; }
+.pcard--num b .scn-n { display: inline-flex; margin-top: 0; font-size: 12.5px; color: #fff; }   /* .pcard span 규칙보다 우선 */
+.pcard--num b .scn-dash { display: inline; margin-top: 0; font-size: inherit; font-weight: 400; color: var(--muted); }
+@media (max-width: 960px) { .scn-legend { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 720px) {
+  .scn-stage { aspect-ratio: 3 / 2; }
+  @supports not (aspect-ratio: 1) { .scn-stage { padding-top: 66.667%; } }
+  .scn-stage.is-2d { aspect-ratio: auto; padding-top: 0; }
+  .scn-stage.is-2d + .scn-hint { display: block; }
+  .scn-lb { padding: 3px; box-shadow: 0 1px 3px #0e2e4a33; }
+  .scn-lb .scn-t, .scn-lb--t, .scn-lb--s { display: none; }
+  .scn-lb .scn-n { width: 20px; height: 20px; font-size: 11.5px; }
+  .scn-lb--d { right: 10px; top: 10px; padding: 4px 10px 4px 5px; font-size: 12px; }
+  .scn-tip { right: 6px; bottom: 6px; padding: 2px 8px; font-size: 10.5px; }
+  .scn-steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .scn-legend { grid-template-columns: 1fr; }
+}
 /* 비교표 */
 .cmp { width: 100%; border-collapse: collapse; font-size: var(--fs-sm); }
 .cmp th, .cmp td { padding: 14px 12px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }

@@ -815,60 +815,44 @@ ${col('필터프레스 (Filter-Press)', '여과·압착을 이용한 탈수', PR
           <p class="note mt-14">${esc(DEWATER_NOTE)}</p>`;
 }
 
-/* 현장 배치 도식 — 회사소개서 p.33 · 기술소개서 p.18·20의 구성(Control Car · CCTV · Robot · Vacuum Car · Separator) */
+/* 현장 배치와 작업 순서 — 회사소개서 p.33 · 기술소개서 p.18~20의 구성. 그림은 js/process-scene.js(3D), js/process-scene-2d.js(2D)가 그린다 (28차) */
 function siteDiagram() {
   return `      <div class="diagram" data-reveal>
-        <svg viewBox="0 0 980 340" role="img" aria-label="현장 배치 도식: 설비 밖 제어 차량에서 CCTV로 보며 설비 안의 로봇을 원격 조정하고, 로봇은 호스로 흡입차·분리장치와 연결됩니다" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="color:var(--ink)">
-          <!-- 설비(탱크) -->
-          <rect x="380" y="52" width="220" height="228" rx="26"/>
-          <path d="M380 92h220M380 240h220" stroke-dasharray="4 6" style="color:var(--muted)"/>
-          <text x="490" y="40" text-anchor="middle" font-size="13" font-weight="700" fill="var(--ink)" stroke="none">설비 (Tank · Reactor · Pond)</text>
-          <!-- 로봇 -->
-          <g transform="translate(445 186)">
-            <rect x="0" y="0" width="90" height="34" rx="6" style="color:var(--brand)"/>
-            <rect x="-6" y="34" width="102" height="12" rx="6" style="color:var(--brand)"/>
-            <circle cx="10" cy="40" r="3" style="color:var(--brand)"/><circle cx="45" cy="40" r="3" style="color:var(--brand)"/><circle cx="80" cy="40" r="3" style="color:var(--brand)"/>
-            <path d="M0 10h-22a8 8 0 0 0-8 8v6" style="color:var(--brand)"/>
-            <text x="45" y="-8" text-anchor="middle" font-size="12" font-weight="700" fill="var(--brand)" stroke="none">Robot</text>
-          </g>
-          <!-- CCTV -->
-          <g transform="translate(400 108)">
-            <path d="M0 0h26l8 8-8 8H0z"/><circle cx="40" cy="8" r="3"/>
-            <text x="-8" y="-10" font-size="11" fill="var(--muted)" stroke="none">CCTV</text>
-          </g>
-          <!-- 제어 차량 -->
-          <g transform="translate(60 150)">
-            <rect x="0" y="0" width="190" height="90" rx="10"/>
-            <rect x="18" y="18" width="70" height="44" rx="4"/><path d="M28 36l10 10 12-16 10 12 12-8" style="color:var(--brand)"/>
-            <circle cx="40" cy="104" r="12"/><circle cx="150" cy="104" r="12"/>
-            <text x="95" y="-14" text-anchor="middle" font-size="13" font-weight="700" fill="var(--ink)" stroke="none">Control Car (제어 차량)</text>
-            <text x="140" y="50" text-anchor="middle" font-size="11" fill="var(--muted)" stroke="none">원격 조정 · 모니터</text>
-          </g>
-          <!-- 제어 신호선 -->
-          <path d="M250 195C300 195 330 195 380 195" stroke-dasharray="6 6" style="color:var(--brand)"/>
-          <text x="315" y="184" text-anchor="middle" font-size="11" fill="var(--brand)" stroke="none">원격 조정 · CCTV 신호</text>
-          <!-- 흡입차 -->
-          <g transform="translate(680 150)">
-            <rect x="0" y="0" width="150" height="90" rx="10"/><rect x="150" y="34" width="60" height="56" rx="8"/>
-            <ellipse cx="75" cy="40" rx="55" ry="26"/>
-            <circle cx="40" cy="104" r="12"/><circle cx="120" cy="104" r="12"/><circle cx="185" cy="104" r="12"/>
-            <text x="105" y="-14" text-anchor="middle" font-size="13" font-weight="700" fill="var(--ink)" stroke="none">Vacuum Car (흡입차)</text>
-          </g>
-          <!-- 호스 -->
-          <path d="M600 220C640 220 650 195 680 195" stroke-width="5" style="color:var(--brand)"/>
-          <text x="640" y="248" text-anchor="middle" font-size="11" fill="var(--brand)" stroke="none">호스</text>
-          <!-- 분리장치 -->
-          <g transform="translate(860 40)">
-            <rect x="0" y="0" width="90" height="70" rx="8"/><path d="M10 20h70M10 36h70M10 52h70" style="color:var(--muted)"/>
-            <text x="45" y="-12" text-anchor="middle" font-size="13" font-weight="700" fill="var(--ink)" stroke="none">Separator</text>
-            <text x="45" y="92" text-anchor="middle" font-size="11" fill="var(--muted)" stroke="none">분리장치 (필요 시)</text>
-          </g>
-          <path d="M840 150C840 120 870 120 880 110" stroke-dasharray="4 6" style="color:var(--muted)"/>
-          <!-- 지면 -->
-          <path d="M40 300h900" style="color:var(--line)"/>
-          <text x="40" y="326" font-size="11" fill="var(--muted)" stroke="none">작업자는 설비 밖에서 조종 · 로봇이 먼저 설비 안으로 들어갑니다</text>
-        </svg>
-        <p class="diagram__note">실제 배치는 현장 조건에 맞춰 정합니다.</p>
+        <div class="scn-stage" id="scn-stage" data-fallback="js/process-scene-2d.js" role="img" aria-label="현장 배치와 작업 순서: 작업자는 설비 밖 제어 차량에서 CCTV로 내부를 보며 로봇을 조종합니다. 로봇이 설비 안에서 회수한 물질은 호스를 따라 진공흡입차로 갑니다. 위험 물질이 줄어든 뒤 작업자가 투입되어 최종 잔여물을 제거합니다.">
+          <canvas id="scn-gl"></canvas>
+          <div class="scn-labels" id="scn-labels" aria-hidden="true">
+            <span class="scn-lb" id="scn-lb1"><span class="scn-n">1</span><span class="scn-t">제어 차량</span></span>
+            <span class="scn-lb" id="scn-lb2"><span class="scn-n scn-n--b">2</span><span class="scn-t">로봇</span></span>
+            <span class="scn-lb" id="scn-lb3"><span class="scn-n">3</span><span class="scn-t">진공흡입차</span></span>
+            <span class="scn-lb" id="scn-lb4"><span class="scn-n">4</span><span class="scn-t">분리장치</span></span>
+            <span class="scn-lb scn-lb--t" id="scn-lbT">설비 (탱크 · 반응기 · Pond)</span>
+            <span class="scn-lb scn-lb--s" id="scn-lbC">CCTV</span>
+            <span class="scn-lb scn-lb--s" id="scn-lbS">원격 조종 · CCTV 영상</span>
+            <span class="scn-lb scn-lb--s" id="scn-lbH">회수물</span>
+            <span class="scn-lb scn-lb--d" id="scn-lbD"><i>✓</i>클리닝 완료</span>
+          </div>
+          <span class="scn-tip" aria-hidden="true">끌어서 돌려 보기</span>
+          <p class="scn-nogl">그림을 표시할 수 없습니다. 아래 설명을 참고해 주세요.</p>
+        </div>
+        <p class="scn-hint">옆으로 밀어서 볼 수 있습니다.</p>
+        <div class="scn-ctrl">
+          <button type="button" id="scn-pp" aria-pressed="false">멈춤</button>
+          <button type="button" id="scn-rs">처음부터</button>
+          <ol class="scn-steps">
+            <li><b>1</b>원격 조종</li>
+            <li><b>2</b>로봇 투입 · 회수</li>
+            <li><b>3</b>진공흡입차로 회수</li>
+            <li><b>4</b>작업자 최종 클리닝</li>
+          </ol>
+        </div>
+        <p class="scn-say" id="scn-say">작업자는 설비 밖 제어 차량에서 CCTV로 내부를 보며 로봇을 조종합니다.</p>
+        <ul class="scn-legend">
+          <li><b><span class="scn-n">1</span>제어 차량</b><p>작업자가 CCTV로 내부를 보며 로봇을 조종합니다.</p></li>
+          <li><b><span class="scn-n scn-n--b">2</span>로봇</b><p>잔여 위험 물질을 회수하고, 전면부 Jet Nozzle로 내부를 세척합니다.</p></li>
+          <li><b><span class="scn-n">3</span>진공흡입차</b><p>호스로 연결해 회수물을 흡입합니다.</p></li>
+          <li><b><span class="scn-n">4</span>분리장치</b><p>촉매·충진물 작업에서 회수물을 분리합니다.</p></li>
+        </ul>
+        <p class="diagram__note">실제 배치는 현장 조건에 맞춰 정합니다. 그림은 이해를 돕기 위해 단순화한 것입니다.</p>
       </div>`;
 }
 
@@ -905,14 +889,14 @@ function serviceCards(reveal, chips) {
 }
 
 /* 사진 카드 묶음 (3열). titles[i]가 있으면 굵은 제목으로, 없으면 사진 설명을 제목으로 쓴다 */
-function pcards(ids, titles, sizesAttr, subs) {   // subs[i]가 있으면 설명 둘째 줄(작은 회색 글)로 넣는다 (19차, 메인 "현장의 장면")
+function pcards(ids, titles, sizesAttr, subs, nums) {   // subs[i]가 있으면 설명 둘째 줄(작은 회색 글)로 넣는다 (19차, 메인 "현장의 장면"). nums[i]가 있으면 번호가 붙은 설명(HTML)으로 쓴다 (28차, 현장 배치)
   const sz = sizesAttr || '(max-width:720px) 92vw, 420px';
   return ids.map((id, i) => {
     const p = P(id);
     const t = titles && titles[i] ? titles[i] : p.cap;
-    return `        <figure class="pcard" data-reveal${i ? ` data-delay="${i * 80}"` : ''}>
+    return `        <figure class="pcard${nums ? ' pcard--num' : ''}" data-reveal${i ? ` data-delay="${i * 80}"` : ''}>
           <div class="pcard__fig">${photo(p, sz)}</div>
-          <figcaption><b>${esc(t)}</b>${subs && subs[i] ? `<span>${esc(subs[i])}</span>` : ''}</figcaption>
+          <figcaption><b>${nums && nums[i] ? nums[i] : esc(t)}</b>${subs && subs[i] ? `<span>${esc(subs[i])}</span>` : ''}</figcaption>
         </figure>`;
   }).join('\n');
 }
@@ -1317,11 +1301,15 @@ ${PROCESS.steps.map((st, i) => `        <article data-reveal${i ? ` data-delay="
   <section class="section section--soft">
     <div class="wrap">
       <div class="head">
-        <div data-reveal><h2>위험한 작업은 로봇이 먼저,<br>작업자는 설비 밖에서 조종합니다</h2></div>
+        <div data-reveal><h2>현장 배치와 작업 순서</h2><p class="lead">위험한 작업은 로봇이 먼저 하고, 작업자는 설비 밖에서 조종합니다.</p></div>
       </div>
 ${siteDiagram()}
       <div class="grid grid--3 mt-24">
-${pcards(['R25', 'R07', 'R27'], ['제어 차량과 로봇의 연결', '제어 차량 (원격 조종·CCTV)', '흡입차와 호스로 연결된 로봇'])}
+${pcards(['R07', 'R25', 'R27'], null, null, null, [
+  '<span class="scn-n">1</span>제어 차량 (원격 조종·CCTV)',
+  '<span class="scn-n">1</span><span class="scn-dash">–</span><span class="scn-n scn-n--b">2</span>제어 차량과 로봇의 연결',
+  '<span class="scn-n scn-n--b">2</span><span class="scn-dash">–</span><span class="scn-n">3</span>로봇과 진공흡입차의 호스 연결'
+])}
       </div>
     </div>
   </section>
@@ -1383,7 +1371,7 @@ ${SRC_LINE}    </div>
 ` + cta({
   h2: '우리 현장은 어떤 순서로<br>진행될지 물어보세요',
   p: '대상 설비·작업 목적·희망 일정을 알려 주시면 현장 검토부터 안내하겠습니다.'
-}) + MAIN_END + footer() + foot();
+}) + MAIN_END + footer() + foot(['process-scene.js']);
 
 /* ---------- 5. 수행 이력 ---------- */
 pages['projects.html'] = () => head({
