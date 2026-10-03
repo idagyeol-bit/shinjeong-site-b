@@ -343,10 +343,15 @@ const CREDS = {
   permits: ['일반폐기물 수집·운반업 허가', '지정폐기물 수집·운반업 허가', '저수조청소업 등록'],
   certs: ['ISO 9001:2015 (품질경영)', 'ISO 14001:2015 (환경경영)', 'KOSHA-MS 안전보건경영시스템 인증', '위험성평가 인정 (산업안전보건공단)', '기업부설연구소 인정', '벤처기업 확인', 'INNOBIZ 기술혁신형 중소기업', 'MAINBIZ 경영혁신형 중소기업', '전남형 강소기업', '신용등급 우수기업 인증 (2023)', '지역사회 공헌 인정기업 (2020)'],
   awards: ['환경부장관상 (2007)', '서비스분야 안전보건활동 우수사례 대상 (2018)', '중소기업 경영혁신 공모전 우수상 (2020)', '산업통상자원부 표창 (2021)'],
-  patents: '등록 특허 8건 · 출원 4건 (회사소개서 수록). 대표 특허: 정합식 맨홀(2017), 관내부 무인 준설 처리 시스템(2017), 스크류 바퀴를 구비한 수륙양용 준설로봇(2020), 소형관로 준설로봇 및 그 운전방법(2020), 워터젯 유닛을 구비한 세정로봇 장치(2020)',
+  patentCount: '등록 8건 · 출원 4건',   // 31차: 회사소개서(2024) p.28~29 특허증 8장, p.30 출원사실증명 4장. 대표 특허 다섯 건은 PROCESS.patents
   teams: ['경영지원팀', '안전 · 공무', '기업부설연구소', 'C&M 1팀 · 2팀', 'C&S 1팀 · 2팀', 'SAP팀'],
-  quals: ['산업안전기사 · 산업안전산업기사 · 위험물산업기사', '토목기사 · 토목 중급/초급기술자 · 기계 중급기술자', '가스시설시공관리자 · 난방시공업 인정기능사', '용접기능사 · 특수용접기능사 · 설비보전기능사', '화학분석기능사 · 건설재료시험기능사 · 전기기능사', '굴삭기운전기능사 · 지게차운전기능사 · 건설기계조종사']
+  quals: ['산업안전기사 · 산업안전산업기사 · 위험물산업기사', '토목기사 · 토목 중급/초급기술자 · 기계 중급기술자', '가스시설시공관리자 · 난방시공업 인정기능사', '용접기능사 · 특수용접기능사 · 설비보전기능사', '화학분석기능사 · 건설재료시험기능사 · 전기기능사', '굴삭기운전기능사 · 지게차운전기능사 · 건설기계조종사'],
+  qualFields: ['안전·위험물', '토목·기계', '가스·난방', '용접·설비보전', '분석·시험·전기', '건설기계 운전']   // 31차: quals 줄마다 붙이는 분야 이름(원본에 없는 이름 — 31차 F2)
 };
+
+/* 조직도 (31차) — 회사소개서(2024) p.7의 부서만 싣는다(이름·직책은 싣지 않음). CREDS.teams의 'C&M 1팀 · 2팀'을 두 칸으로 나눈다 */
+const ORG_ROWS = [CREDS.teams.slice(0, 3), CREDS.teams.slice(3).flatMap((t) => { const m = t.match(/^(.+) 1팀 · 2팀$/); return m ? [`${m[1]} 1팀`, `${m[1]} 2팀`] : [t]; })];
+const ORG_LABEL = `조직도: 대표이사 아래에 ${ORG_ROWS[0].map((t) => t.replace(/ · /g, '·')).join(', ')}가 있고, 그 아래에 ${ORG_ROWS[1].join(', ')}이 있습니다.`;
 
 /* ===================== 보유 장비 — 업무별 표 (23차) =====================
    장비명·규격·용도는 회사소개서(2024) p.21~24 장비표 그대로(2026-10-03 대조). 규격 '—'은 원본에 없거나 단위 확인 전.
@@ -1255,7 +1260,7 @@ ${TECH.conditions.map((c, i) => `          <li><em>0${i + 1}</em><b>${esc(c.labe
       </div>
       <div class="stats stats--flush" data-reveal>
         <div class="stat"><b><span data-count="2017">2017</span></b><span>기업부설연구소 설립</span></div>
-        <div class="stat"><b><span data-count="${PROCESS.patents.length}">${PROCESS.patents.length}</span><i>건</i></b><span>등록 특허</span></div>
+        <div class="stat"><b><span data-count="${PROCESS.patents.length}">${PROCESS.patents.length}</span><i>건</i></b><span>로봇·준설 관련 등록 특허</span></div>
         <div class="stat"><b><span data-count="${PROCESS.projects.length}">${PROCESS.projects.length}</span><i>건</i></b><span>연구개발 과제</span></div>
         <div class="stat"><b><span data-count="${PROCESS.protos.length}">${PROCESS.protos.length}</span><i>종</i></b><span>로봇 시제품</span></div>
       </div>
@@ -1450,29 +1455,32 @@ pages['company.html'] = () => head({
   keepLead: '신정개발은 1992년 설립 이후 풍부한 현장 경험과 숙련된 직원들의 노력으로 유틸리티·환경 분야 유지보수 공사를 수행해 왔습니다. 작업 방법의 개선과 환경·안전·보건에 힘써 공사의 질을 높이겠습니다.',
   crumbs: [{ label: '회사 소개' }]
 }) + `
-  <section class="section">
+  <nav class="co-nav" aria-label="이 페이지의 구역">
     <div class="wrap">
-      <div class="stats" data-reveal>
-        <div class="stat"><b><span data-count="${C.founded}">${C.founded}</span></b><span>설립</span></div>
-        <div class="stat"><b><span data-count="2007">2007</span></b><span>법인 전환</span></div>
-        <div class="stat"><b><span data-count="2017">2017</span></b><span>기업부설연구소 설립</span></div>
-        <div class="stat"><b><span data-count="2">2</span><i>곳</i></b><span>여수 본사 · 서산 지사</span></div>
-      </div>
+      <ul>
+        <li><a href="#overview">회사 개요</a></li>
+        <li><a href="#credentials">면허·인증·수상</a></li>
+        <li><a href="#organization">조직·기술 인력</a></li>
+        <li><a href="#history">연혁</a></li>
+        <li><a href="#location">오시는 길·연락처</a></li>
+      </ul>
     </div>
-  </section>
+  </nav>
 
-  <section class="section section--sm section--soft">
+  <!-- 01 회사 개요 (31차: 숫자 4칸 · 연락처 표의 회사명·설립·사업 범위를 한 표로) -->
+  <section class="section" id="overview">
     <div class="wrap">
-      <div class="split split--top split--sticky">
-        <div data-reveal>
-          <h2>연혁</h2>
-          <p class="note mt-14">1992년 신학상사로 출발해 1995년 신정개발로 상호를 바꾸고, 2007년 법인으로 전환했습니다.</p>
-          <ul class="hist mt-28">
-${C.history.map((h) => `            <li><b>${h.year}</b><ul class="hist__items">
-${h.items.map((it) => `              <li><em>${it.m}</em><span>${esc(it.label)}</span></li>`).join('\n')}
-            </ul></li>`).join('\n')}
-          </ul>
-        </div>
+      <div class="head head--solo" data-reveal><div><h2>회사 개요</h2></div></div>
+      <div class="split split--wide split--top">
+        <dl class="dtable dtable--tight" data-reveal>
+          <div><dt>회사명</dt><dd>${esc(C.name)} <span class="note">${esc(C.brandEn)} CO., LTD.</span></dd></div>
+          <div><dt>설립</dt><dd>${C.founded}년</dd></div>
+          <div><dt>법인 전환</dt><dd>2007년</dd></div>
+          <div><dt>기업부설연구소</dt><dd>2017년 설립</dd></div>
+          <div><dt>사업장</dt><dd>여수 본사 · 서산 지사</dd></div>
+          <div><dt>사업 분야</dt><dd class="co-links">${SERVICES.map((s) => `<a href="${s.file}">${esc(s.title)}</a>`).join('')}</dd></div>
+          <div><dt>수행 실적</dt><dd>2020~2023년 170여 건 <a href="projects.html">수행 이력 보기</a></dd></div>
+        </dl>
         <figure class="split__media" data-reveal data-delay="90">
           <div class="split__fig">${photo(P('M02'), '(max-width:960px) 92vw, 620px')}</div>
           <figcaption class="split__cap split__cap--sm">${esc(P('M02').cap)}</figcaption>
@@ -1481,94 +1489,101 @@ ${h.items.map((it) => `              <li><em>${it.m}</em><span>${esc(it.label)}<
     </div>
   </section>
 
-  <section class="section" id="credentials">
+  <!-- 02 면허·인증·수상 (31차: 상자 3개 → 줄 목록 네 묶음) -->
+  <section class="section section--soft" id="credentials">
     <div class="wrap">
-      <div class="head">
-        <div data-reveal><h2>면허·인증과<br>조직</h2></div>
+      <div class="head head--solo" data-reveal><div><h2>면허·인증·수상</h2></div></div>
+      <div class="co-rows">
+        <div class="co-rows__row" data-reveal>
+          <h3>면허·허가·등록</h3>
+          <ul class="co-rows__list">${CREDS.licenses.concat(CREDS.permits).map((x) => `<li>${esc(x)}</li>`).join('')}</ul>
+        </div>
+        <div class="co-rows__row" data-reveal>
+          <h3>경영시스템·기업 인증</h3>
+          <div>
+            <ul class="co-rows__list">${CREDS.certs.map((x) => `<li>${esc(x)}</li>`).join('')}</ul>
+            <p class="note mt-14">회사소개서(2024) 수록 기준</p>
+          </div>
+        </div>
+        <div class="co-rows__row" data-reveal>
+          <h3>수상</h3>
+          <ul class="co-rows__years">${CREDS.awards.map((x) => { const m = x.match(/^(.*) \((\d{4})\)$/); return `<li><em>${m[2]}</em><span>${esc(m[1])}</span></li>`; }).join('')}</ul>
+        </div>
+        <div class="co-rows__row" data-reveal>
+          <h3>특허</h3>
+          <div>
+            <p class="co-rows__sum">${esc(CREDS.patentCount)} <span class="note">회사소개서(2024) 수록 기준</span></p>
+            <p class="co-rows__label">대표 특허</p>
+            <ul class="co-rows__years">${PROCESS.patents.map(([name, year]) => `<li><em>${year}</em><span>${esc(name)}</span></li>`).join('')}</ul>
+            <div class="mt-14"><a class="tlink" href="technology.html#research">등록 특허 표 보기 ${arrow(14)}</a></div>
+          </div>
+        </div>
       </div>
-      <div class="creds">
+    </div>
+  </section>
+
+  <!-- 03 조직과 기술 인력 (31차: 조직도 + 분야 · 자격 표) -->
+  <section class="section" id="organization">
+    <div class="wrap">
+      <div class="head head--solo" data-reveal><div><h2>조직과 기술 인력</h2></div></div>
+      <div class="split split--top">
         <div data-reveal>
-          <h3>면허 · 허가 · 등록</h3>
-          <ul>${CREDS.licenses.map((x) => `<li>${esc(x)}</li>`).join('')}${CREDS.permits.map((x) => `<li>${esc(x)}</li>`).join('')}</ul>
+          <h3 class="mb-16">조직도</h3>
+          <div class="co-org" role="img" aria-label="${esc(ORG_LABEL)}">
+            <div class="co-org__top"><span>대표이사</span></div>
+            <ul class="co-org__row co-org__row--3">${ORG_ROWS[0].map((t) => `<li>${esc(t)}</li>`).join('')}</ul>
+            <ul class="co-org__row co-org__row--5">${ORG_ROWS[1].map((t) => `<li>${esc(t)}</li>`).join('')}</ul>
+          </div>
         </div>
-        <div data-reveal data-delay="70">
-          <h3>경영시스템 · 기업 인증</h3>
-          <ul>${CREDS.certs.map((x) => `<li>${esc(x)}</li>`).join('')}</ul>
-          <p class="creds__sub">회사소개서(2024) 수록 기준</p>
-        </div>
-        <div data-reveal data-delay="140">
-          <h3>수상 · 특허</h3>
-          <ul>${CREDS.awards.map((x) => `<li>${esc(x)}</li>`).join('')}</ul>
-          <p class="creds__sub">${esc(CREDS.patents)}</p>
-        </div>
-      </div>
-      <div class="grid grid--2 mt-24">
-        <div class="panel panel--line" data-reveal>
-          <h3>조직 구성</h3>
-          <p class="note mt-10">대표이사 아래 ${CREDS.teams.map(esc).join(' · ')}으로 구성됩니다.</p>
-        </div>
-        <div class="panel panel--line" data-reveal data-delay="80">
-          <h3>보유 기술자격</h3>
-          <ul class="numlist mt-10">${CREDS.quals.map((q, i) => `<li><em>0${i + 1}</em><b class="fs-body">${esc(q)}</b></li>`).join('')}</ul>
+        <div data-reveal data-delay="80">
+          <h3 class="mb-16">보유 기술자격</h3>
+          <dl class="dtable dtable--tight">
+${CREDS.quals.map((q, i) => `            <div><dt>${esc(CREDS.qualFields[i])}</dt><dd>${esc(q)}</dd></div>`).join('\n')}
+          </dl>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="section section--soft">
+  <!-- 04 연혁 (31차: 2단 — 2023~2015 / 2012~1992) -->
+  <section class="section section--soft" id="history">
     <div class="wrap">
-      <div class="split split--rev">
-        <div data-reveal>
-          <h2>작업 전에<br>현장부터 확인합니다</h2>
-          <p class="lead mt-20">설비 구조와 작업 목적, 잔류물 특성을 확인한 뒤 작업 방법을 정합니다.</p>
-          <div class="mt-28"><a class="btn btn--line" href="services.html">사업분야 보기 ${arrow(18)}</a></div>
+      <div class="head head--solo" data-reveal><div><h2>연혁</h2><p class="lead">1992년 신학상사로 출발해 1995년 신정개발로 상호를 바꾸고, 2007년 법인으로 전환했습니다.</p></div></div>
+      <div class="co-hist2" data-reveal>
+${[C.history.slice(0, 7), C.history.slice(7)].map((part) => `        <ul class="hist hist--tight">
+${part.map((h) => `            <li><b>${h.year}</b><ul class="hist__items">
+${h.items.map((it) => `              <li><em>${it.m}</em><span>${esc(it.label)}</span></li>`).join('\n')}
+            </ul></li>`).join('\n')}
+        </ul>`).join('\n')}
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 오시는 길·연락처 (31차: 여수 본사 / 서산 지사 / 연락처 3칸) -->
+  <section class="section" id="location">
+    <div class="wrap">
+      <div class="head head--solo" data-reveal><div><h2>오시는 길·연락처</h2></div></div>
+      <div class="co-locs" data-reveal>
+        <div>
+          <h3>여수 본사</h3>
+          <p>${icon('pin', 17)} ${esc(C.address)}</p>
+          <p class="co-locs__links"><a href="https://map.naver.com/p/search/${encodeURIComponent(C.address)}" target="_blank" rel="noopener">네이버 지도</a><a href="https://map.kakao.com/link/search/${encodeURIComponent(C.address)}" target="_blank" rel="noopener">카카오맵</a></p>
         </div>
-        <figure class="split__media" data-reveal data-delay="90">
-          <div class="split__fig">${photo(P('M05'), '(max-width:960px) 92vw, 620px')}</div>
-          <figcaption class="split__cap">${esc(P('M05').cap)}</figcaption>
-        </figure>
-      </div>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="wrap">
-      <div class="head">
-        <div data-reveal><h2>현장과 안전</h2></div>
-      </div>
-      <div class="grid grid--3">
-${pcards(['M10', 'M06', 'M04'], ['현장의 차량과 안전 구획', '안전모', '산업단지 전경'])}
-      </div>
-    </div>
-  </section>
-
-  <section class="section section--soft">
-    <div class="wrap">
-      <div class="head">
-        <div data-reveal><h2>다루는 업무</h2></div>
-        <div class="head__aside head__aside--end" data-reveal data-delay="90">
-          <a class="tlink" href="services.html">사업분야 전체 보기 ${arrow(14)}</a>
+        <div>
+          <h3>서산 지사</h3>
+          <p>${icon('pin', 17)} ${esc(C.branch)}</p>
+          <p class="co-locs__links"><a href="https://map.naver.com/p/search/${encodeURIComponent(C.branch)}" target="_blank" rel="noopener">네이버 지도</a></p>
+        </div>
+        <div>
+          <h3>연락처</h3>
+          <dl class="co-locs__dl">
+            <div><dt>대표 전화</dt><dd><a href="tel:${C.tel.replace(/-/g, '')}">${C.tel}</a></dd></div>
+            <div><dt>문의 가능 시간</dt><dd>${esc(C.hours)}</dd></div>
+            <div><dt>팩스</dt><dd>${C.fax}</dd></div>
+            <div><dt>이메일</dt><dd><a href="mailto:${C.email}">${C.email}</a></dd></div>
+          </dl>
         </div>
       </div>
-      <div class="grid grid--5">
-${serviceCards(true)}
-      </div>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="wrap">
-      <div class="head head--solo" data-reveal><div><h2>연락처</h2></div></div>
-      <dl class="dtable" data-reveal>
-        <div><dt>회사명</dt><dd>${esc(C.name)} <span class="note">${esc(C.brandEn)} CO., LTD.</span></dd></div>
-        <div><dt>설립</dt><dd>${C.founded}년</dd></div>
-        <div><dt>본사</dt><dd>${icon('pin', 17)} ${esc(C.address)} <a href="https://map.naver.com/p/search/${encodeURIComponent(C.address)}" target="_blank" rel="noopener">네이버 지도</a> <a href="https://map.kakao.com/link/search/${encodeURIComponent(C.address)}" target="_blank" rel="noopener">카카오맵</a></dd></div>
-        <div><dt>지사</dt><dd>${icon('pin', 17)} ${esc(C.branch)} <a href="https://map.naver.com/p/search/${encodeURIComponent(C.branch)}" target="_blank" rel="noopener">네이버 지도</a></dd></div>
-        <div><dt>대표 전화</dt><dd><a href="tel:${C.tel.replace(/-/g, '')}">${C.tel}</a> <span class="note">문의 가능 시간 ${esc(C.hours)}</span></dd></div>
-        <div><dt>팩스</dt><dd>${C.fax}</dd></div>
-        <div><dt>이메일</dt><dd>${icon('mail', 17)} <a href="mailto:${C.email}">${C.email}</a></dd></div>
-        <div><dt>사업 범위</dt><dd>${SERVICES.map((s) => esc(s.title)).join(' · ')}</dd></div>
-      </dl>
 ${SRC_LINE}    </div>
   </section>
 
