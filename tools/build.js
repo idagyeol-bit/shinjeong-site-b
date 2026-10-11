@@ -10,7 +10,11 @@ const fs = require('fs');
 const path = require('path');
 /* 40차: 바꾸는 손잡이(색·글꼴·모양·여백, 첫 화면, 메인 구역 순서와 문구, 메뉴와 공통 문구, 큰 틀)는 설정 파일 한 곳에 있다.
    사실(회사 정보·업무·실적·면허·장비·FAQ·숫자·사진 목록)은 이 파일에 그대로 둔다. */
-const CFG = require('./site.config.js');
+const BASE_CFG = require('./site.config.js');
+/* 41차: 시안(tools/variants/<시안이름>.js)을 만드는 동안에는 CFG 가 "기본 설정 + 시안의 다른 점"으로 바뀌고 VARIANT 에 시안 정보가 들어간다.
+   기본판을 만들 때는 CFG = 기본 설정, VARIANT = null. 페이지 함수들은 언제나 CFG 를 읽는다. */
+let CFG = BASE_CFG;
+let VARIANT = null;          // { name: 'test', label: '시험 시안', file: 'tools/variants/test.js' }
 
 const OUT = path.resolve(__dirname, '..');
 const SITE_URL = 'https://idagyeol-bit.github.io/shinjeong-site-b/'; // 배포 주소가 정해지면 이 줄만 바꾸세요
@@ -601,26 +605,31 @@ function photo(p, sizesAttr, eager) {
 /* ===================== 공통 뼈대 ===================== */
 /* 맨 위 메뉴(CFG.nav)와 머리말·휴대폰·바닥글 공통 문구(CFG.common)는 tools/site.config.js 에 있다 (40차) */
 
+/* 41차: 시안 페이지(VARIANT)는 PREVIEW 와 상관없이 늘 검색 제외·시안 표시를 넣고, canonical·hreflang·JSON-LD 는 넣지 않는다.
+   제목 앞 표시는 [시안 이름], 맨 위 안내 줄에 "기본판 보기"(../index.html). 기본판의 결과는 41차 전과 같다 */
 function head(o) {
-  const title = (PREVIEW ? '[시안] ' : '') + o.title;
+  const V = VARIANT;
+  const marked = PREVIEW || !!V;   // 검색 제외·안내 줄·is-preview 를 넣을지
+  const title = (V ? `[${V.label}] ` : PREVIEW ? '[시안] ' : '') + o.title;
+  const here = (V ? `${V.name}/` : '') + (o.file === 'index.html' ? '' : o.file);   // 이 페이지의 공개 주소(사이트 주소 뒤)
   return `<!doctype html>
-<html lang="ko"${PREVIEW ? ' class="is-preview"' : ''}>
+<html lang="ko"${marked ? ' class="is-preview"' : ''}>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-${PREVIEW ? '<meta name="robots" content="noindex, nofollow">\n' : ''}<title>${esc(title)}</title>
+${marked ? '<meta name="robots" content="noindex, nofollow">\n' : ''}<title>${esc(title)}</title>
 <meta name="description" content="${esc(o.desc)}">
 <meta name="format-detection" content="telephone=no">
 <meta name="theme-color" content="#0e2e4a">
-<link rel="canonical" href="${SITE_URL}${o.file === 'index.html' ? '' : o.file}">
-${o.file === '404.html' ? '' : `<link rel="alternate" hreflang="ko" href="${SITE_URL}${o.file === 'index.html' ? '' : o.file}">
+${V ? '' : `<link rel="canonical" href="${SITE_URL}${here}">
+`}${V || o.file === '404.html' ? '' : `<link rel="alternate" hreflang="ko" href="${SITE_URL}${o.file === 'index.html' ? '' : o.file}">
 <link rel="alternate" hreflang="en" href="${SITE_URL}en/${o.file === 'index.html' ? '' : o.file}">
 <link rel="alternate" hreflang="x-default" href="${SITE_URL}${o.file === 'index.html' ? '' : o.file}">
 `}<meta property="og:type" content="website">
 <meta property="og:site_name" content="${esc(C.brand)}">
 <meta property="og:title" content="${esc(title)}">
 <meta property="og:description" content="${esc(o.desc)}">
-<meta property="og:url" content="${SITE_URL}${o.file === 'index.html' ? '' : o.file}">
+<meta property="og:url" content="${SITE_URL}${here}">
 <meta property="og:locale" content="ko_KR">
 <meta property="og:image" content="${SITE_URL}assets/photos/M08-1600.jpg">
 <meta property="og:image:width" content="1600">
@@ -629,12 +638,13 @@ ${o.file === '404.html' ? '' : `<link rel="alternate" hreflang="ko" href="${SITE
 <link rel="icon" href="assets/logo/shinjeong-symbol.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="assets/logo/shinjeong-symbol.png">
 <link rel="preload" href="assets/fonts/sub/PretendardVariable-0.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/${V ? `tokens.${V.name}.css` : 'tokens.css'}">
 <link rel="stylesheet" href="css/site.css">
-${!PREVIEW && o.jsonld ? `<script type="application/ld+json">${JSON.stringify(o.jsonld)}</script>\n` : ''}</head>
+${!marked && o.jsonld ? `<script type="application/ld+json">${JSON.stringify(o.jsonld)}</script>\n` : ''}</head>
 <body data-page="${o.page}">
 <a class="skip-link" href="#main">본문 바로가기</a>
-${PREVIEW ? `<div class="pvbar" role="note">검토용 시안입니다 · 공식 홈페이지 <a href="${OFFICIAL_SITE.url}" target="_blank" rel="noopener">${OFFICIAL_SITE.label}</a></div>\n` : ''}`;
+${V ? `<div class="pvbar" role="note">검토용 ${esc(V.label)}입니다 · <a href="../index.html">기본판 보기</a> · 공식 홈페이지 <a href="${OFFICIAL_SITE.url}" target="_blank" rel="noopener">${OFFICIAL_SITE.label}</a></div>\n`
+    : PREVIEW ? `<div class="pvbar" role="note">검토용 시안입니다 · 공식 홈페이지 <a href="${OFFICIAL_SITE.url}" target="_blank" rel="noopener">${OFFICIAL_SITE.label}</a></div>\n` : ''}`;
 }
 
 /* activeSvc: 분야 상세 페이지에서 하위 메뉴의 현재 분야를 표시하기 위한 id (S01-S05)
@@ -643,7 +653,7 @@ function header(page, activeSvc, file) {
   return frame('header')(page, activeSvc, file);
 }
 
-/* 큰 틀 'base'의 머리말 — 40차 전의 머리말 그대로 */
+/* 큰 틀 'base'의 머리말 — 40차 전의 머리말 그대로. 시안 페이지에는 언어 선택(KOR/ENG)을 넣지 않는다(41차, 시안은 한국어만) */
 function headerBase(page, activeSvc, file) {
   const cur = (id) => (id === activeSvc ? ' class="is-current"' : '');
   const self = file || 'index.html';
@@ -681,8 +691,7 @@ ${SERVICES.map((s) => `              <li><a href="${s.file}"${cur(s.id)}><b>${es
 ${nav}
   </nav>
   <div class="hdr__act">
-    ${lang}
-    <a class="hdr__cta" href="contact.html"${page === 'contact' ? ' aria-current="page"' : ''}>${CFG.common.headerCta} ${arrow(14)}</a>
+${VARIANT ? '' : `    ${lang}\n`}    <a class="hdr__cta" href="contact.html"${page === 'contact' ? ' aria-current="page"' : ''}>${CFG.common.headerCta} ${arrow(14)}</a>
     <button class="burger" type="button" aria-expanded="false" aria-controls="drawer" aria-label="메뉴 열기"><i></i><i></i><i></i></button>
   </div>
 </header>
@@ -733,10 +742,11 @@ ${SERVICES.map((s) => `      <a href="${s.file}"${s.id === activeId ? ' aria-cur
 `;
 }
 
-/* 맨 아래 문의 띠. 기본 제목·문장·버튼 문구는 tools/site.config.js 의 home.copy.cta (40차) — 회사 소개 페이지도 기본 문구를 쓴다 */
+/* 맨 아래 문의 띠. 기본 제목·문장·버튼 문구는 tools/site.config.js 에 있다 (41차, 이다결 님 "가"):
+   메인 페이지는 home.copy.cta (cta({ home: true })), 그 밖의 페이지는 common.cta. 페이지가 넘기는 제목·문장(h2, p)이 있으면 그것이 먼저다 */
 function cta(o) {
   const t = o || {};
-  const d = CFG.home.copy.cta;
+  const d = t.home ? CFG.home.copy.cta : CFG.common.cta;
   return `  <section class="cta">
     <div class="wrap">
       <h2 data-reveal>${t.h2 || d.title}</h2>
@@ -800,7 +810,7 @@ ${g.items.map((i) => `            <li><a href="${i.href}"${i.blank ? ' target="_
 const SRC_LINE = '      <p class="note mt-block">출처: (주)신정개발 회사소개서(2024) · 기술소개서(2025)</p>\n';
 
 /* 메인 업무 카드 아래 버튼 — 어느 업무인지 모를 때. "수행 이력 N건 모두 보기"와 같은 버튼 (문구는 설정 파일 home.copy.what.button) */
-const SVC_CTA = `      <div class="svc-cta" data-reveal><a class="btn btn--line btn--sm" href="contact.html">${CFG.home.copy.what.button} ${arrow(18)}</a></div>`;
+const svcCta = () => `      <div class="svc-cta" data-reveal><a class="btn btn--line btn--sm" href="contact.html">${CFG.home.copy.what.button} ${arrow(18)}</a></div>`;   // 41차: 시안마다 설정이 달라 함수로 둔다
 
 
 const MAIN_END = '</main>\n\n';
@@ -1017,7 +1027,7 @@ ${TRUST.map((t) => t.t
       <div class="grid grid--5">
 ${serviceCards(true, true)}
       </div>
-${SVC_CTA}
+${svcCta()}
 
     </div>
   </section>
@@ -1157,7 +1167,7 @@ pages['index.html'] = () => {
   }) + header('home', null, 'index.html') + `
 <main id="main">
 
-` + frame('hero')() + '\n' + CFG.home.sections.map((s) => S[s.id](s.bg)).join('\n') + '\n' + cta() + MAIN_END + footer() + foot();
+` + frame('hero')() + '\n' + CFG.home.sections.map((s) => S[s.id](s.bg)).join('\n') + '\n' + cta({ home: true }) + MAIN_END + footer() + foot();
 };
 
 /* ---------- 2. 사업분야 ---------- */
@@ -1839,9 +1849,10 @@ pages['404.html'] = () => head({
 ` + footer() + foot();
 
 /* ===================== 설정 확인과 디자인 토큰 (40차) ===================== */
-/* 설정 파일에 잘못된 값이 있으면 한국어로 알리고 아무 파일도 쓰지 않은 채 멈춘다 */
+/* 설정 파일에 잘못된 값이 있으면 한국어로 알리고 아무 파일도 쓰지 않은 채 멈춘다.
+   시안을 확인하는 중이면 시안 파일 이름을 함께 알린다 (41차) */
 function configError(msg) {
-  console.error('설정 오류 (tools/site.config.js): ' + msg);
+  console.error((VARIANT ? `시안 설정 오류 (${VARIANT.file}): ` : '설정 오류 (tools/site.config.js): ') + msg);
   process.exit(1);
 }
 function checkConfig() {
@@ -1949,14 +1960,97 @@ ${cssList('--font', v('--font'))}
   return fs.readFileSync(TOKENS_HEAD_FILE, 'utf8') + root.replace(/^\n/, '');
 }
 
+/* ===================== 시안 (41차) =====================
+   tools/variants/<시안이름>.js 에 기본 설정과 "다른 점만" 적으면, 그 시안을 <시안이름>/ 폴더에 한국어 12쪽으로 만든다.
+   합치는 규칙: 묶음({ })은 안쪽까지 항목별로 덮어쓰고, 목록([ ])은 통째로 바꾼다. 기본 설정에 없는 이름은 오류.
+   시안 페이지는 같은 폴더의 페이지끼리는 그대로 잇고, assets/·css/·js/ 로 가는 주소만 생성 뒤 ../ 를 붙인다(relocate). */
+const VARIANT_DIR = path.join(__dirname, 'variants');
+const VARIANT_RESERVED = ['assets', 'css', 'en', 'guide', 'js', 'tools'];   // 이미 있는 폴더 이름 — 시안 이름으로 쓸 수 없다
+const isGroup = (x) => x !== null && typeof x === 'object' && !Array.isArray(x);
+
+function mergeConfig(base, over, at) {
+  const out = Object.assign({}, base);
+  Object.keys(over).forEach((k) => {
+    const p = at ? `${at}.${k}` : k;
+    if (!Object.prototype.hasOwnProperty.call(base, k)) configError(`'${p}'라는 항목은 기본 설정에 없습니다.`);
+    const b = base[k];
+    const x = over[k];
+    if (isGroup(b)) {
+      if (!isGroup(x)) configError(`'${p}'는 묶음({ })으로 적어야 합니다.`);
+      out[k] = mergeConfig(b, x, p);
+    } else if (Array.isArray(b)) {
+      if (!Array.isArray(x)) configError(`'${p}'는 목록([ ])으로 적어야 합니다.`);
+      out[k] = x;                                   // 목록은 통째로 바꾼다
+    } else {
+      if (isGroup(x) || Array.isArray(x)) configError(`'${p}'에는 값 하나를 적습니다.`);
+      out[k] = x;
+    }
+  });
+  return out;
+}
+
+/* 만들 시안 목록 — 이름이 _ 로 시작하는 파일은 건너뛴다(보관·예시용). only 가 있으면 그 시안 하나만 */
+function loadVariants(only) {
+  const names = fs.existsSync(VARIANT_DIR)
+    ? fs.readdirSync(VARIANT_DIR).filter((f) => /\.js$/.test(f) && !f.startsWith('_')).map((f) => f.replace(/\.js$/, '')).sort()
+    : [];
+  if (only && !names.includes(only)) {
+    console.error(`시안 설정 오류: 시안 '${only}'이 없습니다 (tools/variants/${only}.js). 있는 시안: ${names.join(', ') || '없음'}`);
+    process.exit(1);
+  }
+  return (only ? [only] : names).map((name) => {
+    const file = `tools/variants/${name}.js`;
+    VARIANT = { name, label: name, file };
+    if (!/^[a-z0-9-]+$/.test(name)) configError(`시안 이름 '${name}'은 쓸 수 없습니다. 파일 이름(=주소)은 영어 소문자·숫자·- 만 씁니다.`);
+    if (VARIANT_RESERVED.includes(name)) configError(`시안 이름 '${name}'은 쓸 수 없습니다. 이미 있는 폴더 이름입니다: ${VARIANT_RESERVED.join(', ')}`);
+    let over;
+    try { over = require(path.join(VARIANT_DIR, name + '.js')); } catch (e) { configError(`파일을 읽지 못했습니다 (쉼표·따옴표·괄호를 확인하세요): ${e.message}`); }
+    if (!isGroup(over)) configError('module.exports = { … } 모양이어야 합니다.');
+    if (typeof over.label !== 'string' || !over.label.trim()) configError("맨 위에 label(사람이 읽는 시안 이름, 예: '시안 A')이 있어야 합니다.");
+    VARIANT = null;
+    return { name, file, label: over.label, over };
+  });
+}
+
+/* 시안 폴더 안의 페이지에서 assets/·css/·js/ 로 가는 주소 앞에 ../ 를 붙인다 (같은 폴더의 .html 링크와 바깥 주소는 그대로) */
+function relocate(html) {
+  const up = (u) => (/^(assets|css|js)\//.test(u) ? '../' + u : u);
+  return html
+    .replace(/(\s)(href|src|poster|data-fallback)="([^"]*)"/g, (m, sp, a, u) => `${sp}${a}="${up(u)}"`)
+    .replace(/(\s)srcset="([^"]*)"/g, (m, sp, v) => `${sp}srcset="${v.split(',').map((p) => { const t = p.trim().split(/\s+/); t[0] = up(t[0]); return t.join(' '); }).join(', ')}"`);
+}
+
 /* ===================== 기록 ===================== */
 if (!fs.existsSync(OUT)) fs.mkdirSync(OUT, { recursive: true });
 
-/* 설정 확인(틀린 곳이 있으면 여기서 멈춘다) → 디자인 토큰 → 페이지 */
+/* node tools/build.js --variant test → 기본판과 test 시안만 만든다 */
+const ARGS = process.argv.slice(2);
+const ONLY_AT = ARGS.indexOf('--variant');
+const ONLY = ONLY_AT >= 0 ? ARGS[ONLY_AT + 1] : null;
+if (ONLY_AT >= 0 && !ONLY) { console.error('시안 이름을 함께 적어 주세요. 예: node tools/build.js --variant test'); process.exit(1); }
+
+/* 1) 기본판 설정 확인 → 디자인 토큰 → 페이지 (아직 쓰지 않는다) */
 checkConfig();
 const tokens = tokensCss();
 const pageHtml = {};
 Object.keys(pages).forEach((file) => { pageHtml[file] = pages[file](); });
+
+/* 2) 시안마다 설정 확인 → 디자인 토큰 → 페이지 12쪽 (아직 쓰지 않는다). 하나라도 틀리면 여기서 멈추고 아무 파일도 쓰지 않는다 */
+const variantOut = loadVariants(ONLY).map((v) => {
+  VARIANT = { name: v.name, label: v.label, file: v.file };
+  const over = Object.assign({}, v.over);
+  delete over.label;
+  CFG = mergeConfig(BASE_CFG, over, '');
+  checkConfig();
+  const css = tokensCss();
+  const html = {};
+  Object.keys(pages).filter((f) => f !== '404.html').forEach((f) => { html[f] = relocate(pages[f]()); });
+  return { name: v.name, label: v.label, css, html };
+});
+VARIANT = null;
+CFG = BASE_CFG;
+
+/* 3) 쓰기 — 기본판 */
 fs.writeFileSync(path.join(OUT, 'css', 'tokens.css'), tokens, 'utf8');
 
 let n = 0;
@@ -1982,3 +2076,11 @@ if (PREVIEW) {
 }
 
 console.log(`생성 완료: HTML ${n}개 + css/tokens.css + ${PREVIEW ? 'robots.txt (시안: 검색 제외, 사이트맵 없음)' : 'sitemap.xml + robots.txt'} → ${OUT}`);
+
+/* 4) 쓰기 — 시안 (설정 파일이 없어진 시안의 폴더는 지우지 않는다. 지우는 법은 CLAUDE.md "시안 (41차)") */
+variantOut.forEach((v) => {
+  fs.mkdirSync(path.join(OUT, v.name), { recursive: true });
+  Object.keys(v.html).forEach((f) => fs.writeFileSync(path.join(OUT, v.name, f), v.html[f], 'utf8'));
+  fs.writeFileSync(path.join(OUT, 'css', `tokens.${v.name}.css`), v.css, 'utf8');
+  console.log(`시안 ${v.name} (${v.label}): HTML ${Object.keys(v.html).length}개 + css/tokens.${v.name}.css → ${v.name}/`);
+});
