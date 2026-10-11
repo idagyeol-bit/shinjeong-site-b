@@ -40,10 +40,19 @@
 - `guide/img/`의 그림은 이 사이트 화면을 찍은 것이고, `guide/shinjeong-homepage-review.pdf`는 검토 자료다(절대 규칙 2·5의 대상이 아니다).
 - **정식 오픈 때:** 이다결 님에게 확인한 뒤 `guide/` 폴더를 지운다.
 
+## 작업 방법 (39차)
+- 갈래가 두 개다. `main` = 클라이언트에게 보낸 공개본(깃허브 Pages가 보여 주는 판). `dev` = 작업용.
+- **모든 수정은 `dev`에서 한다.** 작업을 시작하기 전에 `git branch --show-current`로 `dev`인지 확인하고, 아니면 멈추고 알린다.
+- `dev`에서 커밋하고 `git push origin dev`로 올려도 공개 주소는 바뀌지 않는다(백업만 된다). 고친 모습은 미리보기(`serve.ps1`)로 본다.
+- **`main`에 합치거나 `main`을 푸시하는 것은 이다결 님이 "main에 합쳐 줘"처럼 분명히 말할 때만** 한다. 순서: `git switch main` → `git pull --ff-only origin main` → `git merge --no-ff dev` → 재생성 두 줄로 결과가 같은지 확인 → 보고하고 확인받기 → `git push origin main` → `git switch dev`.
+- 급하게 공개본만 고쳐야 할 때(틀린 숫자 등)도 이다결 님이 말할 때만 `main`에서 고친다. 끝나면 `git switch dev` → `git merge main`으로 같은 수정을 `dev`에도 가져온다.
+- `review-2026-10` 태그는 2026-10-03 클라이언트에게 보낸 판이다. 지우거나 옮기지 않는다. 비교: `git diff review-2026-10 dev --stat`.
+- `dev`에서 사이트를 크게 바꾼 뒤 합치면 검토 자료(`guide/`)와 PDF 속 화면이 실제 사이트와 달라진다. 합치기 전에 이다결 님에게 알린다.
+
 ## 자주 하는 작업
 - 미리보기: `powershell -ExecutionPolicy Bypass -File serve.ps1` → http://localhost:4173/ (또는 `python -m http.server 4173`)
 - 재생성: `node tools/build.js` 다음에 `node tools/build-en.js` (영어판)
-- 배포: `git add -A && git commit -m "메시지" && git push origin main` → 1~2분 뒤 GitHub Pages 반영
+- 저장: `git add <바뀐 파일> && git commit -m "메시지" && git push origin dev` → 공개 주소는 바뀌지 않는다. 공개본 반영은 위 "작업 방법 (39차)"의 합치는 순서대로, 이다결 님이 말할 때만 한다
 - 검증: 재생성 후 모든 `<a href>`가 존재하는 파일을 가리키는지, `<img>`의 width/height 비율이 실제 파일과 같은지 확인한다.
 
 ## 도메인 확정 후 바꿀 것
