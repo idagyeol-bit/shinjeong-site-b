@@ -8,6 +8,9 @@
 'use strict';
 const fs = require('fs');
 const path = require('path');
+/* 40차: 바꾸는 손잡이(색·글꼴·모양·여백, 첫 화면, 메인 구역 순서와 문구, 메뉴와 공통 문구, 큰 틀)는 설정 파일 한 곳에 있다.
+   사실(회사 정보·업무·실적·면허·장비·FAQ·숫자·사진 목록)은 이 파일에 그대로 둔다. */
+const CFG = require('./site.config.js');
 
 const OUT = path.resolve(__dirname, '..');
 const SITE_URL = 'https://idagyeol-bit.github.io/shinjeong-site-b/'; // 배포 주소가 정해지면 이 줄만 바꾸세요
@@ -532,15 +535,8 @@ const SHOW_SEARCH = false;
 
 const FEATURED = ['P07', 'P01', 'P08'];
 
-/* 메인 첫 화면 제목 — 하는 일 다섯 가지. 표시 글자만 여기서 정하고, 연결 주소는 SERVICES에서 가져온다.
-   br: true 인 항목 뒤에서 PC 줄을 나눈다(휴대폰에서는 자연 줄바꿈). */
-const HERO_SERVICES = [
-  { svc: 'S01', label: '탱크 클리닝' },
-  { svc: 'S02', label: '촉매 교체' },
-  { svc: 'S03', label: '화학세정', br: true },
-  { svc: 'S04', label: '준설' },
-  { svc: 'S05', label: '관로 조사' }
-];
+/* 메인 첫 화면 제목(하는 일 다섯 가지)은 40차부터 tools/site.config.js 의 hero.services 에 있다.
+   표시 글자만 거기서 정하고, 연결 주소는 SERVICES에서 가져온다. */
 
 /* 업무 카드의 설비 칩 — 방문자가 쓰는 설비 이름(한국어 우선). 칩마다 그 카드의 분야 페이지로 연결한다.
    4차 '설비로 찾기' 데이터를 옮겨 쓴 것이고, 이름은 모두 분야 상세의 대상 설비에 있는 것이다. */
@@ -603,13 +599,7 @@ function photo(p, sizesAttr, eager) {
 }
 
 /* ===================== 공통 뼈대 ===================== */
-const NAV = [
-  { href: 'services.html', label: '사업분야', key: 'services' },
-  { href: 'projects.html', label: '수행 이력', key: 'projects' },
-  { href: 'process.html', label: '현장 진행 방식', key: 'process' },
-  { href: 'technology.html', label: '장비·로봇', key: 'technology' },
-  { href: 'company.html', label: '회사 소개', key: 'company' }
-];
+/* 맨 위 메뉴(CFG.nav)와 머리말·휴대폰·바닥글 공통 문구(CFG.common)는 tools/site.config.js 에 있다 (40차) */
 
 function head(o) {
   const title = (PREVIEW ? '[시안] ' : '') + o.title;
@@ -647,8 +637,14 @@ ${!PREVIEW && o.jsonld ? `<script type="application/ld+json">${JSON.stringify(o.
 ${PREVIEW ? `<div class="pvbar" role="note">검토용 시안입니다 · 공식 홈페이지 <a href="${OFFICIAL_SITE.url}" target="_blank" rel="noopener">${OFFICIAL_SITE.label}</a></div>\n` : ''}`;
 }
 
-/* activeSvc: 분야 상세 페이지에서 하위 메뉴의 현재 분야를 표시하기 위한 id (S01-S05) */
+/* activeSvc: 분야 상세 페이지에서 하위 메뉴의 현재 분야를 표시하기 위한 id (S01-S05)
+   머리말 HTML은 큰 틀(CFG.frame.header)이 고른 FRAMES.header 의 함수가 만든다 (40차) */
 function header(page, activeSvc, file) {
+  return frame('header')(page, activeSvc, file);
+}
+
+/* 큰 틀 'base'의 머리말 — 40차 전의 머리말 그대로 */
+function headerBase(page, activeSvc, file) {
   const cur = (id) => (id === activeSvc ? ' class="is-current"' : '');
   const self = file || 'index.html';
   const lang = `<div class="lang" role="group" aria-label="언어 선택"><a href="${self}" data-lang="ko" lang="ko" class="is-on" aria-current="true">KOR</a><a href="en/${self}" data-lang="en" lang="en">ENG</a></div>`;
@@ -662,13 +658,13 @@ ${SERVICES.map((s) => `              <li><a href="${s.file}"${cur(s.id)}><b>${es
             <a class="gnb__all" href="services.html">사업분야 전체 보기 ${arrow(14)}</a>
           </div>
         </div>`;
-  const nav = NAV.map((n) => {
+  const nav = CFG.nav.map((n) => {
     const a = `<a href="${n.href}"${n.key === page ? ' aria-current="page"' : ''}>${esc(n.label)}</a>`;
     return n.key === 'services'
       ? `      <div class="gnb__item" data-sub>\n        ${a}${svcPanel}\n      </div>`
       : `      ${a}`;
   }).join('\n');
-  const dnav = NAV.concat([{ href: 'contact.html', label: '현장 문의', key: 'contact' }])
+  const dnav = CFG.nav.concat([{ href: 'contact.html', label: CFG.common.drawerContact, key: 'contact' }])
     .map((n, i) => {
       const a = `    <a href="${n.href}"${n.key === page ? ' aria-current="page"' : ''}>${esc(n.label)}<span>0${i + 1}</span></a>`;
       return n.key === 'services'
@@ -686,7 +682,7 @@ ${nav}
   </nav>
   <div class="hdr__act">
     ${lang}
-    <a class="hdr__cta" href="contact.html"${page === 'contact' ? ' aria-current="page"' : ''}>현장 문의 ${arrow(14)}</a>
+    <a class="hdr__cta" href="contact.html"${page === 'contact' ? ' aria-current="page"' : ''}>${CFG.common.headerCta} ${arrow(14)}</a>
     <button class="burger" type="button" aria-expanded="false" aria-controls="drawer" aria-label="메뉴 열기"><i></i><i></i><i></i></button>
   </div>
 </header>
@@ -737,14 +733,16 @@ ${SERVICES.map((s) => `      <a href="${s.file}"${s.id === activeId ? ' aria-cur
 `;
 }
 
+/* 맨 아래 문의 띠. 기본 제목·문장·버튼 문구는 tools/site.config.js 의 home.copy.cta (40차) — 회사 소개 페이지도 기본 문구를 쓴다 */
 function cta(o) {
   const t = o || {};
+  const d = CFG.home.copy.cta;
   return `  <section class="cta">
     <div class="wrap">
-      <h2 data-reveal>${t.h2 || '검토가 필요한 현장을<br>알려 주세요'}</h2>
-      <p data-reveal data-delay="80">${esc(t.p || '대상 설비와 작업 목적, 희망 일정을 보내 주시면 가능한 작업 범위와 진행 방법을 안내해 드립니다.')}</p>
+      <h2 data-reveal>${t.h2 || d.title}</h2>
+      <p data-reveal data-delay="80">${esc(t.p || d.text)}</p>
       <div class="cta__act" data-reveal data-delay="160">
-        <a class="btn btn--ghost" href="contact.html">현장 문의하기 ${arrow(18)}</a>
+        <a class="btn btn--ghost" href="contact.html">${d.button} ${arrow(18)}</a>
         <a class="btn btn--ghost" href="mailto:${C.email}">${C.email}</a>
       </div>
     </div>
@@ -753,11 +751,12 @@ function cta(o) {
 }
 
 function footer() {
+  const g = CFG.common.footerGroups;   // 바닥글 묶음 제목 (40차, 설정 파일)
   const map = [
-    { h: '사업분야', items: SERVICES.map((s) => ({ href: s.file, label: s.title })) },
-    { h: '기술', items: [{ href: 'process.html', label: '현장 진행 방식' }, { href: 'technology.html', label: '장비·로봇' }, { href: 'process.html#dewater', label: '회수물 탈수 과정' }] },
-    { h: '회사', items: [{ href: 'projects.html', label: '수행 이력' }, { href: 'company.html', label: '회사 소개' }, { href: DOC_PROFILE, label: '회사소개서 (PDF)', blank: true }, { href: DOC_TECH, label: '기술소개서 (PDF)', blank: true }] },
-    { h: '문의', items: [{ href: 'contact.html', label: '현장 문의' }, { href: `mailto:${C.email}`, label: '이메일로 문의' }] }
+    { h: g.services, items: SERVICES.map((s) => ({ href: s.file, label: s.title })) },
+    { h: g.tech, items: [{ href: 'process.html', label: '현장 진행 방식' }, { href: 'technology.html', label: '장비·로봇' }, { href: 'process.html#dewater', label: '회수물 탈수 과정' }] },
+    { h: g.company, items: [{ href: 'projects.html', label: '수행 이력' }, { href: 'company.html', label: '회사 소개' }, { href: DOC_PROFILE, label: '회사소개서 (PDF)', blank: true }, { href: DOC_TECH, label: '기술소개서 (PDF)', blank: true }] },
+    { h: g.contact, items: [{ href: 'contact.html', label: '현장 문의' }, { href: `mailto:${C.email}`, label: '이메일로 문의' }] }
   ];
   return `<footer class="ftr">
   <div class="wrap">
@@ -791,7 +790,7 @@ ${g.items.map((i) => `            <li><a href="${i.href}"${i.blank ? ' target="_
 
 <nav class="mcta" aria-label="빠른 문의">
   <a class="mcta__tel" href="tel:${C.tel.replace(/-/g, '')}">전화 문의</a>
-  <a class="mcta__go" href="contact.html">현장 문의 ${arrow(17)}</a>
+  <a class="mcta__go" href="contact.html">${CFG.common.mobileCta} ${arrow(17)}</a>
 </nav>
 `;
 }
@@ -800,8 +799,8 @@ ${g.items.map((i) => `            <li><a href="${i.href}"${i.blank ? ' target="_
 /* 현장 진행 방식·장비·로봇·회사 소개 본문 맨 아래에 넣는 출처 한 줄 */
 const SRC_LINE = '      <p class="note mt-block">출처: (주)신정개발 회사소개서(2024) · 기술소개서(2025)</p>\n';
 
-/* 메인 업무 카드 아래 버튼 — 어느 업무인지 모를 때. "수행 이력 N건 모두 보기"와 같은 버튼 */
-const SVC_CTA = `      <div class="svc-cta" data-reveal><a class="btn btn--line btn--sm" href="contact.html">어느 업무인지 모르겠다면 문의하기 ${arrow(18)}</a></div>`;
+/* 메인 업무 카드 아래 버튼 — 어느 업무인지 모를 때. "수행 이력 N건 모두 보기"와 같은 버튼 (문구는 설정 파일 home.copy.what.button) */
+const SVC_CTA = `      <div class="svc-cta" data-reveal><a class="btn btn--line btn--sm" href="contact.html">${CFG.home.copy.what.button} ${arrow(18)}</a></div>`;
 
 
 const MAIN_END = '</main>\n\n';
@@ -951,42 +950,44 @@ ${FAQ.map((f, i) => `        <details${i === 0 ? ' open' : ''}>
 const pages = {};
 
 /* ---------- 1. 메인 ---------- */
-pages['index.html'] = () => {
-  const heroPhoto = { id: 'M08', w: 1600, h: 1067, sizes: [960, 1600, 2400], alt: '산업설비 야간 전경' };
-  const feat = FEATURED.map(prj);
+/* 40차: 메인은 "첫 화면 + 구역들 + 문의 띠"를 이어 붙여 만든다.
+   첫 화면은 FRAMES.hero, 구역은 FRAMES.sections 의 함수가 만들고, 구역 순서와 바탕은 CFG.home.sections 를 따른다.
+   문구는 CFG.home.copy, 숫자와 사실은 이 파일의 데이터(C, TRUST, PROJECTS 등)에서 넣는다. */
 
-  return head({
-    file: 'index.html', page: 'home',
-    title: C.seoTitle,
-    desc: C.seoDesc,
-    jsonld: {
-      '@context': 'https://schema.org', '@type': 'Organization',
-      name: C.name, alternateName: C.brandEn, foundingDate: String(C.founded),
-      url: SITE_URL, email: C.email, telephone: '+82-' + C.tel.replace(/^0/, ''), faxNumber: '+82-' + C.fax.replace(/^0/, ''),
-      address: { '@type': 'PostalAddress', addressCountry: 'KR', addressRegion: '전라남도', addressLocality: '여수시', streetAddress: '봉계2길 27' },
-      description: C.seoDesc
-    }
-  }) + header('home', null, 'index.html') + `
-<main id="main">
+/* 문구 속 자리표시({founded}, {n})를 사실 데이터의 값으로 채운다 */
+const fill = (s, vars) => String(s).replace(/\{(\w+)\}/g, (m, k) => (k in vars ? String(vars[k]) : m));
+/* 구역 바탕 이름 → 덧붙일 class (white 는 덧붙이지 않는다) */
+const BG_CLASS = { white: '', soft: ' section--soft', navy: ' section--navy' };
 
-  <!-- ===== 히어로 ===== -->
+/* 큰 틀 'base'의 첫 화면 — 40차 전의 히어로 그대로 */
+function heroBase() {
+  const h = CFG.hero;
+  const list = h.services;
+  return `  <!-- ===== 히어로 ===== -->
   <section class="hero">
-    <div class="hero__media">${photo(heroPhoto, '100vw', true)}</div>
+    <div class="hero__media">${photo(h.photo, '100vw', true)}</div>
     <div class="wrap hero__inner">
-      <span class="eyebrow">여수 · ${C.founded}년 설립</span>
-      <h1 class="hero__svc" aria-label="${esc(HERO_SERVICES.map((h) => h.label).join(', '))}">${HERO_SERVICES.map((h, i) =>
+      <span class="eyebrow">${fill(h.eyebrow, { founded: C.founded })}</span>
+      <h1 class="hero__svc" aria-label="${esc(list.map((x) => x.label).join(', '))}">${list.map((x, i) =>
         /* 가운뎃점을 앞 이름과 한 덩어리(줄바꿈 금지)로 묶어 줄 맨 앞에 오지 않게 한다 */
-        `<span class="hero__svcitem"><a href="${svc(h.svc).file}">${esc(h.label)}</a>${i < HERO_SERVICES.length - 1 ? `<span class="hero__dot${h.br ? ' hero__dot--brk' : ''}" aria-hidden="true"> ·</span>` : ''}</span>${h.br ? '<br class="hero__br">' : ''}`
+        `<span class="hero__svcitem"><a href="${svc(x.svc).file}">${esc(x.label)}</a>${i < list.length - 1 ? `<span class="hero__dot${x.br ? ' hero__dot--brk' : ''}" aria-hidden="true"> ·</span>` : ''}</span>${x.br ? '<br class="hero__br">' : ''}`
       ).join(' ')}</h1>
-      <p class="hero__lead hero__lead--strong">산업설비 클리닝 전문기업, 신정개발</p>
+      <p class="hero__lead hero__lead--strong">${h.lead}</p>
       <div class="hero__act">
-        <a class="btn btn--light" href="services.html">사업분야 보기 ${arrow(18)}</a>
+        <a class="btn btn--light" href="${h.button.href}">${h.button.label} ${arrow(18)}</a>
       </div>
     </div>
   </section>
+`;
+}
 
-  <!-- ===== 신뢰 숫자 ===== -->
-  <section class="section section--sm trust" aria-label="숫자로 보는 신정개발">
+/* 큰 틀 'base'의 메인 구역 여섯 개 — 40차 전의 구역 그대로. 각 함수는 바탕 이름(bg)을 받는다 */
+const HOME_SECTIONS = {
+  /* 신뢰 숫자 — 숫자(TRUST)·주요 현장(TRUST_SITES)·출처(TRUST_SRC)는 사실 데이터 */
+  trust: (bg) => {
+    const c = CFG.home.copy.trust;
+    return `  <!-- ===== 신뢰 숫자 ===== -->
+  <section class="section section--sm${BG_CLASS[bg]} trust" aria-label="${c.label}">
     <div class="wrap">
       <div class="stats" data-reveal>
 ${TRUST.map((t) => t.t
@@ -994,18 +995,23 @@ ${TRUST.map((t) => t.t
     : `        <div class="stat"><b><span data-count="${t.n}">${t.n}</span><i>${esc(t.unit)}</i></b><span>${esc(t.l)}</span></div>`).join('\n')}
       </div>
       <div class="trust__info" data-reveal>
-        <div class="trust__sites"><b>주요 현장</b><ul class="trust__chips" aria-label="주요 현장">${TRUST_SITES.map((x) => `<li class="chip">${esc(x)}</li>`).join('')}</ul></div>
+        <div class="trust__sites"><b>${c.sitesTitle}</b><ul class="trust__chips" aria-label="${c.sitesTitle}">${TRUST_SITES.map((x) => `<li class="chip">${esc(x)}</li>`).join('')}</ul></div>
         <p class="trust__src">출처: ${esc(TRUST_SRC)}</p>
       </div>
     </div>
   </section>
+`;
+  },
 
-  <!-- ===== 사업분야 ===== -->
-  <section class="section" id="what">
+  /* 사업분야 — 업무 카드는 SERVICES 데이터 */
+  what: (bg) => {
+    const c = CFG.home.copy.what;
+    return `  <!-- ===== 사업분야 ===== -->
+  <section class="section${BG_CLASS[bg]}" id="what">
     <div class="wrap">
       <div class="head">
         <div data-reveal>
-          <h2>사업분야</h2>
+          <h2>${c.title}</h2>
         </div>
       </div>
       <div class="grid grid--5">
@@ -1015,70 +1021,91 @@ ${SVC_CTA}
 
     </div>
   </section>
+`;
+  },
 
-  <!-- ===== 수행 이력 ===== -->
-  <section class="section section--soft">
+  /* 주요 수행 이력 — 보여 줄 이력(FEATURED)과 전체 건수는 사실 데이터 */
+  projects: (bg) => {
+    const c = CFG.home.copy.projects;
+    const feat = FEATURED.map(prj);
+    return `  <!-- ===== 수행 이력 ===== -->
+  <section class="section${BG_CLASS[bg]}">
     <div class="wrap">
       <div class="head">
         <div data-reveal>
-          <h2>주요 수행 이력</h2>
-          <p class="lead">4개 발주처와 2020~2023년 4년 연속 단가계약을 맺었습니다.</p>
+          <h2>${c.title}</h2>
+          <p class="lead">${c.lead}</p>
         </div>
       </div>
 ${REC_HEAD}
       <ul class="rec" data-reveal>
 ${feat.map((p) => recRow(p)).join('\n')}
       </ul>
-      <div class="mt-28" data-reveal><a class="btn btn--line btn--sm" href="projects.html">수행 이력 ${PROJECTS.length}건 모두 보기 ${arrow(18)}</a></div>
+      <div class="mt-28" data-reveal><a class="btn btn--line btn--sm" href="projects.html">${fill(c.button, { n: PROJECTS.length })} ${arrow(18)}</a></div>
     </div>
   </section>
+`;
+  },
 
-  <!-- ===== 현장 진행 방식 요약 (다크) — 18차: 단계 이름은 현장 진행 방식 페이지와 같은 데이터(PROCESS.steps) ===== -->
-  <section class="section section--navy">
+  /* 현장 진행 방식 요약 — 단계 이름은 현장 진행 방식 페이지와 같은 데이터(PROCESS.steps) */
+  process: (bg) => {
+    const c = CFG.home.copy.process;
+    return `  <!-- ===== 현장 진행 방식 요약 (다크) — 18차: 단계 이름은 현장 진행 방식 페이지와 같은 데이터(PROCESS.steps) ===== -->
+  <section class="section${BG_CLASS[bg]}">
     <div class="wrap">
       <div class="head">
         <div data-reveal>
-          <h2>현장 진행 방식</h2>
+          <h2>${c.title}</h2>
         </div>
       </div>
 
       <div class="split split--top" data-reveal>
         <figure class="split__media">
           <div class="split__fig">${photo(P('R27'), '(max-width:960px) 92vw, 620px')}</div>
-          <figcaption class="split__cap split__cap--strong">로봇은 설비 안에서, 흡입차는 밖에서 호스로 연결해 작업합니다.</figcaption>
+          <figcaption class="split__cap split__cap--strong">${c.caption}</figcaption>
         </figure>
         <div>
           <ol class="numlist numlist--tight">
 ${PROCESS.steps.map((st, i) => `            <li><em>${String(i + 1).padStart(2, '0')}</em><b>${esc(st.t)}</b></li>`).join('\n')}
           </ol>
-          <div class="mt-24"><a class="btn btn--ghost btn--sm" href="process.html">현장 진행 방식 자세히 보기 ${arrow(18)}</a></div>
+          <div class="mt-24"><a class="btn btn--ghost btn--sm" href="process.html">${c.button} ${arrow(18)}</a></div>
         </div>
       </div>
     </div>
   </section>
+`;
+  },
 
-  <!-- ===== 현장의 장면 ===== -->
-  <section class="section section--soft">
+  /* 현장의 장면 — 사진 카드 세 장 */
+  scenes: (bg) => {
+    const c = CFG.home.copy.scenes;
+    return `  <!-- ===== 현장의 장면 ===== -->
+  <section class="section${BG_CLASS[bg]}">
     <div class="wrap">
       <div class="head">
         <div data-reveal>
-          <h2>현장의 장면</h2>
+          <h2>${c.title}</h2>
         </div>
       </div>
       <div class="grid grid--3 grid--3row">
-${pcards(['P01', 'P03', 'W10'], ['탱크 내부 고압 세척', '반응기 안 촉매 흡입 로봇', '맨홀 호스 작업'], null, ['설비 클리닝', '촉매·충진물', '준설·슬러지'])}
+${pcards(c.cards.map((k) => k.photo), c.cards.map((k) => k.title), null, c.cards.map((k) => k.field))}
       </div>
     </div>
   </section>
+`;
+  },
 
-  <!-- ===== 회사 소개 ===== -->
-  <section class="section">
+  /* 회사 소개 — 소개 문장(C.intro)과 연도 숫자는 사실 데이터라 여기에 둔다 */
+  company: (bg) => {
+    const c = CFG.home.copy.company;
+    return `  <!-- ===== 회사 소개 ===== -->
+  <section class="section${BG_CLASS[bg]}">
     <div class="wrap">
       <div class="split">
         <div data-reveal>
-          <h2>회사 소개</h2>
+          <h2>${c.title}</h2>
           <p class="lead mt-20">${esc(C.intro)}</p>
-          <div class="mt-28"><a class="btn btn--line" href="company.html">회사 소개 자세히 보기 ${arrow(18)}</a></div>
+          <div class="mt-28"><a class="btn btn--line" href="company.html">${c.button} ${arrow(18)}</a></div>
         </div>
         <figure class="split__media" data-reveal data-delay="90">
           <div class="split__fig">${photo(P('M02'), '(max-width:960px) 92vw, 620px')}</div>
@@ -1094,8 +1121,43 @@ ${pcards(['P01', 'P03', 'W10'], ['탱크 내부 고압 세척', '반응기 안 �
       </div>
     </div>
   </section>
+`;
+  }
+};
 
-` + cta() + MAIN_END + footer() + foot();
+/* ===================== 큰 틀 (40차) =====================
+   설정 파일의 frame 칸(hero / sections / header)이 여기서 이름으로 고른다. 지금은 'base'(40차 전의 모양) 하나뿐이다.
+   새 큰 틀은 그림 시안으로 고른 뒤 지시서로 여기에 이름을 더한다. */
+const FRAMES = {
+  hero: { base: heroBase },
+  sections: { base: HOME_SECTIONS },
+  header: { base: headerBase }
+};
+function frame(kind) {
+  const name = CFG.frame[kind];
+  if (!Object.prototype.hasOwnProperty.call(FRAMES[kind], name)) {
+    configError(`큰 틀 '${name}'이 없습니다 (설정 frame.${kind}). 쓸 수 있는 것: ${Object.keys(FRAMES[kind]).join(', ')}`);
+  }
+  return FRAMES[kind][name];
+}
+
+pages['index.html'] = () => {
+  const S = frame('sections');
+  return head({
+    file: 'index.html', page: 'home',
+    title: C.seoTitle,
+    desc: C.seoDesc,
+    jsonld: {
+      '@context': 'https://schema.org', '@type': 'Organization',
+      name: C.name, alternateName: C.brandEn, foundingDate: String(C.founded),
+      url: SITE_URL, email: C.email, telephone: '+82-' + C.tel.replace(/^0/, ''), faxNumber: '+82-' + C.fax.replace(/^0/, ''),
+      address: { '@type': 'PostalAddress', addressCountry: 'KR', addressRegion: '전라남도', addressLocality: '여수시', streetAddress: '봉계2길 27' },
+      description: C.seoDesc
+    }
+  }) + header('home', null, 'index.html') + `
+<main id="main">
+
+` + frame('hero')() + '\n' + CFG.home.sections.map((s) => S[s.id](s.bg)).join('\n') + '\n' + cta() + MAIN_END + footer() + foot();
 };
 
 /* ---------- 2. 사업분야 ---------- */
@@ -1776,12 +1838,130 @@ pages['404.html'] = () => head({
 
 ` + footer() + foot();
 
+/* ===================== 설정 확인과 디자인 토큰 (40차) ===================== */
+/* 설정 파일에 잘못된 값이 있으면 한국어로 알리고 아무 파일도 쓰지 않은 채 멈춘다 */
+function configError(msg) {
+  console.error('설정 오류 (tools/site.config.js): ' + msg);
+  process.exit(1);
+}
+function checkConfig() {
+  ['hero', 'sections', 'header'].forEach((k) => frame(k));
+  const S = frame('sections');
+  CFG.home.sections.forEach((s) => {
+    if (!S[s.id]) configError(`메인 구역 '${s.id}'이 없습니다 (설정 home.sections). 쓸 수 있는 것: ${Object.keys(S).join(', ')}`);
+    if (!(s.bg in BG_CLASS)) configError(`구역 바탕 '${s.bg}'이 없습니다 (설정 home.sections, 구역 '${s.id}'). 쓸 수 있는 것: ${Object.keys(BG_CLASS).join(', ')}`);
+  });
+  CFG.hero.services.forEach((x) => { if (!svc(x.svc)) configError(`첫 화면 업무 번호 '${x.svc}'이 없습니다 (설정 hero.services). 쓸 수 있는 것: ${SERVICES.map((s) => s.id).join(', ')}`); });
+  CFG.home.copy.scenes.cards.concat([{ photo: CFG.hero.photo.id }]).forEach((k) => { if (!PHOTOS[k.photo]) configError(`사진 번호 '${k.photo}'이 사진 목록에 없습니다`); });
+}
+
+/* css/tokens.css = tools/tokens.head.css(머리 주석과 글꼴 정의 8개, 40차 전의 글자 그대로) + 아래 :root
+   :root 의 줄 순서·주석·줄 맞춤은 40차 전의 tokens.css 그대로 두고, 값만 CFG.tokens 에서 넣는다.
+   새 변수를 더하려면 설정 파일과 이 틀에 함께 넣는다(한쪽에만 있으면 오류로 멈춘다). */
+const TOKENS_HEAD_FILE = path.join(__dirname, 'tokens.head.css');
+function tokensCss() {
+  const all = {};
+  Object.keys(CFG.tokens).forEach((g) => Object.keys(CFG.tokens[g]).forEach((k) => {
+    if (k in all) configError(`디자인 토큰 '${k}'이 두 번 있습니다 (tokens.${g})`);
+    all[k] = CFG.tokens[g][k];
+  }));
+  const used = new Set();
+  const v = (k) => {
+    if (!(k in all)) configError(`디자인 토큰 '${k}'이 없습니다 (설정 tokens). 지우지 말고 값만 바꿉니다`);
+    used.add(k);
+    return all[k];
+  };
+  /* 글꼴 목록처럼 긴 값은 한 줄 80자 안에서 쉼표 뒤로 나눈다(40차 전의 줄 모양) */
+  const cssList = (name, value) => {
+    const pre = `  ${name}: `;
+    const parts = String(value).split(', ');
+    const lines = [];
+    let cur = pre + parts[0];
+    parts.slice(1).forEach((p) => {
+      if ((cur + ', ' + p + ',').length <= 80) cur += ', ' + p;
+      else { lines.push(cur + ','); cur = ' '.repeat(pre.length) + p; }
+    });
+    lines.push(cur + ';');
+    return lines.join('\n');
+  };
+  const root = `
+:root {
+  /* ---------- 색 ---------- */
+  --white: ${v('--white')};
+  --ink: ${v('--ink')};          /* 제목 */
+  --text: ${v('--text')};         /* 본문 */
+  --muted: ${v('--muted')};        /* 보조 설명 */
+  --line: ${v('--line')};         /* 구분선 */
+  --line-soft: ${v('--line-soft')};
+  --soft: ${v('--soft')};         /* 연회색 섹션 배경 */
+  --soft-2: ${v('--soft-2')};
+
+  --brand: ${v('--brand')};        /* 포인트 — 링크·활성 표시·아이콘 */
+  --brand-hover: ${v('--brand-hover')};
+  --brand-tint: ${v('--brand-tint')};
+
+  --navy: ${v('--navy')};         /* 다크 섹션 배경 */
+  --navy-deep: ${v('--navy-deep')};
+  --on-navy: ${v('--on-navy')};
+  --on-navy-sub: ${v('--on-navy-sub')};  /* 네이비 위 보조 글자 */
+  --on-navy-line: ${v('--on-navy-line')};
+
+  --focus: ${v('--focus')};
+
+  /* ---------- 폭·여백 ---------- */
+  --wrap: ${v('--wrap')};                              /* 콘텐츠 최대 폭 */
+  --gutter: ${v('--gutter')};            /* 좌우 여백 */
+  --header-h: ${v('--header-h')};
+  --sec-y: ${v('--sec-y')};          /* 섹션 상하 여백 */
+  --sec-y-sm: ${v('--sec-y-sm')};
+  --measure: ${v('--measure')};                             /* 본문 한 줄 최대 길이 */
+
+  /* ---------- 글자 ---------- */
+${cssList('--font', v('--font'))}
+
+  --fs-display: ${v('--fs-display')};  /* 메인 히어로 */
+  --fs-h1: ${v('--fs-h1')};       /* 페이지 제목 */
+  --fs-h2: ${v('--fs-h2')};       /* 섹션 제목 */
+  --fs-h3: ${v('--fs-h3')};
+  --fs-h4: ${v('--fs-h4')};
+  --fs-lead: ${v('--fs-lead')};    /* 리드 문장 */
+  --fs-body: ${v('--fs-body')};   /* 본문 */
+  --fs-sm: ${v('--fs-sm')};
+  --fs-xs: ${v('--fs-xs')};
+  --fs-eyebrow: ${v('--fs-eyebrow')};
+  --fs-stat: ${v('--fs-stat')};     /* 큰 숫자 */
+
+  --ls-tight: ${v('--ls-tight')};
+  --ls-normal: ${v('--ls-normal')};
+  --ls-wide: ${v('--ls-wide')};
+
+  /* ---------- 기타 ---------- */
+  --radius: ${v('--radius')};
+  --radius-lg: ${v('--radius-lg')};
+  --ease: ${v('--ease')};
+  --dur: ${v('--dur')};
+  --shadow: ${v('--shadow')};
+  --shadow-lift: ${v('--shadow-lift')};
+}
+`;
+  const extra = Object.keys(all).filter((k) => !used.has(k));
+  if (extra.length) configError(`디자인 토큰 ${extra.join(', ')}은 css/tokens.css 에 자리가 없습니다. 새 변수는 지시서로 tools/build.js 의 tokensCss() 에 함께 더합니다`);
+  return fs.readFileSync(TOKENS_HEAD_FILE, 'utf8') + root.replace(/^\n/, '');
+}
+
 /* ===================== 기록 ===================== */
 if (!fs.existsSync(OUT)) fs.mkdirSync(OUT, { recursive: true });
 
+/* 설정 확인(틀린 곳이 있으면 여기서 멈춘다) → 디자인 토큰 → 페이지 */
+checkConfig();
+const tokens = tokensCss();
+const pageHtml = {};
+Object.keys(pages).forEach((file) => { pageHtml[file] = pages[file](); });
+fs.writeFileSync(path.join(OUT, 'css', 'tokens.css'), tokens, 'utf8');
+
 let n = 0;
 Object.keys(pages).forEach((file) => {
-  fs.writeFileSync(path.join(OUT, file), pages[file](), 'utf8');
+  fs.writeFileSync(path.join(OUT, file), pageHtml[file], 'utf8');
   n++;
 });
 
@@ -1801,4 +1981,4 @@ if (PREVIEW) {
     `User-agent: *\nAllow: /\n\nSitemap: ${SITE_URL}sitemap.xml\n`, 'utf8');
 }
 
-console.log(`생성 완료: HTML ${n}개 + ${PREVIEW ? 'robots.txt (시안: 검색 제외, 사이트맵 없음)' : 'sitemap.xml + robots.txt'} → ${OUT}`);
+console.log(`생성 완료: HTML ${n}개 + css/tokens.css + ${PREVIEW ? 'robots.txt (시안: 검색 제외, 사이트맵 없음)' : 'sitemap.xml + robots.txt'} → ${OUT}`);

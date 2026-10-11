@@ -14,7 +14,7 @@
 ## 구조
 - `tools/build.js` 가 **원본**이다. 회사 정보(C), 사업분야(SERVICES), 기술(TECH/RECOVERY/PROCESS), 수행이력(PROJECTS), 사진 목록(PHOTOS), 신뢰 정보(CREDS), 장비(EQUIP), FAQ 를 여기서 고친 뒤 `node tools/build.js` 를 실행하면 13개 HTML + sitemap + robots 가 다시 생성된다.
 - HTML 파일을 직접 고치면 다음 생성 때 덮어써진다. 반드시 build.js 를 고친다.
-- 디자인 토큰(색·글자·여백)은 `css/tokens.css`, 구성 요소 스타일은 `css/site.css`.
+- 디자인 토큰은 `tools/site.config.js`의 `tokens`에서 고친다(`css/tokens.css`는 생성 결과), 구성 요소 스타일은 `css/site.css`.
 - 사진: `assets/photos/<ID>-<가로폭>.jpg`. ID ↔ 원본 ZIP 파일 ↔ 크롭 좌표는 `tools/photo-plan.json`.
 - 자세한 사용법은 `README.md`, 디자인 규칙은 `가이드_대기업사이트_분석과_적용원칙.md`.
 
@@ -48,6 +48,13 @@
 - 급하게 공개본만 고쳐야 할 때(틀린 숫자 등)도 이다결 님이 말할 때만 `main`에서 고친다. 끝나면 `git switch dev` → `git merge main`으로 같은 수정을 `dev`에도 가져온다.
 - `review-2026-10` 태그는 2026-10-03 클라이언트에게 보낸 판이다. 지우거나 옮기지 않는다. 비교: `git diff review-2026-10 dev --stat`.
 - `dev`에서 사이트를 크게 바꾼 뒤 합치면 검토 자료(`guide/`)와 PDF 속 화면이 실제 사이트와 달라진다. 합치기 전에 이다결 님에게 알린다.
+
+## 설정 파일 (40차)
+- 바꾸는 손잡이는 `tools/site.config.js` 한 곳이다: 색·글꼴·모양·여백(tokens), 첫 화면(hero), 메인 구역 순서와 바탕(home.sections), 메인 문구(home.copy), 메뉴와 공통 문구(nav, common), 큰 틀(frame).
+- `css/tokens.css`는 직접 고치지 않는다. 설정을 고치고 `node tools/build.js`로 다시 만든다.
+- 사실(회사 정보, 업무, 실적, 면허·인증, 장비, 자주 묻는 질문, 숫자, 사진 목록)은 `tools/build.js`에 있다. 설정 파일로 옮기지 않는다. 문구를 바꿀 때도 사실은 바꾸지 않는다.
+- 시안은 한국어만 만든다. 영어판은 기본판에만 있다. 기본판의 메인 문구를 바꾸면 `node tools/build-en.js --list`로 번역을 맞춘다.
+- 큰 틀(`frame`)은 지금 `base`만 있다. 새 큰 틀은 그림 시안으로 고른 뒤 지시서로 `FRAMES`에 추가한다.
 
 ## 자주 하는 작업
 - 미리보기: `powershell -ExecutionPolicy Bypass -File serve.ps1` → http://localhost:4173/ (또는 `python -m http.server 4173`)
