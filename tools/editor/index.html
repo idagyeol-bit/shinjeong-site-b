@@ -5,8 +5,50 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
 <title>시안 편집기 — 신정개발 홈페이지</title>
+<link rel="icon" href="../../assets/logo/shinjeong-symbol.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../css/tokens.css">
+<link rel="stylesheet" href="editor.css">
 </head>
 <body>
-<p>시안 편집기 (42차) — 화면을 준비하고 있습니다.</p>
+<!-- 신정개발 홈페이지 시안 편집기 (42차). 켜기: 홈페이지 폴더의 시안편집기.bat
+     미리보기와 저장은 모두 같은 생성기(tools/build.js)를 이 브라우저 안에서 돌려 만든다. 편집기 안에 페이지 틀은 없다. -->
+<header class="top">
+  <div class="brand"><img src="../../assets/logo/shinjeong-symbol.svg" alt="">시안 편집기</div>
+  <div class="tabs" id="tabs" role="tablist" aria-label="시안 고르기">
+    <!-- 탭은 editor.js 가 채운다: 기본판 · 시안들 · + 새 시안 -->
+  </div>
+  <div class="acts">
+    <div class="seg" role="group" aria-label="미리보기 크기">
+      <button type="button" id="btn-pc" aria-pressed="true">PC</button>
+      <button type="button" id="btn-m" aria-pressed="false">휴대폰</button>
+    </div>
+    <button type="button" class="btn" id="btn-undo" title="되돌리기 (Ctrl+Z)" disabled>↶ 되돌리기</button>
+    <button type="button" class="btn" id="btn-redo" title="다시 하기 (Ctrl+Y)" disabled>↷</button>
+    <button type="button" class="btn" id="btn-import" disabled>다른 시안에서 가져오기</button>
+    <button type="button" class="btn" id="btn-backups" disabled>저장한 판으로 돌아가기</button>
+    <button type="button" class="btn btn--primary" id="btn-save" disabled>저장</button>
+  </div>
+</header>
+
+<div class="body">
+  <aside class="panel" id="panel" aria-label="조절 칸">
+    <p class="notice">불러오는 중…</p>
+  </aside>
+  <section class="view" aria-label="미리보기">
+    <div class="viewbar">
+      <label for="page">페이지</label>
+      <select id="page"></select>
+      <span class="muted" id="view-note"></span>
+    </div>
+    <div class="stage stage--pc" id="stage">
+      <p class="preview-err" id="preview-err" hidden></p>
+      <iframe id="preview" title="시안 미리보기"></iframe>
+    </div>
+  </section>
+</div>
+
+<footer class="status" id="status"><span class="status__msg" id="status-msg">불러오는 중…</span><span class="status__time" id="status-time"></span></footer>
+
+<script src="editor.js"></script>
 </body>
 </html>

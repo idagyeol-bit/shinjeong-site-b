@@ -2020,6 +2020,18 @@ function relocate(html) {
     .replace(/(\s)srcset="([^"]*)"/g, (m, sp, v) => `${sp}srcset="${v.split(',').map((p) => { const t = p.trim().split(/\s+/); t[0] = up(t[0]); return t.join(' '); }).join(', ')}"`);
 }
 
+/* 42차: 시안 편집기(tools/editor)가 이 생성기를 브라우저에서 그대로 부를 때 읽는 정보(사진 목록·페이지·큰 틀 이름 등).
+   Node 로 실행할 때는 쓰이지 않고 결과 파일에도 영향이 없다. 편집기 안에 페이지 틀을 따로 두지 않기 위한 것 */
+module.exports = {
+  photos: PHOTOS,
+  services: SERVICES.map((s) => ({ id: s.id, title: s.title, file: s.file })),
+  pages: Object.keys(pages),
+  frames: { hero: Object.keys(FRAMES.hero), sections: Object.keys(FRAMES.sections), header: Object.keys(FRAMES.header) },
+  sectionIds: Object.keys(HOME_SECTIONS),
+  backgrounds: Object.keys(BG_CLASS),
+  reserved: VARIANT_RESERVED
+};
+
 /* ===================== 기록 ===================== */
 if (!fs.existsSync(OUT)) fs.mkdirSync(OUT, { recursive: true });
 
