@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>비교 보기 — 신정개발 홈페이지</title>
+<link rel="icon" href="/work/assets/logo/shinjeong-symbol.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/work/css/tokens.css">
+<!-- 신정개발 홈페이지 나란히 비교 화면 (44차). 켜기: 작업 폴더의 비교보기.bat (서버 tools/compare/compare.ps1, 포트 4180)
+     왼쪽 /final/ = 최종본 사본(../_최종본_보기, origin/main), 오른쪽 /work/ = 작업 폴더(지금 갈래). 읽기만 한다. -->
+<style>
+  :root { --c-bg: #e9ecf0; --c-ink: #14181c; --c-text: #3d454d; --c-muted: #6b737b; --c-line: #d9dee4; --c-blue: #1d5fd1; --c-warn: #fff1b8; --c-warn-ink: #7a5300; --top: 52px; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body { background: var(--c-bg); color: var(--c-text); font: 14px/1.45 Pretendard, -apple-system, BlinkMacSystemFont, "Malgun Gothic", sans-serif; overflow: hidden; }
+  button, select { font: inherit; color: inherit; }
+  .top { position: fixed; inset: 0 0 auto; height: var(--top); z-index: 10; display: flex; align-items: center; gap: 10px; padding: 0 14px; background: #fff; border-bottom: 1px solid var(--c-line); white-space: nowrap; }
+  .top h1 { margin: 0 6px 0 0; font-size: 15px; font-weight: 800; color: var(--c-ink); display: flex; align-items: center; gap: 7px; }
+  .top h1 img { width: 18px; height: 22px; }
+  .top select { height: 32px; border: 1px solid var(--c-line); border-radius: 8px; padding: 0 8px; background: #fff; min-width: 190px; }
+  .seg { display: inline-flex; border: 1px solid var(--c-line); border-radius: 8px; overflow: hidden; }
+  .seg button { height: 32px; padding: 0 11px; border: 0; background: #fff; font-weight: 600; cursor: pointer; }
+  .seg button[aria-pressed="true"] { background: var(--c-ink); color: #fff; }
+  .chk { display: inline-flex; align-items: center; gap: 6px; font-weight: 600; cursor: pointer; }
+  .btn { height: 32px; padding: 0 12px; border: 1px solid var(--c-line); border-radius: 8px; background: #fff; font-weight: 600; cursor: pointer; }
+  .btn:hover, .seg button:hover:not([aria-pressed="true"]) { background: #f3f5f7; }
+  .note { margin-left: auto; font-size: 12px; color: var(--c-muted); overflow: hidden; text-overflow: ellipsis; }
+  .stages { position: fixed; inset: var(--top) 0 0; display: flex; gap: 10px; padding: 10px; }
+  .pane { position: relative; flex: 1; min-width: 0; display: flex; flex-direction: column; background: #fff; border-radius: 10px; box-shadow: 0 1px 3px rgba(0,0,0,.08); overflow: hidden; }
+  .label { height: 34px; flex: none; display: flex; align-items: center; gap: 8px; padding: 0 12px; border-bottom: 1px solid var(--c-line); font-weight: 700; color: var(--c-ink); font-size: 13.5px; white-space: nowrap; overflow: hidden; }
+  .label small { font-weight: 500; color: var(--c-muted); font-size: 12px; overflow: hidden; text-overflow: ellipsis; }
+  .label .dot { width: 9px; height: 9px; border-radius: 50%; flex: none; }
+  .pane--final .dot { background: #12558c; }
+  .pane--work .dot { background: #c2410c; }
+  .label.is-warn { background: var(--c-warn); color: var(--c-warn-ink); }
+  .label.is-warn small { color: var(--c-warn-ink); font-weight: 700; }
+  .stage { position: relative; flex: 1; min-height: 0; overflow: hidden; background: #f4f5f7; }
+  .stage iframe { position: absolute; top: 0; border: 0; background: #fff; transform-origin: 0 0; }
+  .is-m .stage iframe { box-shadow: 0 0 0 1px var(--c-line); }
+  /* 겹쳐 보기: 두 칸을 같은 자리에 겹치고, 오른쪽(시안)은 손잡이 오른쪽만 보이게 자른다 */
+  .mode-over .stages { display: block; }
+  .mode-over .pane { position: absolute; inset: 10px; }
+  .mode-over .pane--work { clip-path: inset(0 0 0 var(--split, 50%)); }
+  .mode-over .pane--work .label { justify-content: flex-end; }
+  .handle { display: none; }
+  .mode-over .handle {
+    display: block; position: absolute; top: 10px; bottom: 10px; left: calc(10px + var(--split-px, 50%)); width: 0; z-index: 5;
+  }
+  .handle::before { content: ''; position: absolute; top: 0; bottom: 0; left: -1px; width: 3px; background: #1d5fd1; }
+  .handle span {
+    position: absolute; top: 50%; left: -19px; width: 38px; height: 38px; margin-top: -19px; border-radius: 50%; background: #1d5fd1; color: #fff;
+    display: flex; align-items: center; justify-content: center; font-size: 14px; cursor: ew-resize; box-shadow: 0 2px 8px rgba(0,0,0,.25); user-select: none; touch-action: none;
+  }
+  .handle i { position: absolute; top: 44px; left: 0; transform: translateX(-50%); font-style: normal; font-size: 11.5px; font-weight: 700; white-space: nowrap; background: rgba(20,24,28,.82); color: #fff; padding: 3px 8px; border-radius: 10px; }
+  .dragging iframe { pointer-events: none; }
+</style>
+</head>
+<body class="mode-side">
+<header class="top">
+  <h1><img src="/work/assets/logo/shinjeong-symbol.svg" alt="">비교 보기</h1>
+  <select id="page" aria-label="페이지 고르기"></select>
+  <div class="seg" role="group" aria-label="화면 크기">
+    <button type="button" data-size="1440" aria-pressed="true">PC 1440</button>
+    <button type="button" data-size="375" aria-pressed="false">휴대폰 375</button>
+  </div>
+  <label class="chk"><input type="checkbox" id="sync" checked> 스크롤 함께</label>
+  <div class="seg" role="group" aria-label="보기 방식">
+    <button type="button" data-mode="side" aria-pressed="true">나란히</button>
+    <button type="button" data-mode="over" aria-pressed="false">겹쳐 보기</button>
+  </div>
+  <button type="button" class="btn" id="reload">새로 고침</button>
+  <span class="note" id="note"></span>
+</header>
+
+<main class="stages" id="stages">
+  <section class="pane pane--final">
+    <div class="label"><span class="dot"></span>최종본 <small>(클라이언트가 보는 판)</small> <small id="final-rev"></small></div>
+    <div class="stage"><iframe id="fL" title="최종본"></iframe></div>
+  </section>
+  <section class="pane pane--work">
+    <div class="label" id="work-label"><span class="dot"></span>시안 A <small id="work-branch">· 지금 갈래: …</small></div>
+    <div class="stage"><iframe id="fR" title="시안 A (작업 폴더)"></iframe></div>
+  </section>
+  <div class="handle" id="handle"><span title="좌우로 끌어 보세요">⇆</span><i>← 최종본 · 시안 A →</i></div>
+</main>
+
+<script>
+(function () {
+  'use strict';
+  var $ = function (s) { return document.querySelector(s); };
+  var PAGES = [
+    ['index.html', '메인'], ['services.html', '사업분야'],
+    ['service-equipment-cleaning.html', '업무 상세 › 설비 클리닝'], ['service-catalyst-media.html', '업무 상세 › 촉매·충진물 작업'],
+    ['service-chemical-cleaning.html', '업무 상세 › 화학세정'], ['service-dredging-sludge.html', '업무 상세 › 준설·슬러지 회수'],
+    ['service-inspection-repair.html', '업무 상세 › 관로·지하 조사 및 보수'],
+    ['projects.html', '수행 이력'], ['process.html', '현장 진행 방식'], ['technology.html', '장비·로봇'],
+    ['company.html', '회사 소개'], ['contact.html', '문의'], ['en/index.html', '영어 메인']
+  ];
+  var fL = $('#fL'), fR = $('#fR');
+  var S = { page: 'index.html', size: 1440, mode: 'side', sync: true, split: 50 };
+  try { var saved = JSON.parse(localStorage.getItem('shinjeong-compare') || '{}'); Object.keys(saved).forEach(function (k) { if (k in S) S[k] = saved[k]; }); } catch (e) { /* 저장을 못 읽어도 기본값으로 연다 */ }
+  var save = function () { try { localStorage.setItem('shinjeong-compare', JSON.stringify(S)); } catch (e) { /* 저장 못 해도 화면은 된다 */ } };
+
+  /* ---------- 페이지 고르기 ---------- */
+  var sel = $('#page');
+  PAGES.forEach(function (p) { var o = document.createElement('option'); o.value = p[0]; o.textContent = p[1]; sel.appendChild(o); });
+  function showPage(page) {
+    if (![].some.call(sel.options, function (o) { return o.value === page; })) {
+      var o = document.createElement('option'); o.value = page; o.textContent = page; sel.appendChild(o);
+    }
+    sel.value = page;
+  }
+  sel.addEventListener('change', function () { go(sel.value); });
+  function go(page) {
+    S.page = page; save(); showPage(page);
+    fL.src = '/final/' + page;
+    fR.src = '/work/' + page;
+  }
+
+  /* ---------- 크기·보기 방식: 고른 크기로 그리고 칸에 맞게 줄여 보인다 ---------- */
+  function fit() {
+    [fL, fR].forEach(function (f) {
+      var st = f.parentNode, w = st.clientWidth, h = st.clientHeight;
+      var k = Math.min(1, w / S.size);
+      f.style.width = S.size + 'px';
+      f.style.height = Math.ceil(h / k) + 'px';
+      f.style.transform = 'scale(' + k + ')';
+      f.style.left = Math.max(0, (w - S.size * k) / 2) + 'px';
+    });
+    var stages = $('#stages');
+    var inner = stages.clientWidth - 20;
+    stages.style.setProperty('--split', S.split + '%');
+    stages.style.setProperty('--split-px', (inner * S.split / 100) + 'px');
+    $('#note').textContent = (S.size === 1440 ? 'PC 1440px' : '휴대폰 375px') + ' · ' + Math.round(Math.min(1, fL.parentNode.clientWidth / S.size) * 100) + '%로 줄여 보임';
+  }
+  function setSize(n) {
+    S.size = n; save();
+    [].forEach.call(document.querySelectorAll('[data-size]'), function (b) { b.setAttribute('aria-pressed', String(+b.dataset.size === n)); });
+    document.body.classList.toggle('is-m', n === 375);
+    fit();
+  }
+  function setMode(m) {
+    S.mode = m; save();
+    [].forEach.call(document.querySelectorAll('[data-mode]'), function (b) { b.setAttribute('aria-pressed', String(b.dataset.mode === m)); });
+    document.body.className = document.body.className.replace(/mode-\w+/, 'mode-' + m);
+    fit();
+  }
+  [].forEach.call(document.querySelectorAll('[data-size]'), function (b) { b.addEventListener('click', function () { setSize(+b.dataset.size); }); });
+  [].forEach.call(document.querySelectorAll('[data-mode]'), function (b) { b.addEventListener('click', function () { setMode(b.dataset.mode); }); });
+  window.addEventListener('resize', fit);
+
+  /* 겹쳐 보기 손잡이 */
+  var handle = $('#handle span');
+  handle.addEventListener('pointerdown', function (e) {
+    e.preventDefault(); handle.setPointerCapture(e.pointerId); document.body.classList.add('dragging');
+    var move = function (ev) {
+      var r = $('#stages').getBoundingClientRect();
+      S.split = Math.max(2, Math.min(98, (ev.clientX - r.left - 10) / (r.width - 20) * 100));
+      fit();
+    };
+    var up = function () { handle.removeEventListener('pointermove', move); handle.removeEventListener('pointerup', up); document.body.classList.remove('dragging'); save(); };
+    handle.addEventListener('pointermove', move); handle.addEventListener('pointerup', up);
+  });
+
+  /* ---------- 함께 움직이기: 스크롤은 같은 비율로, 링크로 옮기면 다른 쪽도 같은 페이지로 ---------- */
+  $('#sync').checked = S.sync;
+  $('#sync').addEventListener('change', function () { S.sync = this.checked; save(); });
+  var quiet = { L: 0, R: 0 };   // 다른 쪽을 움직인 직후 그쪽의 스크롤 알림은 무시한다(서로 되받지 않게)
+  function ratio(w) { var d = w.document.documentElement; var max = d.scrollHeight - w.innerHeight; return max > 0 ? w.scrollY / max : 0; }
+  /* 사이트는 부드러운 스크롤을 쓰므로, 따라 움직이는 쪽은 바로(instant) 옮긴다 — 부드럽게 옮기면 양쪽이 서로 뒤쫓는다 */
+  function toRatio(w, r) { var d = w.document.documentElement; w.scrollTo({ top: r * Math.max(0, d.scrollHeight - w.innerHeight), behavior: 'instant' }); }
+  function pageOf(f) {
+    try { return f.contentWindow.location.pathname.replace(/^\/(final|work)\//, '') || 'index.html'; } catch (e) { return ''; }
+  }
+  function hook(f, me, other, otherKey) {
+    f.addEventListener('load', function () {
+      var w; try { w = f.contentWindow; w.document; } catch (e) { return; }
+      var page = pageOf(f);
+      if (page && page !== S.page) { S.page = page; save(); showPage(page); }
+      var op = pageOf(other);
+      if (page && op && op !== page) { other.src = '/' + (otherKey === 'L' ? 'final' : 'work') + '/' + page; }
+      if (f._restore != null) { var r = f._restore; f._restore = null; setTimeout(function () { toRatio(w, r); }, 60); }
+      w.addEventListener('scroll', function () {
+        if (Date.now() < quiet[me] || !S.sync) return;
+        var ow; try { ow = other.contentWindow; ow.document; } catch (e) { return; }
+        if (pageOf(other) !== pageOf(f)) return;
+        quiet[otherKey] = Date.now() + 120;
+        toRatio(ow, ratio(w));
+      }, { passive: true });
+    });
+  }
+  hook(fL, 'L', fR, 'R');
+  hook(fR, 'R', fL, 'L');
+
+  /* ---------- 새로 고침 ---------- */
+  function reloadRight(why) {
+    try { fR._restore = ratio(fR.contentWindow); fR.contentWindow.location.reload(); } catch (e) { fR.src = '/work/' + S.page; }
+    var t = new Date();
+    $('#note').textContent = why + ' ' + [t.getHours(), t.getMinutes(), t.getSeconds()].map(function (n) { return (n < 10 ? '0' : '') + n; }).join(':');
+  }
+  $('#reload').addEventListener('click', function () {
+    try { fL._restore = ratio(fL.contentWindow); fL.contentWindow.location.reload(); } catch (e) { fL.src = '/final/' + S.page; }
+    reloadRight('둘 다 새로 고침');
+  });
+
+  /* ---------- 지금 갈래와 자동 새로 고침 (3초마다) ---------- */
+  var lastStamp = null;
+  function poll() {
+    fetch('/api/branch', { cache: 'no-store' }).then(function (r) { return r.text(); }).then(function (b) {
+      var lab = $('#work-label'), sm = $('#work-branch');
+      if (b === 'sian-a') { lab.classList.remove('is-warn'); sm.textContent = '· 지금 갈래: sian-a'; }
+      else { lab.classList.add('is-warn'); sm.textContent = '· 지금 갈래: ' + b + ' — 지금 작업 폴더는 ' + b + ' 갈래입니다'; }
+    }).catch(function () { $('#work-branch').textContent = '· 비교 서버에 연결되지 않습니다(검은 창이 닫혔는지 보세요)'; });
+    fetch('/api/stamp', { cache: 'no-store' }).then(function (r) { return r.text(); }).then(function (s) {
+      if (lastStamp !== null && s !== lastStamp) reloadRight('시안이 다시 만들어져 오른쪽을 새로 고침');
+      lastStamp = s;
+    }).catch(function () {});
+  }
+  fetch('/api/final', { cache: 'no-store' }).then(function (r) { return r.text(); }).then(function (t) { $('#final-rev').textContent = t ? '· ' + t.split(' ')[0] : ''; }).catch(function () {});
+  setInterval(poll, 3000);
+
+  /* ---------- 시작 ---------- */
+  setSize(S.size);
+  setMode(S.mode);
+  go(S.page);
+  poll();
+})();
+</script>
+</body>
+</html>
