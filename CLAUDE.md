@@ -65,6 +65,15 @@
 - 시안을 없앨 때는 설정 파일, `<시안이름>/` 폴더, `css/tokens.<시안이름>.css` 세 가지를 함께 지운다.
 - 시안 폴더도 `main`에 합치면 공개 주소에 올라간다. 합치기 전에 어떤 시안을 남길지 이다결 님에게 묻는다(`test`는 합치기 전에 지우는 것이 기본).
 
+## 시안 편집기 (42차)
+- 켜기: 홈페이지 폴더의 `시안편집기.bat` 더블클릭 → http://localhost:4174/tools/editor/ . 검은 창을 닫으면 꺼진다. 설치하는 프로그램은 없다(PowerShell 서버 `tools/editor/editor.ps1` + 브라우저 안 생성).
+- 편집기는 `tools/variants/<시안>.js`, `<시안>/` 폴더, `css/tokens.<시안>.css`만 쓴다. 기본판·사실·다른 파일은 쓰지 못한다. 기본판은 지시서로만 바꾼다.
+- 편집기와 `node tools/build.js`는 같은 `tools/build.js`를 쓴다. 페이지 틀을 고치면 편집기 미리보기도 같이 바뀌어야 한다. 편집기 안에 페이지 틀을 따로 만들지 않는다.
+- 저장할 때마다 이전 판이 `tools/variants/_보관/`에 남는다(시안마다 30개, 커밋하지 않음).
+- 이다결 님이 "시안 저장한 것 커밋하고 푸시해 줘"라고 하면: `git status`로 바뀐 시안 파일(`tools/variants/<시안>.js`, `<시안>/`, `css/tokens.<시안>.css`)만 확인해 보여 주고 `dev`에 커밋·푸시한다. 맨 위 HTML이나 `css/tokens.css`가 바뀌어 있으면 멈추고 알린다.
+- 숫자를 새로 넣는 것, `{n}` 같은 자리표시를 지우는 것, `<br>` 밖의 태그는 편집기가 막는다. 이 규칙을 풀지 않는다.
+- 나중에 붙일 것: `비교 보기` 탭(그림 시안 "다", 시안이 여러 개 생긴 뒤).
+
 ## 자주 하는 작업
 - 미리보기: `powershell -ExecutionPolicy Bypass -File serve.ps1` → http://localhost:4173/ (또는 `python -m http.server 4173`)
 - 재생성: `node tools/build.js` 다음에 `node tools/build-en.js` (영어판)
