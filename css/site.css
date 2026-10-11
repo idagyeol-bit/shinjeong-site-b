@@ -1204,3 +1204,11 @@ html.is-preview .hdr { padding-top: var(--pv-h); }
 .pvbar a { color: #fff; font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
 @media (max-width: 960px) { html.is-preview { --header-h: 94px; } }
 @media print { .pvbar { display: none; } }
+/* 43차: 시안 갈래 띠 — tools/site.config.js 의 sian.name 이 채워진 시안 갈래(sian-a·sian-b)에서만 .pvbar 대신 생긴다.
+   바탕색은 sian.color(--sian). 한 줄에 다 들어가지 않으면 "최종본과 다른 작업용 판입니다"가 둘째 줄로 넘어가 가려진다 */
+.sianbar { position: fixed; inset: 0 0 auto; z-index: 101; height: var(--pv-h); overflow: hidden; display: flex; flex-wrap: wrap; justify-content: center; align-content: flex-start; column-gap: 0; padding-inline: var(--gutter); background: var(--sian, var(--navy)); color: #fff; font-size: 12.5px; font-weight: 500; letter-spacing: 0; line-height: var(--pv-h); white-space: nowrap; }
+.sianbar > span { display: block; height: var(--pv-h); }
+.sianbar__name { font-weight: 800; }
+.sianbar__dir::before, .sianbar__note::before { content: '·'; margin: 0 7px; opacity: .8; }
+.sianbar__note { opacity: .92; }
+@media print { .sianbar { display: none; } }

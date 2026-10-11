@@ -607,10 +607,13 @@ function photo(p, sizesAttr, eager) {
 
 /* 41차: 시안 페이지(VARIANT)는 PREVIEW 와 상관없이 늘 검색 제외·시안 표시를 넣고, canonical·hreflang·JSON-LD 는 넣지 않는다.
    제목 앞 표시는 [시안 이름], 맨 위 안내 줄에 "기본판 보기"(../index.html). 기본판의 결과는 41차 전과 같다 */
+/* 43차: 시안 갈래(sian-a·sian-b)에서는 설정의 sian.name 이 채워져 있다. 그때만 맨 위 안내 줄 대신 시안 띠(.sianbar)를 넣고
+   제목 앞 표시를 [시안 A] 처럼 바꾼다. dev·main 에서는 sian.name 이 비어 있어 결과가 43차 전과 같다 */
 function head(o) {
   const V = VARIANT;
-  const marked = PREVIEW || !!V;   // 검색 제외·안내 줄·is-preview 를 넣을지
-  const title = (V ? `[${V.label}] ` : PREVIEW ? '[시안] ' : '') + o.title;
+  const S = CFG.sian && CFG.sian.name ? CFG.sian : null;
+  const marked = PREVIEW || !!V || !!S;   // 검색 제외·안내 줄·is-preview 를 넣을지
+  const title = (V ? `[${V.label}] ` : S ? `[${S.name}] ` : PREVIEW ? '[시안] ' : '') + o.title;
   const here = (V ? `${V.name}/` : '') + (o.file === 'index.html' ? '' : o.file);   // 이 페이지의 공개 주소(사이트 주소 뒤)
   return `<!doctype html>
 <html lang="ko"${marked ? ' class="is-preview"' : ''}>
@@ -644,6 +647,7 @@ ${!marked && o.jsonld ? `<script type="application/ld+json">${JSON.stringify(o.j
 <body data-page="${o.page}">
 <a class="skip-link" href="#main">본문 바로가기</a>
 ${V ? `<div class="pvbar" role="note">검토용 ${esc(V.label)}입니다 · <a href="../index.html">기본판 보기</a> · 공식 홈페이지 <a href="${OFFICIAL_SITE.url}" target="_blank" rel="noopener">${OFFICIAL_SITE.label}</a></div>\n`
+    : S ? `<div class="sianbar" role="note" style="--sian: ${S.color}"><span class="sianbar__name">${esc(S.name)}</span>${S.direction ? `<span class="sianbar__dir">${esc(S.direction)}</span>` : ''}<span class="sianbar__note">최종본과 다른 작업용 판입니다</span></div>\n`
     : PREVIEW ? `<div class="pvbar" role="note">검토용 시안입니다 · 공식 홈페이지 <a href="${OFFICIAL_SITE.url}" target="_blank" rel="noopener">${OFFICIAL_SITE.label}</a></div>\n` : ''}`;
 }
 
@@ -1864,6 +1868,7 @@ function checkConfig() {
   });
   CFG.hero.services.forEach((x) => { if (!svc(x.svc)) configError(`첫 화면 업무 번호 '${x.svc}'이 없습니다 (설정 hero.services). 쓸 수 있는 것: ${SERVICES.map((s) => s.id).join(', ')}`); });
   CFG.home.copy.scenes.cards.concat([{ photo: CFG.hero.photo.id }]).forEach((k) => { if (!PHOTOS[k.photo]) configError(`사진 번호 '${k.photo}'이 사진 목록에 없습니다`); });
+  if (CFG.sian && CFG.sian.name && !/^#[0-9a-fA-F]{6}$/.test(CFG.sian.color)) configError(`시안 띠 색(sian.color)은 #과 여섯 자리 색 번호로 적습니다. 지금: '${CFG.sian.color}'`);
 }
 
 /* css/tokens.css = tools/tokens.head.css(머리 주석과 글꼴 정의 8개, 40차 전의 글자 그대로) + 아래 :root
