@@ -81,6 +81,7 @@
 - 회사 사실(숫자·업무·실적·연락처)은 `dev`에서만 고친다. 이다결 님이 "시안에 dev 받아 와 줘"라고 하면 시안 갈래마다 `git merge dev`를 하고, 충돌이 나면 멈추고 알린다.
 - "sian-a 미리보기 켜 줘" = 바뀐 것이 없는지 확인 → `git switch sian-a` → 미리보기(`serve.ps1`). 끝나면 "지금 갈래"를 알려 준다.
 - 시안 띠(`CFG.sian`)는 시안 갈래에서만 채운다. `dev`·`main`에서는 비워 둔다.
+- **시안 A는 원본과 다른 저장소에 올린다(2026-10-13 이다결 님 결정).** 저장소 `idagyeol-bit/shinjeong-site-sian-a`(원격 이름 `sian`), 주소 https://idagyeol-bit.github.io/shinjeong-site-sian-a/ . 올리기: `sian-a` 갈래에서 `git push sian sian-a:main`. 원본 저장소(`origin`)에는 시안 A를 올리지 않는다. 설정 `sian.url`에 이 주소를 넣어 링크 미리보기 주소가 시안 A를 가리키게 한다.
 - 지시서는 `홈페이지_구역지도.md`의 구역 번호로 고칠 곳을 정한다. 지시서에 없는 구역은 고치지 않는다.
 
 ## 비교 보기 (44차)

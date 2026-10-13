@@ -20,7 +20,7 @@ const LIST_ONLY = process.argv.includes('--list');
 
 const HANGUL = /[\u1100-\u11ff\u3130-\u318f\uac00-\ud7a3]/;
 const SKIP_PAGES = ['404.html'];           // 404는 루트 하나만 쓴다(GitHub Pages)
-const JS_FILES = ['site.js', 'contact.js', 'projects.js', 'process-scene.js', 'process-scene-2d.js'];
+const JS_FILES = ['site.js', 'contact.js', 'projects.js', 'process-scene.js', 'process-scene-2d.js', 'reel.js'];   // reel.js: 시안 A 첫 화면 (sian-a)
 /* 글자를 옮겨야 하는 속성. 여기에 없는 속성에 한글이 있으면 오류로 알려 준다 */
 const TEXT_ATTRS = ['alt', 'aria-label', 'placeholder', 'title', 'content', 'data-search', 'data-cat', 'data-filter', 'data-label', 'data-h', 'value', 'label'];
 /* 주소를 ../ 로 고쳐야 하는 속성 */

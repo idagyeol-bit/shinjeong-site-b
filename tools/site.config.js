@@ -90,13 +90,21 @@ module.exports = {
     eyebrow: '여수 · {founded}년 설립', // 큰 제목 위 작은 머리글 ({founded} = 설립 연도, 사실 데이터에서 넣는다)
     services: [                    // 큰 제목 — 업무 이름 다섯 개. svc 는 연결할 업무 번호(바꾸지 않는다)
       { svc: 'S01', label: '탱크 클리닝' },
-      { svc: 'S02', label: '촉매 교체' },
+      { svc: 'S02', label: '촉매·충진물' },
       { svc: 'S03', label: '화학세정', br: true }, // br: true = 이 이름 뒤에서 PC 줄을 나눈다 (휴대폰은 저절로 줄바꿈)
       { svc: 'S04', label: '준설' },
       { svc: 'S05', label: '관로 조사' }
     ],
     lead: '산업설비 클리닝 전문기업, 신정개발', // 큰 제목 아래 한 줄
-    button: { label: '사업분야 보기', href: 'services.html' } // 버튼 문구와 가는 주소
+    button: { label: '사업분야 보기', href: 'services.html' }, // 버튼 문구와 가는 주소
+    media: {                       // 큰 틀 'reel'(시안 A)에서 업무마다 보여 줄 사진. 사진은 사진 목록(tools/build.js PHOTOS)에 있는 것만
+      S01: { type: 'photo', id: 'P01' },   // 탱크 클리닝 — 탱크 안에서 고압 세척을 하는 작업자
+      S02: { type: 'photo', id: 'P03' },   // 촉매·충진물 — 반응기 안 흡입 로봇과 호스
+      S03: { type: 'photo', id: 'M10' },   // 화학세정 — 화학세정 페이지와 같은 사진(화학세정 장면 사진은 아직 없음)
+      S04: { type: 'photo', id: 'W10' },   // 준설 — 맨홀에 호스를 연결해 작업하는 작업자들
+      S05: { type: 'photo', id: 'P08' }    // 관로 조사 — GPR 장비로 조사하는 작업자
+      // 나중에 3D 영상으로 바꿀 때: { type: 'video', src: 'assets/video/파일.mp4', poster: 'assets/photos/P01-800.jpg', alt: '영상 설명' }
+    }
   },
 
   /* ===================== ⑥~⑦ 메인 페이지 ===================== */
@@ -180,7 +188,7 @@ module.exports = {
 
   /* ===================== ⑨ 큰 틀 ===================== */
   frame: {                                 // 화면의 큰 틀 — 지금은 'base' 하나뿐이다. 새 큰 틀은 지시서로 추가한다
-    hero: 'base',                          // 첫 화면 틀
+    hero: 'reel',                          // 첫 화면 틀 — 'base'(사진 위 큰 제목) 또는 'reel'(사업분야 가로 흐름, 시안 A)
     sections: 'base',                      // 메인 구역 틀
     header: 'base'                         // 머리말(맨 위 메뉴 줄) 틀
   },
@@ -190,6 +198,7 @@ module.exports = {
   sian: {
     name: '시안 A',  // 시안 이름 (예: '시안 A')
     direction: '',   // 한 문장 방향 (예: '밝고 대담한 글자'). 비어 있으면 이름만 보인다
-    color: '#c2410c' // 띠 색 (예: '#c2410c')
+    color: '#c2410c', // 띠 색 (예: '#c2410c')
+    url: 'https://idagyeol-bit.github.io/shinjeong-site-sian-a/'   // 이 시안이 올라가는 주소 (시안 A 전용 저장소 shinjeong-site-sian-a). 비어 있으면 원본 주소
   }
 };

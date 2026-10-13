@@ -17,7 +17,7 @@ let CFG = BASE_CFG;
 let VARIANT = null;          // { name: 'test', label: '시험 시안', file: 'tools/variants/test.js' }
 
 const OUT = path.resolve(__dirname, '..');
-const SITE_URL = 'https://idagyeol-bit.github.io/shinjeong-site-b/'; // 배포 주소가 정해지면 이 줄만 바꾸세요
+const SITE_URL = (BASE_CFG.sian && BASE_CFG.sian.url) || 'https://idagyeol-bit.github.io/shinjeong-site-b/'; // 배포 주소가 정해지면 이 줄만 바꾸세요 (시안 갈래는 설정 sian.url 의 주소를 쓴다)
 /* 36차: 시안(검토용) 표시 스위치. true 인 동안 — 검색 제외(noindex), 제목 앞 [시안], 맨 위 안내 한 줄, 검색엔진용 회사 정보·사이트맵 없음.
    정식 오픈 때 false 로 바꾸고 다시 생성하면 모두 원래대로 돌아간다. */
 const PREVIEW = true;
@@ -995,6 +995,87 @@ function heroBase() {
 `;
 }
 
+/* ---------- 큰 틀 'reel'의 첫 화면 — 사업분야 가로 흐름 (시안 A) ----------
+   PC: 구역이 화면에 잠시 고정되고, 내리는 만큼 큰 업무명이 오른쪽에서 왼쪽으로 지나간다(js/reel.js, 시간에 따라 저절로 움직이지 않음).
+       화면 가로 50~75% 의 밝은 영역을 지나는 글자 부분만 선명하다(같은 글을 두 겹으로 겹치고 위 겹을 그 영역만 보이게 자른다).
+       밝은 영역 아래에 지금 업무의 사진, 왼쪽 아래에 짧은 설명, 오른쪽 아래에 01 / 05 번호.
+   휴대폰·움직임 줄이기·스크립트 꺼짐: 고정하지 않고, 손가락으로 넘기거나 이전·다음 버튼으로 보는 목록.
+   업무명은 CFG.hero.services, 사진(나중에 영상)은 CFG.hero.media, 설명은 사업분야 데이터(SERVICES)의 문장(사실). */
+const REEL_DESC = {
+  S02: '촉매·충진물 작업에서 회수물을 분리합니다.'   // 현장 진행 방식 페이지 "분리장치"의 문장 그대로 (이다결 님 지정)
+};
+function reelItems() {
+  return CFG.hero.services.map((x, i) => {
+    const s = svc(x.svc);
+    const m = (CFG.hero.media || {})[x.svc] || { type: 'photo', id: s.photo.id };
+    return { i, svc: x.svc, name: x.label, file: s.file, desc: REEL_DESC[x.svc] || s.card, media: m };
+  });
+}
+/* 사진 또는 영상 하나. 영상(type: 'video')은 나중에 3D 영상으로 바꿀 때를 위한 자리 — 지금은 쓰지 않는다 */
+function reelMedia(m, eager, sizesAttr) {
+  if (m.type === 'video') {
+    return `<video src="${m.src}"${m.poster ? ` poster="${m.poster}"` : ''} muted playsinline loop preload="metadata" aria-label="${esc(m.alt || '')}"></video>`;
+  }
+  return photo(P(m.id), sizesAttr, eager);
+}
+function heroReel() {
+  const h = CFG.hero;
+  const items = reelItems();
+  const n = items.length;
+  const pad = (k) => String(k).padStart(2, '0');
+  const words = (lit) => items.map((it, i) => (i ? '<span class="reel__sep" aria-hidden="true">·</span>' : '') +
+    (lit ? `<span class="reel__word">${esc(it.name)}</span>` : `<a class="reel__word" href="${it.file}" data-i="${i}">${esc(it.name)}</a>`)).join('');
+  const intro = `<span class="eyebrow">${fill(h.eyebrow, { founded: C.founded })}</span>
+        <p class="reel__lead">${h.lead}</p>`;
+  return `  <!-- ===== 히어로: 사업분야 가로 흐름 (큰 틀 'reel', 시안 A) ===== -->
+  <section class="reel" id="reel" style="--n: ${n}" aria-label="신정개발이 하는 일">
+    <div class="reel__pin">
+      <div class="reel__intro">
+        ${intro}
+        <a class="reel__more" href="${h.button.href}">${h.button.label} ${arrow(16)}</a>
+      </div>
+      <div class="reel__band" aria-hidden="true"></div>
+      <div class="reel__row">
+        <h1 class="reel__track" aria-label="${esc(items.map((it) => it.name).join(', '))}">${words(false)}</h1>
+        <div class="reel__lit" aria-hidden="true"><div class="reel__track reel__track--lit">${words(true)}</div></div>
+      </div>
+      <div class="reel__media">
+${items.map((it, i) => `        <figure class="reel__fig${i ? '' : ' is-on'}" data-i="${i}">${reelMedia(it.media, i === 0, '(min-width: 961px) 30vw, 92vw')}</figure>`).join('\n')}
+      </div>
+      <div class="reel__info">
+${items.map((it, i) => `        <div class="reel__item${i ? '' : ' is-on'}" data-i="${i}"><b><span>${pad(i + 1)}</span>${esc(it.name)}</b><p>${esc(it.desc)}</p><a href="${it.file}">자세히 보기 ${arrow(14)}</a></div>`).join('\n')}
+      </div>
+      <div class="reel__ctrl">
+        <button type="button" class="reel__btn reel__btn--prev" data-go="-1" aria-label="이전 업무">${arrow(18)}</button>
+        <span class="reel__count"><b>01</b> / ${pad(n)}</span>
+        <button type="button" class="reel__btn" data-go="1" aria-label="다음 업무">${arrow(18)}</button>
+      </div>
+    </div>
+
+    <div class="reel-list">
+      <div class="wrap reel-list__head">
+        ${intro}
+        <h1 class="reel-list__title">${items.map((it) => esc(it.name)).join(' · ')}</h1>
+      </div>
+      <div class="reel-list__track" tabindex="0" aria-label="사업분야 넘겨 보기">
+${items.map((it, i) => `        <article class="reel-list__slide" data-i="${i}">
+          <figure class="reel-list__fig">${reelMedia(it.media, false, '(min-width: 961px) 40vw, 92vw')}</figure>
+          <span class="reel-list__no">${pad(i + 1)} / ${pad(n)}</span>
+          <h2>${esc(it.name)}</h2>
+          <p>${esc(it.desc)}</p>
+          <a href="${it.file}">자세히 보기 ${arrow(14)}</a>
+        </article>`).join('\n')}
+      </div>
+      <div class="wrap reel-list__ctrl">
+        <button type="button" class="reel__btn reel__btn--prev" data-go="-1" aria-label="이전 업무">${arrow(18)}</button>
+        <span class="reel__count"><b>01</b> / ${pad(n)}</span>
+        <button type="button" class="reel__btn" data-go="1" aria-label="다음 업무">${arrow(18)}</button>
+      </div>
+    </div>
+  </section>
+`;
+}
+
 /* 큰 틀 'base'의 메인 구역 여섯 개 — 40차 전의 구역 그대로. 각 함수는 바탕 이름(bg)을 받는다 */
 const HOME_SECTIONS = {
   /* 신뢰 숫자 — 숫자(TRUST)·주요 현장(TRUST_SITES)·출처(TRUST_SRC)는 사실 데이터 */
@@ -1143,7 +1224,7 @@ ${pcards(c.cards.map((k) => k.photo), c.cards.map((k) => k.title), null, c.cards
    설정 파일의 frame 칸(hero / sections / header)이 여기서 이름으로 고른다. 지금은 'base'(40차 전의 모양) 하나뿐이다.
    새 큰 틀은 그림 시안으로 고른 뒤 지시서로 여기에 이름을 더한다. */
 const FRAMES = {
-  hero: { base: heroBase },
+  hero: { base: heroBase, reel: heroReel },
   sections: { base: HOME_SECTIONS },
   header: { base: headerBase }
 };
@@ -1171,7 +1252,7 @@ pages['index.html'] = () => {
   }) + header('home', null, 'index.html') + `
 <main id="main">
 
-` + frame('hero')() + '\n' + CFG.home.sections.map((s) => S[s.id](s.bg)).join('\n') + '\n' + cta({ home: true }) + MAIN_END + footer() + foot();
+` + frame('hero')() + '\n' + CFG.home.sections.map((s) => S[s.id](s.bg)).join('\n') + '\n' + cta({ home: true }) + MAIN_END + footer() + foot(CFG.frame.hero === 'reel' ? ['reel.js'] : []);
 };
 
 /* ---------- 2. 사업분야 ---------- */
@@ -1869,6 +1950,14 @@ function checkConfig() {
   CFG.hero.services.forEach((x) => { if (!svc(x.svc)) configError(`첫 화면 업무 번호 '${x.svc}'이 없습니다 (설정 hero.services). 쓸 수 있는 것: ${SERVICES.map((s) => s.id).join(', ')}`); });
   CFG.home.copy.scenes.cards.concat([{ photo: CFG.hero.photo.id }]).forEach((k) => { if (!PHOTOS[k.photo]) configError(`사진 번호 '${k.photo}'이 사진 목록에 없습니다`); });
   if (CFG.sian && CFG.sian.name && !/^#[0-9a-fA-F]{6}$/.test(CFG.sian.color)) configError(`시안 띠 색(sian.color)은 #과 여섯 자리 색 번호로 적습니다. 지금: '${CFG.sian.color}'`);
+  /* 큰 틀 'reel'의 업무별 사진·영상 (시안 A) */
+  Object.keys(CFG.hero.media || {}).forEach((k) => {
+    const m = CFG.hero.media[k];
+    if (!svc(k)) configError(`첫 화면 사진의 업무 번호 '${k}'이 없습니다 (설정 hero.media)`);
+    if (m.type === 'photo' && !PHOTOS[m.id]) configError(`첫 화면 사진 번호 '${m.id}'이 사진 목록에 없습니다 (설정 hero.media.${k})`);
+    if (m.type === 'video' && !m.src) configError(`첫 화면 영상 주소(src)가 없습니다 (설정 hero.media.${k})`);
+    if (m.type !== 'photo' && m.type !== 'video') configError(`첫 화면 사진 종류는 'photo' 또는 'video' 입니다 (설정 hero.media.${k})`);
+  });
 }
 
 /* css/tokens.css = tools/tokens.head.css(머리 주석과 글꼴 정의 8개, 40차 전의 글자 그대로) + 아래 :root
