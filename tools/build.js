@@ -995,12 +995,14 @@ function heroBase() {
 `;
 }
 
-/* ---------- 큰 틀 'reel'의 첫 화면 — 사업분야 가로 흐름 (시안 A) ----------
-   PC: 구역이 화면 높이만큼 고정되고, 내리는 만큼 큰 업무명이 화면 가로 전체를 오른쪽에서 왼쪽으로 지나간다
-       (js/reel.js, 스크롤 위치만 따른다 — 시간에 따라 저절로 움직이지 않음).
-       가운데 밝은 영역(화면 가로 12~88%, 76%)을 지나는 글자 부분만 선명하다(같은 글을 두 겹으로 겹치고 위 겹을 그 영역만 보이게 자른다).
-       지금 업무의 사진(나중에 영상)이 구역 전체를 채우는 배경이 되고, 그 위에 어두운 그라데이션, 큰 업무명, 왼쪽 아래 짧은 설명, 오른쪽 아래 01 / 05.
-   휴대폰·움직임 줄이기·스크립트 꺼짐: 고정하지 않는다. 휴대폰은 화면을 채우는 배경 사진 위에 글을 얹은 장을 손가락이나 이전·다음 버튼으로 넘긴다.
+/* ---------- 큰 틀 'reel'의 첫 화면 — 사업분야 회전 기둥 (시안 A) ----------
+   업무명 다섯 개가 보이지 않는 입체 기둥(업무 수만큼의 면, 세로축)에 한 면씩 붙어 있고, 기둥이 돌며 정면의 업무명 하나만 보인다
+   (js/reel.js). 정면에서 돌아간 면은 옆으로 물러나며 사라지고, 뒷면·뒤집힌 글자는 보이지 않는다. 테두리·상자는 그리지 않는다.
+   PC: 구역이 화면 높이만큼 고정되고, 휠(스크롤 위치)과 끌기가 같은 회전 상태를 움직인다. 멈추면 가까운 업무의 정면으로 맞춘다.
+       마지막 업무에서 더 내리면 다음 구역으로, 첫 업무에서 올리면 위로 그대로 나간다(갇히지 않음). 시간에 따라 저절로 돌지 않는다.
+   휴대폰·움직임 줄이기: 고정하지 않고 같은 기둥을 가로 끌기·이전·다음 버튼·키보드로 돌린다(움직임 줄이기는 회전 없이 바뀜).
+   지금 업무의 사진(나중에 영상)이 구역 전체를 채우는 배경이고, 왼쪽 아래 짧은 설명, 오른쪽 아래 01 / 05 가 함께 바뀐다.
+   스크립트가 없으면 다섯 업무를 넘겨 보는 목록(.reel-list)으로 보인다.
    업무명은 CFG.hero.services, 사진·영상과 사진 위치는 CFG.hero.media, 설명은 사업분야 데이터(SERVICES)의 문장(사실). */
 const REEL_DESC = {
   S02: '촉매·충진물 작업에서 회수물을 분리합니다.'   // 현장 진행 방식 페이지 "분리장치"의 문장 그대로 (이다결 님 지정)
@@ -1025,8 +1027,6 @@ function heroReel() {
   const items = reelItems();
   const n = items.length;
   const pad = (k) => String(k).padStart(2, '0');
-  const words = (lit) => items.map((it, i) => (i ? '<span class="reel__sep" aria-hidden="true">·</span>' : '') +
-    (lit ? `<span class="reel__word">${esc(it.name)}</span>` : `<a class="reel__word" href="${it.file}" data-i="${i}">${esc(it.name)}</a>`)).join('');
   const intro = `<span class="eyebrow">${fill(h.eyebrow, { founded: C.founded })}</span>
         <p class="reel__lead">${h.lead}</p>`;
   return `  <!-- ===== 히어로: 사업분야 가로 흐름 (큰 틀 'reel', 시안 A) ===== -->
@@ -1036,14 +1036,15 @@ function heroReel() {
 ${items.map((it, i) => `        <figure class="reel__fig${i ? '' : ' is-on'}" data-i="${i}" style="${reelPos(it.media)}">${reelMedia(it.media, i === 0, '100vw')}</figure>`).join('\n')}
       </div>
       <div class="reel__shade" aria-hidden="true"></div>
-      <div class="reel__band" aria-hidden="true"></div>
       <div class="reel__intro">
         ${intro}
         <a class="reel__more" href="${h.button.href}">${h.button.label} ${arrow(16)}</a>
       </div>
-      <div class="reel__row">
-        <h1 class="reel__track" aria-label="${esc(items.map((it) => it.name).join(', '))}">${words(false)}</h1>
-        <div class="reel__lit" aria-hidden="true"><div class="reel__track reel__track--lit">${words(true)}</div></div>
+      <h1 class="sr-only">${items.map((it) => esc(it.name)).join(' · ')}</h1>
+      <div class="reel__stage" tabindex="0" role="group" aria-label="사업분야 넘겨 보기">
+        <div class="reel__prism" aria-hidden="true">
+${items.map((it, i) => `          <div class="reel__face${i ? '' : ' is-front'}" data-i="${i}"><span>${esc(it.name)}</span></div>`).join('\n')}
+        </div>
       </div>
       <div class="reel__info">
 ${items.map((it, i) => `        <div class="reel__item${i ? '' : ' is-on'}" data-i="${i}"><b><span>${pad(i + 1)}</span>${esc(it.name)}</b><p>${esc(it.desc)}</p><a href="${it.file}">자세히 보기 ${arrow(14)}</a></div>`).join('\n')}

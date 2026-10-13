@@ -1,41 +1,97 @@
-/* 신정개발 홈페이지 — 첫 화면 사업분야 가로 흐름 (시안 A, 큰 틀 'reel')
-   - PC(가로 961px 이상, 움직임 줄이기 꺼짐): 구역이 화면 높이만큼 고정된 동안 내린 만큼 업무명이 화면 가로 전체를 오른쪽→왼쪽으로 지나간다.
-     올리면 반대로 돌아온다. 시간에 따라 저절로 움직이는 것은 없다(스크롤 위치만 따른다).
-     업무 k 의 가운데가 밝은 영역 가운데(화면 가로 50%)에 올 때 배경 사진(영상)·설명·번호가 k 로 바뀐다. 마지막 업무를 지나면 다음 구역으로 내려간다.
-   - 키보드: 업무명(링크)에 초점이 가면 그 업무 자리로 스크롤, 구역 안에서 ← → 로 이전·다음.
-   - 그 밖(휴대폰·움직임 줄이기·좁은 화면): 화면을 채우는 배경 장을 손가락으로 넘기는 목록. 이전·다음 버튼과 01 / 05 번호를 맞춘다.
-   - 화면에 보이는 글은 HTML 에만 있다(영어판은 build-en 이 HTML 을 옮긴다). */
+/* 신정개발 홈페이지 — 첫 화면 사업분야 회전 기둥 (시안 A, 큰 틀 'reel')
+   - 업무명 N개가 보이지 않는 입체 기둥(N각 기둥, 세로축)의 면에 하나씩 붙어 있다. 회전 상태 f(0 = 첫 업무, N-1 = 마지막)만 바꾸면
+     면마다 회전 각도·깊이·투명도가 정해진다. 정면에서 58° 넘게 돌아간 면은 완전히 투명, 뒷면은 그리지 않는다(멈추면 한 이름만).
+     f 가 커지면(아래로) 지금 업무는 왼쪽 옆면으로 돌아가 뒤로 물러나고, 다음 업무가 오른쪽 옆면에서 정면으로 온다.
+   - PC(가로 961px 이상, 움직임 허용): 구역이 고정된 동안 스크롤 위치가 곧 f 다. 휠도 끌기도 스크롤 위치를 움직이므로 서로 튀지 않는다.
+     움직임이 멈추면 움직인 방향의 가까운 업무 정면으로 맞춘다(짧은 입력은 제자리). 구역 처음·끝 밖으로는 맞추지 않아 갇히지 않는다.
+   - 휴대폰·움직임 줄이기: 고정하지 않는다. 가로 끌기·이전·다음 버튼·← → 키로 f 를 바꾼다(세로 스와이프는 페이지 스크롤).
+     움직임 줄이기에서는 회전 없이 이름만 바뀐다.
+   - 시간에 따라 저절로 돌지 않는다. 화면에 보이는 글은 HTML 에만 있다(영어판은 build-en 이 HTML 을 옮긴다). */
 (function () {
   'use strict';
   var root = document.getElementById('reel');
   if (!root) return;
-  var pad = function (k) { return (k < 10 ? '0' : '') + k; };
-  var clamp = function (v, a, b) { return Math.max(a, Math.min(b, v)); };
-
-  /* ---------- PC: 고정·가로 흐름 ---------- */
   var pin = root.querySelector('.reel__pin');
-  var tracks = [].slice.call(root.querySelectorAll('.reel__pin .reel__track'));
-  var words = tracks.length ? [].slice.call(tracks[0].querySelectorAll('.reel__word')) : [];
+  var stage = root.querySelector('.reel__stage');
+  if (!pin || !stage) return;
+  var faces = [].slice.call(root.querySelectorAll('.reel__face'));
   var figs = [].slice.call(root.querySelectorAll('.reel__fig'));
   var items = [].slice.call(root.querySelectorAll('.reel__item'));
-  var pinCount = root.querySelector('.reel__ctrl .reel__count b');
-  var pinBtns = [].slice.call(root.querySelectorAll('.reel__ctrl .reel__btn'));
-  var n = words.length;
-  var centers = [], cur = 0, target = 0, raf = 0, active = -1;
+  var countB = root.querySelector('.reel__ctrl .reel__count b');
+  var btns = [].slice.call(root.querySelectorAll('.reel__ctrl .reel__btn'));
+  var N = faces.length;
+  if (!N) return;
+  var STEP = 360 / N;
+  var pad = function (k) { return (k < 10 ? '0' : '') + k; };
+  var clamp = function (v, a, b) { return Math.max(a, Math.min(b, v)); };
+  var mqReduce = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : { matches: false };
 
-  function pinned() { return pin && getComputedStyle(pin).display !== 'none'; }
-  function measure() { centers = words.map(function (w) { return w.offsetLeft + w.offsetWidth / 2; }); }
-  function span() { return Math.max(1, root.offsetHeight - window.innerHeight); }
-  function topOf() { return root.getBoundingClientRect().top + window.pageYOffset; }
-  function progress() { return clamp((window.pageYOffset - topOf()) / span(), 0, 1); }
+  var f = 0;          /* 지금 그려진 회전 상태 */
+  var target = 0;     /* 가야 할 회전 상태 */
+  var settled = 0;    /* 마지막으로 맞춘 업무 */
+  var active = -1, raf = 0, R = 0, dragging = false;
 
-  /* 배경 영상(있을 때만): 지금 업무의 영상만 무음·반복 재생. 재생이 시작돼야 대체 사진 위로 보이고, 실패하면 사진이 그대로 보인다.
-     글자 이동과는 따로 움직인다(글자는 스크롤만 따른다). 움직임 줄이기에서는 재생하지 않는다 */
-  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function shown() { return getComputedStyle(pin).display !== 'none'; }
+  function linked() { return shown() && getComputedStyle(pin).position === 'sticky'; }   /* PC: 스크롤 위치 = 회전 상태 */
+  function flat() { return mqReduce.matches; }
+
+  /* ---------- 기둥 크기와 글자 맞춤 ---------- */
+  function measure() {
+    var SW = stage.clientWidth, widest = 0;
+    faces.forEach(function (face) {
+      var s = face.firstElementChild;
+      s.style.fontSize = '';
+      var max = SW - 2 * Math.max(16, SW * 0.04), w = s.scrollWidth;
+      if (w > max) { s.style.fontSize = (parseFloat(getComputedStyle(s).fontSize) * max / w).toFixed(1) + 'px'; w = s.scrollWidth; }   /* 긴 업무명만 줄인다 */
+      widest = Math.max(widest, w);
+    });
+    /* 면 너비 = 가장 긴 업무명보다 조금 넓게(화면 폭은 넘지 않게). 기둥이 화면만큼 넓으면 옆으로 미끄러지는 것처럼 보이고,
+       업무명 폭에 맞추면 제자리에서 도는 입체감이 난다 */
+    var W = Math.min(SW, widest * 1.08);
+    R = W / (2 * Math.tan(Math.PI / N));   /* 면 너비가 W 인 N각 기둥의 중심~면 거리 */
+    /* 원근 거리를 기둥 크기에 맞춘다(멀어지는 쪽 글자가 눈에 띄게 작아지도록) */
+    stage.style.perspective = Math.max(420, R * 1.8).toFixed(0) + 'px';
+  }
+
+  /* ---------- 그리기 ---------- */
+  function render() {
+    var isFlat = flat();
+    var front = Math.round(f);
+    faces.forEach(function (face, i) {
+      var phi = (i - f) * STEP;                       /* 양수 = 오른쪽 옆면, 음수 = 왼쪽 옆면 */
+      var a = Math.abs(phi);
+      var o = isFlat ? (i === front ? 1 : 0) : clamp((58 - a) / 40, 0, 1);
+      face.style.opacity = o.toFixed(3);
+      face.style.visibility = o > 0.002 ? 'visible' : 'hidden';
+      face.style.transform = isFlat ? 'none' : 'translateZ(' + (-R).toFixed(1) + 'px) rotateY(' + phi.toFixed(2) + 'deg) translateZ(' + R.toFixed(1) + 'px)';
+    });
+    setActive(front);
+  }
+  function setActive(a) {
+    a = clamp(a, 0, N - 1);
+    if (a === active) return;
+    active = a;
+    faces.forEach(function (x, i) { x.classList.toggle('is-front', i === a); });
+    figs.forEach(function (x, i) { x.classList.toggle('is-on', i === a); playOnly(x, i === a); });
+    items.forEach(function (x, i) { x.classList.toggle('is-on', i === a); });
+    if (countB) countB.textContent = pad(a + 1);
+    btns.forEach(function (b) { var d = +b.getAttribute('data-go'); b.disabled = (d < 0 && a === 0) || (d > 0 && a === N - 1); });
+  }
+  function tick() {
+    if (dragging || flat()) f = target;
+    else f += (target - f) * 0.2;
+    if (Math.abs(target - f) < 0.0005) f = target;
+    render();
+    raf = f !== target ? requestAnimationFrame(tick) : 0;
+  }
+  function kick() { if (!raf) raf = requestAnimationFrame(tick); }
+
+  /* 배경 영상(있을 때만): 지금 업무의 영상만 무음·반복 재생. 재생이 시작돼야 대체 사진 위로 보이고, 실패하면 사진이 보인다.
+     회전과는 따로 움직인다. 움직임 줄이기에서는 재생하지 않는다 */
   function playOnly(box, on) {
-    var v = box && box.querySelector('video.reel-video');
+    var v = box.querySelector('video.reel-video');
     if (!v) return;
-    if (!on || reduceMotion) { if (!v.paused) v.pause(); return; }
+    if (!on || flat()) { if (!v.paused) v.pause(); return; }
     if (!v.getAttribute('src')) {
       v.addEventListener('playing', function () { v.classList.add('is-playing'); });
       v.addEventListener('error', function () { v.classList.remove('is-playing'); });
@@ -44,107 +100,115 @@
     var p = v.play();
     if (p && p.catch) p.catch(function () { v.classList.remove('is-playing'); });
   }
-  function setActive(a) {
-    if (a === active) return;
-    active = a;
-    figs.forEach(function (f, i) { f.classList.toggle('is-on', i === a); playOnly(f, i === a); });
-    items.forEach(function (it, i) { it.classList.toggle('is-on', i === a); });
-    if (pinCount) pinCount.textContent = pad(a + 1);
-    pinBtns.forEach(function (b) { b.disabled = (+b.getAttribute('data-go') < 0 && a === 0) || (+b.getAttribute('data-go') > 0 && a === n - 1); });
+
+  /* ---------- PC: 스크롤 위치와 회전 상태 ---------- */
+  function sectionTop() { return root.getBoundingClientRect().top + window.pageYOffset; }
+  function span() { return Math.max(1, root.offsetHeight - window.innerHeight); }
+  function scrollF() { return N > 1 ? clamp((window.pageYOffset - sectionTop()) / span(), 0, 1) * (N - 1) : 0; }
+  function yOf(x) { return sectionTop() + span() * (N > 1 ? x / (N - 1) : 0); }
+  /* 움직인 방향으로 0.12칸 넘게 갔으면 그 방향의 다음 업무, 아니면 제자리 */
+  function nearest(x, from) {
+    var t;
+    if (x >= from) t = Math.floor(x) + (x - Math.floor(x) > 0.12 ? 1 : 0);
+    else t = Math.ceil(x) - (Math.ceil(x) - x > 0.12 ? 1 : 0);
+    return clamp(t, 0, N - 1);
   }
-  function render(p) {
-    if (!n || !centers.length) return;
-    if (pin.scrollLeft) pin.scrollLeft = 0;   /* 키보드 초점이 고정 화면을 옆으로 밀었으면 되돌린다 */
-    var f = p * (n - 1);
-    var i0 = n > 1 ? Math.min(n - 2, Math.floor(f)) : 0;
-    var t = n > 1 ? f - i0 : 0;
-    var c = n > 1 ? centers[i0] + (centers[i0 + 1] - centers[i0]) * t : centers[0];
-    var x = window.innerWidth * 0.5 - c;   /* 밝은 영역(가로 12~88%)의 가운데 */
-    tracks.forEach(function (tr) { tr.style.transform = 'translate3d(' + x.toFixed(1) + 'px,0,0)'; });
-    var a = Math.round(f);
-    setActive(a);
-    if (figs[a]) figs[a].style.setProperty('--py', (-(f - a) * 18).toFixed(1) + 'px');   /* 사진은 아주 조금만 따라 움직인다 */
-  }
-  function tick() {
-    cur += (target - cur) * 0.22;
-    if (Math.abs(target - cur) < 0.0004) cur = target;
-    render(cur);
-    raf = cur !== target ? requestAnimationFrame(tick) : 0;
+  var snapT = 0;
+  function snap() {
+    if (!linked() || dragging) return;
+    var r = root.getBoundingClientRect();
+    if (r.top > 1 || r.bottom < window.innerHeight - 1) return;   /* 고정 구역 밖(처음 위·끝 아래)에서는 맞추지 않는다 */
+    var x = scrollF();
+    if (Math.abs(x - Math.round(x)) < 0.01) { settled = Math.round(x); return; }
+    settled = nearest(x, settled);
+    window.scrollTo({ top: yOf(settled), behavior: 'smooth' });
   }
   function darkHeader() {
     var r = root.getBoundingClientRect();
     var hdr = document.querySelector('.hdr');
-    var h = hdr ? hdr.offsetHeight : 0;
-    document.body.classList.toggle('reel-dark', pinned() && r.top <= 1 && r.bottom > h);
+    document.body.classList.toggle('reel-dark', linked() && r.top <= 1 && r.bottom > (hdr ? hdr.offsetHeight : 0));
   }
   function onScroll() {
     darkHeader();
-    if (!pinned()) return;
-    target = progress();
-    if (!raf) raf = requestAnimationFrame(tick);
+    if (!linked()) return;
+    target = scrollF();
+    kick();
+    clearTimeout(snapT);
+    snapT = setTimeout(snap, 160);
   }
+
+  /* ---------- 업무로 가기 (버튼·키보드) ---------- */
   function go(i) {
-    i = clamp(i, 0, n - 1);
-    window.scrollTo({ top: topOf() + span() * (n > 1 ? i / (n - 1) : 0), behavior: 'smooth' });
+    i = clamp(i, 0, N - 1);
+    settled = i;
+    if (linked()) window.scrollTo({ top: yOf(i), behavior: 'smooth' });
+    else { target = i; kick(); }
   }
-  function layout() {
-    if (!pinned()) { document.body.classList.remove('reel-dark'); return; }
-    measure();
-    cur = target = progress();
-    render(cur);
-    darkHeader();
-  }
-  pinBtns.forEach(function (b) { b.addEventListener('click', function () { go(active + (+b.getAttribute('data-go'))); }); });
-  words.forEach(function (w, i) {
-    /* 키보드로 업무명에 오면 그 업무 자리로 (마우스 클릭은 링크 그대로) */
-    w.addEventListener('focus', function () { if (pinned() && w.matches(':focus-visible') && i !== active) go(i); });
+  btns.forEach(function (b) { b.addEventListener('click', function () { go(Math.round(f) + (+b.getAttribute('data-go'))); }); });
+  stage.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { e.preventDefault(); go(Math.round(f) + 1); }
+    else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); go(Math.round(f) - 1); }
+    else if (e.key === 'Home') { e.preventDefault(); go(0); }
+    else if (e.key === 'End') { e.preventDefault(); go(N - 1); }
   });
-  if (pin) {
-    pin.addEventListener('scroll', function () { if (pin.scrollLeft) { pin.scrollLeft = 0; render(cur); } });
-    pin.addEventListener('keydown', function (e) {
-      if (!pinned()) return;
-      if (e.key === 'ArrowRight') { e.preventDefault(); go(active + 1); }
-      else if (e.key === 'ArrowLeft') { e.preventDefault(); go(active - 1); }
-    });
+
+  /* ---------- 끌기: 왼쪽으로 끌면 다음, 오른쪽으로 끌면 이전. 놓으면 거리·속도로 가까운 업무 정면에 맞춘다 ---------- */
+  var startX = 0, startY = 0, startF = 0, pid = null, moved = false, samples = [];
+  function perItem() { return Math.max(160, stage.clientWidth * 0.42); }   /* 이만큼 끌면 업무 하나 */
+  stage.addEventListener('pointerdown', function (e) {
+    if (e.button !== 0 || !shown()) return;
+    pid = e.pointerId; startX = e.clientX; startY = e.clientY; moved = false;
+    startF = linked() ? scrollF() : target;
+    samples = [{ t: performance.now(), x: e.clientX }];
+    if (e.pointerType === 'mouse') e.preventDefault();          /* 끄는 동안 글자가 선택되지 않게 */
+  });
+  stage.addEventListener('pointermove', function (e) {
+    if (e.pointerId !== pid) return;
+    var dx = e.clientX - startX, dy = e.clientY - startY;
+    if (!dragging) {
+      if (Math.abs(dx) < 6 || Math.abs(dx) < Math.abs(dy)) return;   /* 세로 움직임은 페이지 스크롤에 맡긴다 */
+      dragging = true; moved = true;
+      try { stage.setPointerCapture(pid); } catch (err) { /* 잡지 못해도 끌기는 된다 */ }
+      stage.classList.add('is-grabbing');
+    }
+    var nf = clamp(startF - dx / perItem(), 0, N - 1);
+    samples.push({ t: performance.now(), x: e.clientX });
+    if (samples.length > 6) samples.shift();
+    if (linked()) window.scrollTo({ top: yOf(nf), behavior: 'instant' });
+    target = nf; kick();
+  });
+  function release(e) {
+    if (e.pointerId !== pid) return;
+    pid = null;
+    if (!dragging) return;
+    dragging = false;
+    stage.classList.remove('is-grabbing');
+    var a = samples[0], b = samples[samples.length - 1], dt = Math.max(1, b.t - a.t);
+    var v = -((b.x - a.x) / dt) * 1000 / perItem();              /* 업무/초 (왼쪽으로 빠르게 = +) */
+    var x = linked() ? scrollF() : target;
+    var from = Math.round(startF);
+    var t = nearest(clamp(x + v * 0.18, 0, N - 1), from);
+    var most = Math.max(1, Math.round(Math.abs(x - startF)));   /* 빠르게 휙 끌어도 끈 거리보다 많이 건너뛰지 않게 */
+    go(clamp(t, from - most, from + most));
+  }
+  stage.addEventListener('pointerup', release);
+  stage.addEventListener('pointercancel', function (e) { if (e.pointerId === pid) { var was = dragging; dragging = false; pid = null; stage.classList.remove('is-grabbing'); if (was) go(Math.round(linked() ? scrollF() : target)); } });
+  stage.addEventListener('click', function (e) { if (moved) { e.preventDefault(); e.stopPropagation(); moved = false; } }, true);
+
+  /* ---------- 시작·크기 바뀜 ---------- */
+  function layout() {
+    root.classList.toggle('is-flat', flat());
+    if (!shown()) { document.body.classList.remove('reel-dark'); return; }
+    measure();
+    if (linked()) { f = target = scrollF(); settled = Math.round(f); }
+    else { f = target = clamp(Math.round(target), 0, N - 1); }
+    render();
+    darkHeader();
   }
   window.addEventListener('scroll', onScroll, { passive: true });
   window.addEventListener('resize', layout);
+  if (mqReduce.addEventListener) mqReduce.addEventListener('change', layout);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(layout);
   window.addEventListener('load', layout);
   layout();
-
-  /* ---------- 휴대폰·움직임 줄이기: 넘겨 보는 목록 ---------- */
-  var list = root.querySelector('.reel-list__track');
-  var slides = list ? [].slice.call(list.querySelectorAll('.reel-list__slide')) : [];
-  var lCount = root.querySelector('.reel-list__ctrl .reel__count b');
-  var lBtns = [].slice.call(root.querySelectorAll('.reel-list__ctrl .reel__btn'));
-  var lActive = 0;
-  var smooth = !(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
-  function lIndex() {
-    if (slides.length < 2) return 0;
-    if (list.scrollLeft > 0 && list.scrollLeft >= list.scrollWidth - list.clientWidth - 2) return slides.length - 1;   /* 끝까지 넘겼으면 마지막 */
-    var step = slides[1].offsetLeft - slides[0].offsetLeft;
-    return clamp(Math.round(list.scrollLeft / step), 0, slides.length - 1);
-  }
-  function lUpdate() {
-    lActive = lIndex();
-    if (getComputedStyle(root.querySelector('.reel-list')).display !== 'none') slides.forEach(function (s, i) { playOnly(s, i === lActive); });
-    if (lCount) lCount.textContent = pad(lActive + 1);
-    lBtns.forEach(function (b) { b.disabled = (+b.getAttribute('data-go') < 0 && lActive === 0) || (+b.getAttribute('data-go') > 0 && lActive === slides.length - 1); });
-  }
-  function lGo(i) {
-    i = clamp(i, 0, slides.length - 1);
-    list.scrollTo({ left: slides[i].offsetLeft - slides[0].offsetLeft, behavior: smooth ? 'smooth' : 'auto' });
-  }
-  if (list && slides.length) {
-    var lt = 0;
-    list.addEventListener('scroll', function () { clearTimeout(lt); lt = setTimeout(lUpdate, 60); }, { passive: true });
-    lBtns.forEach(function (b) { b.addEventListener('click', function () { lGo(lActive + (+b.getAttribute('data-go'))); }); });
-    list.addEventListener('keydown', function (e) {
-      if (e.key === 'ArrowRight') { e.preventDefault(); lGo(lActive + 1); }
-      else if (e.key === 'ArrowLeft') { e.preventDefault(); lGo(lActive - 1); }
-    });
-    window.addEventListener('resize', lUpdate);
-    lUpdate();
-  }
 })();

@@ -1212,11 +1212,11 @@ html.is-preview .hdr { padding-top: var(--pv-h); }
 .sianbar__dir::before, .sianbar__note::before { content: '·'; margin: 0 7px; opacity: .8; }
 .sianbar__note { opacity: .92; }
 @media print { .sianbar { display: none; } }
-/* ========== 시안 A — 첫 화면 사업분야 가로 흐름 (큰 틀 'reel', tools/build.js heroReel · js/reel.js) ==========
-   지금 업무의 사진(나중에 영상)이 구역 전체를 채우는 배경이고, 그 위에 어두운 그라데이션과 큰 업무명·설명·번호를 얹는다.
-   휴대폰(기본): 화면을 채우는 배경 사진 장을 손가락이나 이전·다음 버튼으로 넘긴다(.reel-list).
-   PC + 움직임 허용 + 스크립트: 구역을 화면 높이만큼 고정하고(.reel__pin) 내리는 만큼 큰 업무명이 가로 전체를 지나간다.
-   가운데 밝은 영역(.reel__band, 가로 12~88%)을 지나는 글자 부분만 선명하다(.reel__lit 가 같은 글을 그 영역만 보이게 자름).
+/* ========== 시안 A — 첫 화면 사업분야 회전 기둥 (큰 틀 'reel', tools/build.js heroReel · js/reel.js) ==========
+   지금 업무의 사진(나중에 영상)이 구역 전체를 채우는 배경이고, 그 위에 어두운 그라데이션, 회전 기둥의 업무명, 설명, 번호를 얹는다.
+   업무명은 보이지 않는 입체 기둥의 면에 붙어 세로축으로 돈다(js/reel.js 가 면마다 회전·깊이·투명도를 정한다). 테두리·상자는 그리지 않는다.
+   스크립트 있음: 모든 화면에서 .reel__pin. PC(움직임 허용)는 화면 높이만큼 고정, 휴대폰·움직임 줄이기는 고정 없이 한 화면.
+   스크립트 없음(또는 아주 오래된 브라우저): 다섯 업무를 넘겨 보는 목록 .reel-list.
    사진 위치는 업무마다 --pos(PC)·--pos-m(휴대폰) — tools/site.config.js hero.media 의 pos·posM */
 .reel { position: relative; background: #08090b; color: #fff; }
 .reel__pin { display: none; }
@@ -1224,8 +1224,18 @@ html.is-preview .hdr { padding-top: var(--pv-h); }
 .reel__lead { margin: 10px 0 0; font-size: clamp(17px, 1.4vw, 22px); font-weight: 600; color: #f1f4f6; text-shadow: 0 1px 12px #0008; }
 .reel-video { opacity: 0; transition: opacity 0.4s ease; }
 .reel-video.is-playing { opacity: 1; }
+.reel-list__slide a, .reel__item a, .reel__more { display: inline-flex; align-items: center; gap: 6px; color: #fff; font-weight: 600; text-decoration: none; }
+.reel-list__slide a:hover, .reel__item a:hover, .reel__more:hover,
+.reel-list__slide a:focus-visible, .reel__item a:focus-visible, .reel__more:focus-visible { text-decoration: underline; text-underline-offset: 4px; }
+.reel__btn { width: 44px; height: 44px; border-radius: 50%; border: 1px solid #ffffff66; background: #08090b4d; color: #fff; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; }
+.reel__btn:hover:not(:disabled) { background: #ffffff26; }
+.reel__btn:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+.reel__btn:disabled { opacity: 0.35; cursor: default; }
+.reel__btn--prev svg { transform: scaleX(-1); }
+.reel__count { color: #c3cad1; font-size: 14px; letter-spacing: 0.06em; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.reel__count b { color: #fff; font-weight: 700; }
 
-/* ---------- 휴대폰(기본): 화면을 채우는 배경 장 넘기기 ---------- */
+/* ---------- 스크립트 없음: 넘겨 보는 목록 (휴대폰은 화면을 채우는 장, 넓은 화면은 다섯 칸) ---------- */
 .reel-list { position: relative; }
 .reel-list__head { position: absolute; z-index: 2; left: 0; right: 0; top: 0; padding-top: calc(var(--header-h) + 22px); pointer-events: none; }
 .reel-list__title { margin: 12px 0 0; font-size: clamp(24px, 6.4vw, 40px); line-height: 1.22; font-weight: 800; letter-spacing: -0.03em; color: #fff; word-break: keep-all; text-shadow: 0 2px 16px #0009; }
@@ -1240,19 +1250,7 @@ html.is-preview .hdr { padding-top: var(--pv-h); }
 .reel-list__no { font-size: 13px; color: #c3cad1; letter-spacing: 0.06em; font-variant-numeric: tabular-nums; }
 .reel-list__slide h2 { margin: 0; font-size: clamp(36px, 10.5vw, 56px); line-height: 1.15; letter-spacing: -0.035em; color: #fff; word-break: keep-all; text-shadow: 0 2px 18px #0008; }
 .reel-list__slide p, .reel__item p { margin: 0; color: #e3e8ec; line-height: 1.65; word-break: keep-all; text-shadow: 0 1px 10px #000a; }
-.reel-list__slide a, .reel__item a, .reel__more { display: inline-flex; align-items: center; gap: 6px; color: #fff; font-weight: 600; text-decoration: none; }
-.reel-list__slide a:hover, .reel__item a:hover, .reel__more:hover,
-.reel-list__slide a:focus-visible, .reel__item a:focus-visible, .reel__more:focus-visible { text-decoration: underline; text-underline-offset: 4px; }
 .reel-list__ctrl { position: absolute; z-index: 3; right: var(--gutter); bottom: 22px; display: flex; align-items: center; gap: 14px; }
-.reel__btn { width: 44px; height: 44px; border-radius: 50%; border: 1px solid #ffffff66; background: #08090b4d; color: #fff; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; }
-.reel__btn:hover:not(:disabled) { background: #ffffff26; }
-.reel__btn:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
-.reel__btn:disabled { opacity: 0.35; cursor: default; }
-.reel__btn--prev svg { transform: scaleX(-1); }
-.reel__count { color: #c3cad1; font-size: 14px; letter-spacing: 0.06em; font-variant-numeric: tabular-nums; white-space: nowrap; }
-.reel__count b { color: #fff; font-weight: 700; }
-
-/* ---------- 넓은 화면에서 목록으로 볼 때(움직임 줄이기·스크립트 꺼짐): 정지된 사진과 글 다섯 칸 ---------- */
 @media (min-width: 961px) {
   .reel-list { padding-block: calc(var(--header-h) + 34px) 56px; }
   .reel-list__head { position: static; padding-top: 0; pointer-events: auto; }
@@ -1268,38 +1266,56 @@ html.is-preview .hdr { padding-top: var(--pv-h); }
   .reel-list__ctrl { display: none; }
 }
 
-/* ---------- PC + 움직임 허용 + 스크립트: 고정하고 가로로 흐름 ---------- */
-@media (min-width: 961px) and (prefers-reduced-motion: no-preference) and (scripting: enabled) {
-  .reel { height: calc(100vh + (var(--n) - 1) * 80vh); }
+/* ---------- 스크립트 있음: 배경 + 회전 기둥 (휴대폰 기준) ---------- */
+@media (scripting: enabled) {
   .reel-list { display: none; }
-  .reel__pin { --reel-fs: clamp(72px, 9.6vw, 172px); --row-top: max(38vh, calc(var(--header-h) + 150px)); display: block; position: sticky; top: 0; height: 100vh; overflow: hidden; }
+  .reel__pin { --reel-fs: clamp(44px, 12vw, 72px); display: block; position: relative; height: clamp(560px, calc(100svh - 72px), 860px); overflow: hidden; }
   .reel__bg { position: absolute; inset: 0; z-index: 0; background: #08090b; }
   .reel__fig { position: absolute; inset: 0; margin: 0; opacity: 0; transition: opacity 0.5s ease; }
   .reel__fig.is-on { opacity: 1; }
-  .reel__fig img, .reel__fig video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: var(--pos, 50% 50%); transform: translate3d(0, var(--py, 0px), 0) scale(1.07); transition: transform 1.2s var(--ease); }
-  .reel__fig.is-on img, .reel__fig.is-on video { transform: translate3d(0, var(--py, 0px), 0) scale(1.03); }
+  .reel__fig img, .reel__fig video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: var(--pos-m, 50% 50%); transform: scale(1.06); transition: transform 1.2s var(--ease); }
+  .reel__fig.is-on img, .reel__fig.is-on video { transform: scale(1.02); }
   .reel__shade { position: absolute; inset: 0; z-index: 1; pointer-events: none;
-    background: linear-gradient(180deg, #06080acc 0%, #06080a59 24%, #06080a40 46%, #06080a66 66%, #06080ad6 100%), linear-gradient(90deg, #06080a8c 0%, #06080a00 46%); }
-  .reel__band { position: absolute; z-index: 1; top: 0; bottom: 0; left: 12%; width: 76%; pointer-events: none; background: linear-gradient(180deg, #ffffff00, #ffffff0d 40%, #ffffff0d 60%, #ffffff00); border-inline: 1px solid #ffffff24; }
-  .reel__intro { position: absolute; z-index: 3; left: var(--gutter); top: calc(var(--header-h) + 26px); max-width: 520px; }
-  .reel__more { margin-top: 14px; font-size: 15px; }
-  .reel__row { position: absolute; z-index: 2; left: 0; right: 0; top: var(--row-top); height: calc(var(--reel-fs) * 1.25); font-size: var(--reel-fs); }
-  .reel__track { position: absolute; left: 0; top: 0; margin: 0; font-size: inherit; line-height: 1.25; font-weight: 800; letter-spacing: -0.04em; white-space: nowrap; color: #ffffff47; will-change: transform; }
-  .reel__lit { position: absolute; inset: 0; clip-path: inset(0 12% 0 12%); pointer-events: none; }
-  .reel__track--lit { color: #fff; text-shadow: 0 4px 30px #0007; }
-  .reel__word { color: inherit; text-decoration: none; }
-  .reel__word:focus-visible { outline: 3px solid #fff; outline-offset: 6px; border-radius: 4px; }
-  .reel__sep { margin: 0 0.8em; }   /* 다음 업무명이 밝은 영역에 너무 일찍 들어오지 않게 간격을 넉넉히 */
-  html[lang="en"] .reel__pin { --reel-fs: clamp(64px, 8.4vw, 150px); }   /* 영어 업무명은 길어서 조금 작게 */
-  .reel__info { position: absolute; z-index: 3; left: var(--gutter); bottom: 10vh; width: min(40vw, 520px); }
-  .reel__item { position: absolute; left: 0; bottom: 0; width: 100%; opacity: 0; visibility: hidden; transform: translateY(10px); transition: opacity 0.45s var(--ease), transform 0.45s var(--ease), visibility 0s 0.45s; }
+    background: linear-gradient(180deg, #06080acc 0%, #06080a59 26%, #06080a40 46%, #06080a73 66%, #06080ae0 100%); }
+  .reel__intro { position: absolute; z-index: 3; left: var(--gutter); right: var(--gutter); top: calc(var(--header-h) + 20px); }
+  .reel__more { margin-top: 12px; font-size: 15px; }
+  /* 회전 기둥: 무대(.reel__stage)가 원근을 주고, 면(.reel__face)마다 js 가 회전·깊이·투명도를 넣는다 */
+  .reel__stage { position: absolute; z-index: 2; left: 0; right: 0; top: 38%; height: calc(var(--reel-fs) * 1.7); perspective: 600px; perspective-origin: 50% 50%; cursor: grab; touch-action: pan-y; -webkit-user-select: none; user-select: none; outline: none; }
+  .reel__stage:focus-visible { box-shadow: inset 0 0 0 2px #ffffffb3; border-radius: 8px; }
+  .reel__stage.is-grabbing { cursor: grabbing; }
+  .reel__prism { position: absolute; inset: 0; transform-style: preserve-3d; pointer-events: none; }
+  .reel__face { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; -webkit-backface-visibility: hidden; backface-visibility: hidden; transform-origin: 50% 50%; will-change: transform, opacity; }
+  .reel__face.is-front { opacity: 1; visibility: visible; }   /* 스크립트가 붙기 전에도 첫 업무는 보인다 */
+  .reel__face span { font-size: var(--reel-fs); font-weight: 800; line-height: 1.2; letter-spacing: -0.04em; white-space: nowrap; color: #fff; text-shadow: 0 4px 30px #0007; }
+  .reel__info { position: absolute; z-index: 3; left: var(--gutter); right: var(--gutter); bottom: 88px; min-height: 120px; }
+  .reel__item { position: absolute; left: 0; right: 0; bottom: 0; opacity: 0; visibility: hidden; transform: translateY(8px); transition: opacity 0.4s var(--ease), transform 0.4s var(--ease), visibility 0s 0.4s; }
   .reel__item.is-on { opacity: 1; visibility: visible; transform: none; transition-delay: 0s; }
-  .reel__item b { display: flex; align-items: baseline; gap: 12px; font-size: clamp(20px, 1.6vw, 26px); color: #fff; letter-spacing: -0.02em; text-shadow: 0 1px 12px #0009; }
+  .reel__item b { display: flex; align-items: baseline; gap: 10px; font-size: 20px; color: #fff; letter-spacing: -0.02em; text-shadow: 0 1px 12px #0009; }
   .reel__item b span { font-size: 0.6em; color: #c3cad1; font-variant-numeric: tabular-nums; letter-spacing: 0.04em; }
+  .reel__item p { margin: 8px 0 12px; font-size: 15px; }
+  .reel__ctrl { position: absolute; z-index: 3; right: var(--gutter); bottom: 22px; display: flex; align-items: center; gap: 14px; }
+  .reel.is-flat .reel__fig, .reel.is-flat .reel__item, .reel.is-flat .reel__fig img { transition: none; }
+}
+/* ---------- PC ---------- */
+@media (scripting: enabled) and (min-width: 961px) {
+  .reel__pin { --reel-fs: clamp(72px, 9.6vw, 172px); height: 100vh; }
+  .reel__fig img, .reel__fig video { object-position: var(--pos, 50% 50%); }
+  .reel__shade { background: linear-gradient(180deg, #06080acc 0%, #06080a59 24%, #06080a40 46%, #06080a66 66%, #06080ad6 100%), linear-gradient(90deg, #06080a8c 0%, #06080a00 46%); }
+  .reel__intro { right: auto; max-width: 520px; top: calc(var(--header-h) + 26px); }
+  .reel__more { margin-top: 14px; }
+  .reel__stage { top: max(34vh, calc(var(--header-h) + 140px)); perspective: 1100px; }
+  .reel__info { right: auto; bottom: 10vh; width: min(40vw, 520px); min-height: 0; }
+  .reel__item b { font-size: clamp(20px, 1.6vw, 26px); gap: 12px; }
   .reel__item p { margin: 10px 0 14px; font-size: clamp(15px, 1.1vw, 17px); }
-  .reel__ctrl { position: absolute; z-index: 3; right: var(--gutter); bottom: 10vh; display: flex; align-items: center; gap: 14px; }
+  .reel__ctrl { bottom: 10vh; }
   .reel__ctrl .reel__count { font-size: 15px; }
   .reel__ctrl .reel__count b { font-size: 30px; letter-spacing: 0; margin-right: 2px; }
+  html[lang="en"] .reel__pin { --reel-fs: clamp(64px, 8.4vw, 150px); }   /* 영어 업무명은 길어서 조금 작게 */
+}
+/* PC + 움직임 허용: 화면 높이만큼 고정하고 스크롤(휠)로 돌린다 */
+@media (scripting: enabled) and (min-width: 961px) and (prefers-reduced-motion: no-preference) {
+  .reel { height: calc(100vh + (var(--n) - 1) * 70vh); }
+  .reel__pin { position: sticky; top: 0; }
 }
 /* 고정된 구역 위에서는 머리말을 어둡고 반투명하게 (js/reel.js 가 body 에 reel-dark 를 붙인다) */
 body.reel-dark[data-page="home"] .hdr { background: #08090bb3; color: #fff; border-color: transparent; -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
