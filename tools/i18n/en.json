@@ -816,7 +816,12 @@
   "탱크 클리닝 · 촉매·충진물 · 화학세정 · 준설 · 관로 조사": "Tank Cleaning · Catalyst & Packing Media · Chemical Cleaning · Dredging · Pipeline Survey",
   "이전 업무": "Previous service",
   "다음 업무": "Next service",
-  "사업분야 넘겨 보기": "Browse our services"
+  "사업분야 넘겨 보기": "Browse our services",
+  "산업설비 클리닝": "Industrial Facility Cleaning",
+  "자체 개발 로봇": "In-House Robots",
+  "촉매·충진물 교체": "Catalyst & Packing Media Replacement",
+  "관로 조사·보수": "Pipeline Survey & Repair",
+  "산업설비 클리닝 · 자체 개발 로봇 · 촉매·충진물 교체 · 화학세정 · 준설·슬러지 회수 · 관로 조사·보수": "Industrial Facility Cleaning · In-House Robots · Catalyst & Packing Media Replacement · Chemical Cleaning · Dredging & Sludge Recovery · Pipeline Survey & Repair"
  },
  "page": {
   "index.html": {

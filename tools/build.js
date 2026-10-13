@@ -1003,7 +1003,7 @@ function heroBase() {
    휴대폰·움직임 줄이기: 고정하지 않고 같은 기둥을 가로 끌기·이전·다음 버튼·키보드로 돌린다(움직임 줄이기는 회전 없이 바뀜).
    지금 업무의 사진(나중에 영상)이 구역 전체를 채우는 배경이고, 왼쪽 아래 짧은 설명, 오른쪽 아래 01 / 05 가 함께 바뀐다.
    스크립트가 없으면 다섯 업무를 넘겨 보는 목록(.reel-list)으로 보인다.
-   업무명은 CFG.hero.services, 사진·영상과 사진 위치는 CFG.hero.media, 설명은 사업분야 데이터(SERVICES)의 문장(사실). */
+   돌아가는 큰 글자는 CFG.hero.faces(순서·문구, 48차), 아래 설명의 업무명은 CFG.hero.services, 사진·영상과 사진 위치는 CFG.hero.media, 설명은 사업분야 데이터(SERVICES)의 문장(사실). */
 const REEL_DESC = {
   S02: '촉매·충진물 작업에서 회수물을 분리합니다.'   // 현장 진행 방식 페이지 "분리장치"의 문장 그대로 (이다결 님 지정)
 };
@@ -1011,7 +1011,17 @@ function reelItems() {
   return CFG.hero.services.map((x, i) => {
     const s = svc(x.svc);
     const m = (CFG.hero.media || {})[x.svc] || { type: 'photo', id: s.photo.id };
-    return { i, svc: x.svc, name: x.label, file: s.file, desc: REEL_DESC[x.svc] || s.card, media: m };
+    return { i, svc: x.svc, name: x.label, face: x.label, file: s.file, desc: REEL_DESC[x.svc] || s.card, media: m };
+  });
+}
+/* 돌아가는 큰 글자(48차): CFG.hero.faces 가 있으면 그 순서·문구로 돈다. svc 가 있는 글자는 그 업무의 배경·설명을 그대로 이어 받고,
+   svc 가 없는 글자는 배경·설명 없이 이름만 둔다(정해지지 않은 자료를 다른 업무에서 빌려 오지 않는다). 글자가 없으면 업무 이름 그대로 */
+function reelFaces() {
+  const list = reelItems();
+  if (!CFG.hero.faces) return list;
+  return CFG.hero.faces.map((x, i) => {
+    const it = x.svc && list.find((y) => y.svc === x.svc);
+    return it ? { ...it, i, face: x.text } : { i, svc: null, name: x.text, face: x.text, file: null, desc: null, media: null };
   });
 }
 /* 배경 하나: 사진은 늘 넣고(영상이 불러오는 중이거나 재생에 실패해도 보이는 대체 사진), 영상이 있으면 그 위에 얹는다.
@@ -1024,34 +1034,37 @@ function reelMedia(m, eager, sizesAttr) {
 const reelPos = (m) => `--pos: ${m.pos || '50% 50%'}; --pos-m: ${m.posM || m.pos || '50% 50%'}`;
 function heroReel() {
   const h = CFG.hero;
-  const items = reelItems();
-  const n = items.length;
+  const items = reelItems();            /* 업무 다섯 개 — 스크립트 없을 때의 목록(.reel-list) */
+  const faces = reelFaces();            /* 돌아가는 큰 글자 — CFG.hero.faces 순서 */
+  const n = items.length, nf = faces.length;
   const pad = (k) => String(k).padStart(2, '0');
   const intro = `<span class="eyebrow">${fill(h.eyebrow, { founded: C.founded })}</span>
         <p class="reel__lead">${h.lead}</p>`;
   return `  <!-- ===== 히어로: 사업분야 가로 흐름 (큰 틀 'reel', 시안 A) ===== -->
-  <section class="reel" id="reel" style="--n: ${n}" aria-label="신정개발이 하는 일">
+  <section class="reel" id="reel" style="--n: ${nf}" aria-label="신정개발이 하는 일">
     <div class="reel__pin">
       <div class="reel__bg">
-${items.map((it, i) => `        <figure class="reel__fig${i ? '' : ' is-on'}" data-i="${i}" style="${reelPos(it.media)}">${reelMedia(it.media, i === 0, '100vw')}</figure>`).join('\n')}
+${faces.map((it, i) => it.media
+  ? `        <figure class="reel__fig${i ? '' : ' is-on'}" data-i="${i}" style="${reelPos(it.media)}">${reelMedia(it.media, i === 0, '100vw')}</figure>`
+  : `        <figure class="reel__fig${i ? '' : ' is-on'}" data-i="${i}"></figure>`).join('\n')}
       </div>
       <div class="reel__shade" aria-hidden="true"></div>
       <div class="reel__intro">
         ${intro}
         <a class="reel__more" href="${h.button.href}">${h.button.label} ${arrow(16)}</a>
       </div>
-      <h1 class="sr-only">${items.map((it) => esc(it.name)).join(' · ')}</h1>
+      <h1 class="sr-only">${faces.map((it) => esc(it.face)).join(' · ')}</h1>
       <div class="reel__stage" tabindex="0" role="group" aria-label="사업분야 넘겨 보기">
         <div class="reel__prism" aria-hidden="true">
-${items.map((it, i) => `          <div class="reel__face${i ? '' : ' is-front'}" data-i="${i}"><span>${esc(it.name)}</span></div>`).join('\n')}
+${faces.map((it, i) => `          <div class="reel__face${i ? '' : ' is-front'}" data-i="${i}"><span>${esc(it.face)}</span></div>`).join('\n')}
         </div>
       </div>
       <div class="reel__info">
-${items.map((it, i) => `        <div class="reel__item${i ? '' : ' is-on'}" data-i="${i}"><b><span>${pad(i + 1)}</span>${esc(it.name)}</b><p>${esc(it.desc)}</p><a href="${it.file}">자세히 보기 ${arrow(14)}</a></div>`).join('\n')}
+${faces.map((it, i) => `        <div class="reel__item${i ? '' : ' is-on'}" data-i="${i}"><b><span>${pad(i + 1)}</span>${esc(it.name)}</b>${it.desc ? `<p>${esc(it.desc)}</p>` : ''}${it.file ? `<a href="${it.file}">자세히 보기 ${arrow(14)}</a>` : ''}</div>`).join('\n')}
       </div>
       <div class="reel__ctrl">
         <button type="button" class="reel__btn reel__btn--prev" data-go="-1" aria-label="이전 업무">${arrow(18)}</button>
-        <span class="reel__count"><b>01</b> / ${pad(n)}</span>
+        <span class="reel__count"><b>01</b> / ${pad(nf)}</span>
         <button type="button" class="reel__btn" data-go="1" aria-label="다음 업무">${arrow(18)}</button>
       </div>
     </div>
@@ -1957,6 +1970,10 @@ function checkConfig() {
   CFG.home.copy.scenes.cards.concat([{ photo: CFG.hero.photo.id }]).forEach((k) => { if (!PHOTOS[k.photo]) configError(`사진 번호 '${k.photo}'이 사진 목록에 없습니다`); });
   if (CFG.sian && CFG.sian.name && !/^#[0-9a-fA-F]{6}$/.test(CFG.sian.color)) configError(`시안 띠 색(sian.color)은 #과 여섯 자리 색 번호로 적습니다. 지금: '${CFG.sian.color}'`);
   /* 큰 틀 'reel'의 업무별 사진·영상 (시안 A) */
+  (CFG.hero.faces || []).forEach((x, i) => {
+    if (!x.text) configError(`첫 화면 돌아가는 글자 ${i + 1}번째의 문구(text)가 없습니다 (설정 hero.faces)`);
+    if (x.svc && !CFG.hero.services.some((y) => y.svc === x.svc)) configError(`첫 화면 돌아가는 글자 '${x.text}'의 업무 번호 '${x.svc}'이 hero.services 에 없습니다 (설정 hero.faces)`);
+  });
   Object.keys(CFG.hero.media || {}).forEach((k) => {
     const m = CFG.hero.media[k];
     if (!svc(k)) configError(`첫 화면 사진의 업무 번호 '${k}'이 없습니다 (설정 hero.media)`);
