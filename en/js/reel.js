@@ -1,9 +1,9 @@
 /* 신정개발 홈페이지 — 첫 화면 사업분야 가로 흐름 (시안 A, 큰 틀 'reel')
-   - PC(가로 961px 이상, 움직임 줄이기 꺼짐): 구역이 화면에 고정된 동안 내린 만큼 업무명이 오른쪽→왼쪽으로 지나간다.
+   - PC(가로 961px 이상, 움직임 줄이기 꺼짐): 구역이 화면 높이만큼 고정된 동안 내린 만큼 업무명이 화면 가로 전체를 오른쪽→왼쪽으로 지나간다.
      올리면 반대로 돌아온다. 시간에 따라 저절로 움직이는 것은 없다(스크롤 위치만 따른다).
-     업무 k 의 가운데가 밝은 영역(화면 가로 62.5%)에 올 때 사진·설명·번호가 k 로 바뀐다. 마지막 업무를 지나면 다음 구역으로 내려간다.
+     업무 k 의 가운데가 밝은 영역 가운데(화면 가로 50%)에 올 때 배경 사진(영상)·설명·번호가 k 로 바뀐다. 마지막 업무를 지나면 다음 구역으로 내려간다.
    - 키보드: 업무명(링크)에 초점이 가면 그 업무 자리로 스크롤, 구역 안에서 ← → 로 이전·다음.
-   - 그 밖(휴대폰·움직임 줄이기·좁은 화면): 손가락으로 넘기는 목록. 이전·다음 버튼과 01 / 05 번호만 맞춘다.
+   - 그 밖(휴대폰·움직임 줄이기·좁은 화면): 화면을 채우는 배경 장을 손가락으로 넘기는 목록. 이전·다음 버튼과 01 / 05 번호를 맞춘다.
    - 화면에 보이는 글은 HTML 에만 있다(영어판은 build-en 이 HTML 을 옮긴다). */
 (function () {
   'use strict';
@@ -29,10 +29,25 @@
   function topOf() { return root.getBoundingClientRect().top + window.pageYOffset; }
   function progress() { return clamp((window.pageYOffset - topOf()) / span(), 0, 1); }
 
+  /* 배경 영상(있을 때만): 지금 업무의 영상만 무음·반복 재생. 재생이 시작돼야 대체 사진 위로 보이고, 실패하면 사진이 그대로 보인다.
+     글자 이동과는 따로 움직인다(글자는 스크롤만 따른다). 움직임 줄이기에서는 재생하지 않는다 */
+  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function playOnly(box, on) {
+    var v = box && box.querySelector('video.reel-video');
+    if (!v) return;
+    if (!on || reduceMotion) { if (!v.paused) v.pause(); return; }
+    if (!v.getAttribute('src')) {
+      v.addEventListener('playing', function () { v.classList.add('is-playing'); });
+      v.addEventListener('error', function () { v.classList.remove('is-playing'); });
+      v.setAttribute('src', v.getAttribute('data-src'));
+    }
+    var p = v.play();
+    if (p && p.catch) p.catch(function () { v.classList.remove('is-playing'); });
+  }
   function setActive(a) {
     if (a === active) return;
     active = a;
-    figs.forEach(function (f, i) { f.classList.toggle('is-on', i === a); });
+    figs.forEach(function (f, i) { f.classList.toggle('is-on', i === a); playOnly(f, i === a); });
     items.forEach(function (it, i) { it.classList.toggle('is-on', i === a); });
     if (pinCount) pinCount.textContent = pad(a + 1);
     pinBtns.forEach(function (b) { b.disabled = (+b.getAttribute('data-go') < 0 && a === 0) || (+b.getAttribute('data-go') > 0 && a === n - 1); });
@@ -44,7 +59,7 @@
     var i0 = n > 1 ? Math.min(n - 2, Math.floor(f)) : 0;
     var t = n > 1 ? f - i0 : 0;
     var c = n > 1 ? centers[i0] + (centers[i0 + 1] - centers[i0]) * t : centers[0];
-    var x = window.innerWidth * 0.625 - c;   /* 밝은 영역(50~75%)의 가운데 */
+    var x = window.innerWidth * 0.5 - c;   /* 밝은 영역(가로 12~88%)의 가운데 */
     tracks.forEach(function (tr) { tr.style.transform = 'translate3d(' + x.toFixed(1) + 'px,0,0)'; });
     var a = Math.round(f);
     setActive(a);
@@ -113,6 +128,7 @@
   }
   function lUpdate() {
     lActive = lIndex();
+    if (getComputedStyle(root.querySelector('.reel-list')).display !== 'none') slides.forEach(function (s, i) { playOnly(s, i === lActive); });
     if (lCount) lCount.textContent = pad(lActive + 1);
     lBtns.forEach(function (b) { b.disabled = (+b.getAttribute('data-go') < 0 && lActive === 0) || (+b.getAttribute('data-go') > 0 && lActive === slides.length - 1); });
   }

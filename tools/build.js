@@ -996,11 +996,12 @@ function heroBase() {
 }
 
 /* ---------- 큰 틀 'reel'의 첫 화면 — 사업분야 가로 흐름 (시안 A) ----------
-   PC: 구역이 화면에 잠시 고정되고, 내리는 만큼 큰 업무명이 오른쪽에서 왼쪽으로 지나간다(js/reel.js, 시간에 따라 저절로 움직이지 않음).
-       화면 가로 50~75% 의 밝은 영역을 지나는 글자 부분만 선명하다(같은 글을 두 겹으로 겹치고 위 겹을 그 영역만 보이게 자른다).
-       밝은 영역 아래에 지금 업무의 사진, 왼쪽 아래에 짧은 설명, 오른쪽 아래에 01 / 05 번호.
-   휴대폰·움직임 줄이기·스크립트 꺼짐: 고정하지 않고, 손가락으로 넘기거나 이전·다음 버튼으로 보는 목록.
-   업무명은 CFG.hero.services, 사진(나중에 영상)은 CFG.hero.media, 설명은 사업분야 데이터(SERVICES)의 문장(사실). */
+   PC: 구역이 화면 높이만큼 고정되고, 내리는 만큼 큰 업무명이 화면 가로 전체를 오른쪽에서 왼쪽으로 지나간다
+       (js/reel.js, 스크롤 위치만 따른다 — 시간에 따라 저절로 움직이지 않음).
+       가운데 밝은 영역(화면 가로 12~88%, 76%)을 지나는 글자 부분만 선명하다(같은 글을 두 겹으로 겹치고 위 겹을 그 영역만 보이게 자른다).
+       지금 업무의 사진(나중에 영상)이 구역 전체를 채우는 배경이 되고, 그 위에 어두운 그라데이션, 큰 업무명, 왼쪽 아래 짧은 설명, 오른쪽 아래 01 / 05.
+   휴대폰·움직임 줄이기·스크립트 꺼짐: 고정하지 않는다. 휴대폰은 화면을 채우는 배경 사진 위에 글을 얹은 장을 손가락이나 이전·다음 버튼으로 넘긴다.
+   업무명은 CFG.hero.services, 사진·영상과 사진 위치는 CFG.hero.media, 설명은 사업분야 데이터(SERVICES)의 문장(사실). */
 const REEL_DESC = {
   S02: '촉매·충진물 작업에서 회수물을 분리합니다.'   // 현장 진행 방식 페이지 "분리장치"의 문장 그대로 (이다결 님 지정)
 };
@@ -1011,13 +1012,14 @@ function reelItems() {
     return { i, svc: x.svc, name: x.label, file: s.file, desc: REEL_DESC[x.svc] || s.card, media: m };
   });
 }
-/* 사진 또는 영상 하나. 영상(type: 'video')은 나중에 3D 영상으로 바꿀 때를 위한 자리 — 지금은 쓰지 않는다 */
+/* 배경 하나: 사진은 늘 넣고(영상이 불러오는 중이거나 재생에 실패해도 보이는 대체 사진), 영상이 있으면 그 위에 얹는다.
+   영상은 js/reel.js 가 지금 업무일 때만 주소를 넣어 무음·반복으로 재생하고, 재생이 시작돼야 사진 위로 보인다 */
 function reelMedia(m, eager, sizesAttr) {
-  if (m.type === 'video') {
-    return `<video src="${m.src}"${m.poster ? ` poster="${m.poster}"` : ''} muted playsinline loop preload="metadata" aria-label="${esc(m.alt || '')}"></video>`;
-  }
-  return photo(P(m.id), sizesAttr, eager);
+  const img = photo(P(m.id), sizesAttr, eager);
+  if (m.type !== 'video') return img;
+  return img + `<video class="reel-video" data-src="${m.src}" muted playsinline loop preload="none" aria-hidden="true"></video>`;
 }
+const reelPos = (m) => `--pos: ${m.pos || '50% 50%'}; --pos-m: ${m.posM || m.pos || '50% 50%'}`;
 function heroReel() {
   const h = CFG.hero;
   const items = reelItems();
@@ -1030,17 +1032,18 @@ function heroReel() {
   return `  <!-- ===== 히어로: 사업분야 가로 흐름 (큰 틀 'reel', 시안 A) ===== -->
   <section class="reel" id="reel" style="--n: ${n}" aria-label="신정개발이 하는 일">
     <div class="reel__pin">
+      <div class="reel__bg">
+${items.map((it, i) => `        <figure class="reel__fig${i ? '' : ' is-on'}" data-i="${i}" style="${reelPos(it.media)}">${reelMedia(it.media, i === 0, '100vw')}</figure>`).join('\n')}
+      </div>
+      <div class="reel__shade" aria-hidden="true"></div>
+      <div class="reel__band" aria-hidden="true"></div>
       <div class="reel__intro">
         ${intro}
         <a class="reel__more" href="${h.button.href}">${h.button.label} ${arrow(16)}</a>
       </div>
-      <div class="reel__band" aria-hidden="true"></div>
       <div class="reel__row">
         <h1 class="reel__track" aria-label="${esc(items.map((it) => it.name).join(', '))}">${words(false)}</h1>
         <div class="reel__lit" aria-hidden="true"><div class="reel__track reel__track--lit">${words(true)}</div></div>
-      </div>
-      <div class="reel__media">
-${items.map((it, i) => `        <figure class="reel__fig${i ? '' : ' is-on'}" data-i="${i}">${reelMedia(it.media, i === 0, '(min-width: 961px) 30vw, 92vw')}</figure>`).join('\n')}
       </div>
       <div class="reel__info">
 ${items.map((it, i) => `        <div class="reel__item${i ? '' : ' is-on'}" data-i="${i}"><b><span>${pad(i + 1)}</span>${esc(it.name)}</b><p>${esc(it.desc)}</p><a href="${it.file}">자세히 보기 ${arrow(14)}</a></div>`).join('\n')}
@@ -1058,15 +1061,17 @@ ${items.map((it, i) => `        <div class="reel__item${i ? '' : ' is-on'}" data
         <h1 class="reel-list__title">${items.map((it) => esc(it.name)).join(' · ')}</h1>
       </div>
       <div class="reel-list__track" tabindex="0" aria-label="사업분야 넘겨 보기">
-${items.map((it, i) => `        <article class="reel-list__slide" data-i="${i}">
-          <figure class="reel-list__fig">${reelMedia(it.media, false, '(min-width: 961px) 40vw, 92vw')}</figure>
-          <span class="reel-list__no">${pad(i + 1)} / ${pad(n)}</span>
-          <h2>${esc(it.name)}</h2>
-          <p>${esc(it.desc)}</p>
-          <a href="${it.file}">자세히 보기 ${arrow(14)}</a>
+${items.map((it, i) => `        <article class="reel-list__slide" data-i="${i}" style="${reelPos(it.media)}">
+          <figure class="reel-list__bg">${reelMedia(it.media, false, '(min-width: 961px) 20vw, 100vw')}</figure>
+          <div class="reel-list__body">
+            <span class="reel-list__no">${pad(i + 1)} / ${pad(n)}</span>
+            <h2>${esc(it.name)}</h2>
+            <p>${esc(it.desc)}</p>
+            <a href="${it.file}">자세히 보기 ${arrow(14)}</a>
+          </div>
         </article>`).join('\n')}
       </div>
-      <div class="wrap reel-list__ctrl">
+      <div class="reel-list__ctrl">
         <button type="button" class="reel__btn reel__btn--prev" data-go="-1" aria-label="이전 업무">${arrow(18)}</button>
         <span class="reel__count"><b>01</b> / ${pad(n)}</span>
         <button type="button" class="reel__btn" data-go="1" aria-label="다음 업무">${arrow(18)}</button>
@@ -1954,7 +1959,7 @@ function checkConfig() {
   Object.keys(CFG.hero.media || {}).forEach((k) => {
     const m = CFG.hero.media[k];
     if (!svc(k)) configError(`첫 화면 사진의 업무 번호 '${k}'이 없습니다 (설정 hero.media)`);
-    if (m.type === 'photo' && !PHOTOS[m.id]) configError(`첫 화면 사진 번호 '${m.id}'이 사진 목록에 없습니다 (설정 hero.media.${k})`);
+    if (!PHOTOS[m.id]) configError(`첫 화면 ${m.type === 'video' ? '영상의 대체 ' : ''}사진 번호 '${m.id}'이 사진 목록에 없습니다 (설정 hero.media.${k}) — 영상도 불러오는 중·재생 실패 때 보일 사진(id)이 있어야 합니다`);
     if (m.type === 'video' && !m.src) configError(`첫 화면 영상 주소(src)가 없습니다 (설정 hero.media.${k})`);
     if (m.type !== 'photo' && m.type !== 'video') configError(`첫 화면 사진 종류는 'photo' 또는 'video' 입니다 (설정 hero.media.${k})`);
   });

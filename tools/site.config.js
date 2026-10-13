@@ -97,13 +97,14 @@ module.exports = {
     ],
     lead: '산업설비 클리닝 전문기업, 신정개발', // 큰 제목 아래 한 줄
     button: { label: '사업분야 보기', href: 'services.html' }, // 버튼 문구와 가는 주소
-    media: {                       // 큰 틀 'reel'(시안 A)에서 업무마다 보여 줄 사진. 사진은 사진 목록(tools/build.js PHOTOS)에 있는 것만
-      S01: { type: 'photo', id: 'P01' },   // 탱크 클리닝 — 탱크 안에서 고압 세척을 하는 작업자
-      S02: { type: 'photo', id: 'P03' },   // 촉매·충진물 — 반응기 안 흡입 로봇과 호스
-      S03: { type: 'photo', id: 'M10' },   // 화학세정 — 화학세정 페이지와 같은 사진(화학세정 장면 사진은 아직 없음)
-      S04: { type: 'photo', id: 'W10' },   // 준설 — 맨홀에 호스를 연결해 작업하는 작업자들
-      S05: { type: 'photo', id: 'P08' }    // 관로 조사 — GPR 장비로 조사하는 작업자
-      // 나중에 3D 영상으로 바꿀 때: { type: 'video', src: 'assets/video/파일.mp4', poster: 'assets/photos/P01-800.jpg', alt: '영상 설명' }
+    media: {                       // 큰 틀 'reel'(시안 A)에서 업무마다 화면 전체를 채우는 배경 사진(또는 영상). 사진은 사진 목록(tools/build.js PHOTOS)에 있는 것만
+      S01: { type: 'photo', id: 'P01', pos: '50% 55%', posM: '30% 55%' },   // 탱크 클리닝 — 탱크 안에서 고압 세척을 하는 작업자
+      S02: { type: 'photo', id: 'P03', pos: '50% 50%', posM: '56% 50%' },   // 촉매·충진물 — 반응기 안 흡입 로봇과 호스
+      S03: { type: 'photo', id: 'M10', pos: '38% 58%', posM: '20% 58%' },   // 화학세정 — 화학세정 페이지와 같은 사진(화학세정 장면 사진은 아직 없음)
+      S04: { type: 'photo', id: 'W10', pos: '50% 62%', posM: '52% 62%' },   // 준설 — 맨홀에 호스를 연결해 작업하는 작업자들
+      S05: { type: 'photo', id: 'P08', pos: '50% 58%', posM: '44% 60%' }    // 관로 조사 — GPR 장비로 조사하는 작업자
+      // pos = PC 배경에서 사진의 어느 부분을 보일지(가로% 세로%), posM = 휴대폰(세로 화면)에서. 사진은 구역 전체를 덮는 배경이다
+      // 나중에 영상으로 바꿀 때: { type: 'video', src: 'assets/video/파일.mp4', id: 'P01'(불러오는 중·재생 실패 때 보일 사진), pos: '50% 50%', posM: '50% 50%' }
     }
   },
 
