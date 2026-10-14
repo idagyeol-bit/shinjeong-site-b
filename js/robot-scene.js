@@ -1,9 +1,11 @@
 /* 신정개발 홈페이지 — '자체 개발 로봇' 배경의 3D 로봇 (시안 A 첫 화면 큰 틀 'reel')
-   - 모델: assets/3d/robot-show.glb (휴대폰 robot-show-m.glb). 이다결 님이 준 Meshy 로봇 모델을 웹용으로 줄인 판이다
-     (삼각형·텍스처 크기만 줄였고 형태·비율·재질은 그대로, 원본 파일은 바꾸지 않음).
+   - 모델: assets/3d/robot-v2.glb (휴대폰 robot-v2-m.glb, 53차-2). 이다결 님이 준 Meshy 모델(원본은 바꾸지 않음)에서
+     사진(W05)으로 확인되는 덮개·옆 띠·궤도 옆판·전조등·볼트를 정확한 형태로 다시 만들고, 글자는 선명한 라벨로 다시 붙였다.
+     앞 작업부·궤도는 원본 형상을 줄여 쓰고 재질만 나눴다(노출 금속 / 검은 부분 / 고무). 예전 판(robot-show)은 지우지 않고 둔다.
    - 움직이는 것이 없다: 자동 회전·카메라 순환·로봇이나 부품의 동작이 없다. 처음에는 로봇 전체가 보이는 사선 구도로 멈춰 있다.
    - 첫 화면 배경일 때는 입력을 받지 않는다(휠·끌기는 업무명 넘김이 받는다). setExplore(true) 일 때만 끌기 회전·휠(두 손가락) 확대를 켠다.
-     카메라는 로봇을 감싼 공 밖·땅 위에서만 움직인다(로봇 속으로 들어가거나 로봇을 놓치지 않게).
+     카메라는 로봇 밖·땅 위에서만 움직인다. 가장 가까이 가는 거리는 보는 방향마다 정한다: 원본 형상 부분(앞 작업부·궤도)은
+     텍스처가 화면에서 2배 넘게 늘어나지 않는 거리까지만(없는 디테일을 확대로 만들지 않음), 새로 만든 판·라벨 쪽은 더 가까이.
    - 필요할 때만 그린다(조작·감속·구도 이동·크기 바뀜). 손을 놓으면 짧게 감속한 뒤 멈추고, 그리기도 멈춘다.
    - 로봇을 놓을 자리(제목 아래 빈 곳 후보와 피할 상자)는 부르는 쪽(js/reel.js)이 opt.frame() 으로 알려 준다.
    - 3D 를 못 쓰면 Promise 가 실패하고, 부르는 쪽은 밝은 정지 그림을 그대로 둔다. */
@@ -37,14 +39,14 @@ export async function create(host, opt = {}) {
   const scene = new THREE.Scene();
   scene.background = bg;
   const pm = new THREE.PMREMGenerator(renderer);
-  scene.environment = pm.fromScene(studio(), 0.03).texture;           /* 밝은 연회색 방 + 큰 조명판: 금속 몸체가 밝고 부드럽게 비친다(재질 값은 그대로) */
+  scene.environment = pm.fromScene(studio(), 0.03).texture;           /* 위는 밝고 바닥 쪽은 어두운 방 + 큰 조명판: 광택 스테인리스에 부드러운 그러데이션 반사 */
   pm.dispose();
   scene.add(new THREE.HemisphereLight(0xffffff, 0xc4cad0, 0.8));
   const key = new THREE.DirectionalLight(0xffffff, 1.5); key.position.set(-3, 5, 4); scene.add(key);
   const fill = new THREE.DirectionalLight(0xffffff, 0.5); fill.position.set(4, 2, -3); scene.add(fill);
 
   /* ---------- 로봇 (처음 한 번만 불러온다). 앞(흡입 헤드)이 -X, 'SUCTION ROBOT' 글자가 있는 옆면이 +Z ---------- */
-  const gltf = await new GLTFLoader().loadAsync(base + 'robot-show' + (small || lite ? '-m' : '') + '.glb');
+  const gltf = await new GLTFLoader().loadAsync(base + 'robot-v2' + (small || lite ? '-m' : '') + '.glb');
   const robot = gltf.scene;
   const box0 = new THREE.Box3().setFromObject(robot), c0 = box0.getCenter(new THREE.Vector3());
   robot.position.set(-c0.x, -box0.min.y, -c0.z);                      /* 바닥(y=0) 위, 가운데 */
@@ -54,12 +56,16 @@ export async function create(host, opt = {}) {
   const box = new THREE.Box3().setFromObject(robot), size = box.getSize(new THREE.Vector3());
   const target = box.getCenter(new THREE.Vector3());                  /* 돌려 볼 때의 중심 = 로봇 한가운데 */
   const R = box.getBoundingSphere(new THREE.Sphere()).radius;
-  /* 화면에서 로봇이 차지하는 크기를 재는 표본 점(꼭짓점 일부) */
-  const sample = [];
+  /* 화면에서 로봇이 차지하는 크기를 재는 표본 점(꼭짓점 일부). scanPts = 원본 형상 부분(텍스처 밀도가 정해진 곳)
+     라벨은 판 바로 위의 얇은 판이라 깊이 차이로 깜빡이지 않게 앞으로 당겨 그린다 */
+  const sample = [], scanPts = []; let texels = Infinity;
   robot.traverse((o) => {
     if (!o.isMesh) return;
+    if (o.material && /^decal-/.test(o.material.name)) { o.material.polygonOffset = true; o.material.polygonOffsetFactor = -2; o.material.polygonOffsetUnits = -2; o.renderOrder = 2; }
+    const tpu = o.userData && o.userData.texelsPerUnit;
+    if (tpu) texels = Math.min(texels, tpu);
     const p = o.geometry.attributes.position, step = Math.max(1, Math.floor(p.count / 1500));
-    for (let i = 0; i < p.count; i += step) sample.push(new THREE.Vector3().fromBufferAttribute(p, i).applyMatrix4(o.matrixWorld));
+    for (let i = 0; i < p.count; i += step) { const v = new THREE.Vector3().fromBufferAttribute(p, i).applyMatrix4(o.matrixWorld); sample.push(v); if (tpu) scanPts.push(v); }
   });
   /* 바닥의 부드러운 그림자 판(그림자 지도 대신 — 느린 그래픽에서도 가볍다) */
   const blob = new THREE.Mesh(new THREE.PlaneGeometry(size.x * 1.3, size.z * 1.5), new THREE.MeshBasicMaterial({ color: 0x1b2026, alphaMap: blobTex(), transparent: true, opacity: 0.4, depthWrite: false }));
@@ -73,7 +79,7 @@ export async function create(host, opt = {}) {
   controls.enablePan = false;
   controls.enableDamping = true; controls.dampingFactor = 0.16;    /* 가볍게 감속하되 오래 미끄러지지 않게 */
   controls.rotateSpeed = 0.75; controls.zoomSpeed = 0.9;
-  controls.minDistance = R * 1.35;                                    /* 로봇을 감싼 공 밖에서만(속으로 들어가지 않게) */
+  controls.minDistance = R * 1.35;                                    /* 처음 값. 탐색 중에는 nearLimit() 가 보는 방향마다 다시 정한다 */
   controls.minPolarAngle = 10 * DEG; controls.maxPolarAngle = 84 * DEG;   /* 위에서 내려다보기 ~ 땅 바로 위까지(땅 밑으로는 안 간다) */
   canvas.addEventListener('wheel', (e) => { if (controls.enabled) e.preventDefault(); }, { passive: false });
 
@@ -83,6 +89,17 @@ export async function create(host, opt = {}) {
   const view = { ox: 0, oy: 0, tween: null, exploring: false };
   let W = 1, H = 1, raf = 0, inFrame = false, lastChange = 0, frames = 0, active = false, dirty = true;
   const sph = new THREE.Spherical(), tmp = new THREE.Vector3();
+  /* 가장 가까이 갈 수 있는 거리(지금 보는 방향 기준): 그 방향으로 로봇이 가장 튀어나온 곳 + 12cm(속으로 들어가지 않게),
+     원본 형상 부분은 텍스처가 화면에서 MAG 배 넘게 늘어나지 않을 거리까지(없는 디테일을 확대로 만들지 않음) */
+  const MAG = 2, dirV = new THREE.Vector3();
+  function nearLimit() {
+    dirV.copy(camera.position).sub(controls.target).normalize();
+    const t = controls.target; let ra = -Infinity, rs = -Infinity;
+    for (const p of sample) { const d = (p.x - t.x) * dirV.x + (p.y - t.y) * dirV.y + (p.z - t.z) * dirV.z; if (d > ra) ra = d; }
+    for (const p of scanPts) { const d = (p.x - t.x) * dirV.x + (p.y - t.y) * dirV.y + (p.z - t.z) * dirV.z; if (d > rs) rs = d; }
+    const d1 = isFinite(texels) ? H / (2 * Math.tan(camera.fov * DEG / 2)) / (MAG * texels) : 0;
+    return Math.max(ra + 0.12, rs + d1);
+  }
 
   function placeCam(az, polar, dist) {
     sph.set(dist, polar, az);
@@ -197,7 +214,7 @@ export async function create(host, opt = {}) {
       placeCam(f.az + (t.az - f.az) * k, f.polar + (t.polar - f.polar) * k, f.dist + (t.dist - f.dist) * k);
       if (k >= 1) view.tween = null; else more = true;
     }
-    if (controls.enabled && !view.tween && controls.update()) more = true;
+    if (controls.enabled && !view.tween) { controls.minDistance = nearLimit(); if (controls.update()) more = true; }
     inFrame = false;
     renderer.render(scene, camera);
     dirty = false;
@@ -278,22 +295,25 @@ export async function create(host, opt = {}) {
   };
 }
 
-/* 반사용 밝은 스튜디오: 연회색 방 안에 위·양옆·앞뒤 큰 조명판(빛나는 판). 한 번 PMREM 으로 구워 환경 지도로만 쓴다 */
+/* 반사용 제품 촬영 환경: 위는 밝고 바닥 쪽은 어두운 둥근 방(0.95 → 수평 0.78 → 바닥 0.42) + 위·앞뒤·옆 큰 조명판.
+   광택 스테인리스의 세로 면에 부드러운 그러데이션이 비쳐 하얗게 날아가지 않는다. 한 번 PMREM 으로 구워 환경 지도로만 쓴다 */
 function studio() {
   const sc = new THREE.Scene();
-  const room = new THREE.Mesh(new THREE.BoxGeometry(16, 10, 16), new THREE.MeshBasicMaterial({ color: 0xc4c9ce, side: THREE.BackSide }));
-  room.position.y = 4; sc.add(room);
-  const floor = new THREE.Mesh(new THREE.PlaneGeometry(16, 16), new THREE.MeshBasicMaterial({ color: 0xb8bdc2 }));
-  floor.rotation.x = -Math.PI / 2; floor.position.y = -0.99; sc.add(floor);
+  const geo = new THREE.SphereGeometry(10, 48, 24), col = [], p = geo.attributes.position;
+  for (let i = 0; i < p.count; i++) {
+    const y = p.getY(i) / 10, k = y > 0.05 ? 0.78 + 0.17 * Math.min(1, (y - 0.05) / 0.6) : 0.42 + 0.36 * Math.max(0, (y + 0.35) / 0.4);
+    col.push(k * 0.96, k * 0.98, k);
+  }
+  geo.setAttribute('color', new THREE.Float32BufferAttribute(col, 3));
+  sc.add(new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ vertexColors: true, side: THREE.BackSide })));
   const pane = (w, h, x, y, z, ry, rx, k) => {
     const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ color: new THREE.Color(k, k, k), side: THREE.DoubleSide }));
     m.position.set(x, y, z); m.rotation.set(rx, ry, 0); sc.add(m);
   };
-  pane(10, 6, 0, 8.9, 0, 0, Math.PI / 2, 3.2);     /* 위 */
-  pane(6, 5, -7.9, 3.5, 0, Math.PI / 2, 0, 2.2);   /* 왼쪽 */
-  pane(6, 5, 7.9, 3.5, 0, -Math.PI / 2, 0, 1.6);   /* 오른쪽 */
-  pane(8, 4, 0, 3, 7.9, Math.PI, 0, 1.8);          /* 앞 */
-  pane(8, 4, 0, 3, -7.9, 0, 0, 1.2);               /* 뒤 */
+  pane(8, 5, 0, 7.5, 0, 0, Math.PI / 2, 1.9);       /* 위(윗면이 하얗게 날아가지 않을 만큼) */
+  pane(2.2, 6, -7, 2.5, 1.5, Math.PI / 2, 0, 1.9);  /* 앞쪽(-X) 세로 조명 */
+  pane(2.2, 6, 7, 2.5, -1.5, -Math.PI / 2, 0, 1.4); /* 뒤쪽(+X) 세로 조명 */
+  pane(6, 2.2, 0, 2.2, 7, Math.PI, 0, 1.2);         /* 왼쪽 면(+Z) 쪽 */
   return sc;
 }
 /* 로봇 밑 부드러운 그림자: 가운데가 진하고 가장자리로 사라지는 판(투명도 지도) */

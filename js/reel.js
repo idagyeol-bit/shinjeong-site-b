@@ -247,12 +247,21 @@
         if (W / H >= 0.9) cands.push({ x: W * 0.6, t: side }, { x: W * 0.66, t: side });
         var xt = (hdr ? Math.max(0, hdr.getBoundingClientRect().bottom - fr.top) : 0) + gap;
         var xb2 = H - (mqPC.matches ? H * 0.06 : 24) - 84;
+        var X = { l: W * 0.1, t: xt + (xb2 - xt) * 0.06, w: W * 0.8, h: (xb2 - xt) * 0.88 };
+        /* 탐색 이름표(왼쪽 위)가 있으면 그 아래 또는 그 오른쪽 중 로봇이 더 크게 들어가는 쪽 */
+        var tagEl = root.querySelector('.reel__xtag[data-xtag="' + c.kind + '"]');
+        if (tagEl) {
+          var tg = rel(tagEl), fitX = function (r) { return Math.min(r.w / 1.5, r.h); };
+          var below = { l: X.l, t: tg.b + gap, w: X.w, h: xb2 - tg.b - 2 * gap };
+          var right = { l: tg.r + 2 * gap, t: X.t, w: W - tg.r - 2 * gap - W * 0.04, h: X.h };
+          X = fitX(right) > fitX(below) ? right : below;
+        }
         return {
           cands: cands, avoid: avoid,
           bottom: H - Math.max(22, H * 0.05),                 /* 아래 끝은 바닥 그림자가 잘리지 않게 조금 남긴다 */
           maxW: W * (W / H < 0.9 ? 0.9 : 0.52),               /* 배경으로 남게: 가로는 화면의 52%(세로 화면 90%)까지 */
           edge: Math.max(16, W * 0.03),
-          explore: { l: W * 0.1, t: xt + (xb2 - xt) * 0.06, w: W * 0.8, h: (xb2 - xt) * 0.88 }
+          explore: X
         };
       };
     }
@@ -320,6 +329,7 @@
       clearTimeout(hideT);
       root.classList.remove('is-hit');
       if (xb('pp')) xb('pp').hidden = c.scene.animated === false;   /* 움직이지 않는 로봇에는 일시정지가 없다 */
+      root.setAttribute('data-x', c.kind);   /* 이 장면의 이름표만 보이게 */
       xbar.hidden = false;
       root.classList.add('is-explore');
       c.scene.setExplore(true);
@@ -337,7 +347,7 @@
       root.removeEventListener('wheel', noWheel, { passive: false });
       document.removeEventListener('keydown', noKeys);
       if (c.scene) c.scene.setExplore(false);
-      hideT = setTimeout(function () { if (!cur) xbar.hidden = true; }, 320);
+      hideT = setTimeout(function () { if (!cur) { xbar.hidden = true; root.removeAttribute('data-x'); } }, 320);
       if (focusBack !== false && c.enterBtn && !c.enterBtn.hidden) c.enterBtn.focus({ preventScroll: true });
     }
     if (xbar) {

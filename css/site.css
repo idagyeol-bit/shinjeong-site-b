@@ -1431,6 +1431,16 @@ body[data-hero="reel"][data-page="home"].reel-dark .hdr .hdr__cta:hover { backgr
 .reel__xhint-touch { display: none; }
 @media (hover: none) and (pointer: coarse) { .reel__xhint-touch { display: inline; } .reel__xhint-mouse { display: none; } }
 @media (scripting: enabled) and (min-width: 961px) { .reel__xbar { bottom: 6vh; } }
+/* 탐색 모드 이름표(53차-2): 로봇 이름·용도는 3D 표면이 아닌 HTML 글자로, 돌리거나 확대해도 읽히게 왼쪽 위(소개 판 자리)에 둔다.
+   평소에는 보이지 않지만 자리는 차지한다(js/reel.js 가 로봇 놓을 자리를 잴 때 쓴다) */
+.reel__xtag { position: absolute; z-index: 5; left: var(--gutter); top: calc(var(--header-h) + 12px); max-width: calc(100% - 2 * var(--gutter)); padding: 12px 16px 13px; border-radius: 12px; background: #ffffffeb; box-shadow: 0 1px 2px #0f172a0f, 0 6px 20px #0f172a0d; color: #14191f; visibility: hidden; opacity: 0; transition: opacity 0.3s ease, visibility 0s 0.3s; pointer-events: none; }
+.reel.is-explore[data-x="robot"] .reel__xtag[data-xtag="robot"] { visibility: visible; opacity: 1; transition: opacity 0.3s ease 0.1s, visibility 0s 0s; }
+.reel__xtag-k { display: inline-block; margin-bottom: 4px; padding: 2px 8px; border-radius: 10px; background: #e8edf2; font-size: 12px; font-weight: 700; letter-spacing: 0.02em; color: #334155; }
+.reel__xtag b { display: block; font-size: 17px; font-weight: 800; letter-spacing: -0.02em; color: #17324D; }
+.reel__xtag p { margin: 4px 0 0; font-size: 14px; line-height: 1.5; color: #334155; word-break: keep-all; }
+.reel__xtag small { display: block; margin-top: 6px; font-size: 12px; line-height: 1.45; color: #64748b; word-break: keep-all; }
+@media (scripting: enabled) and (min-width: 961px) { .reel__xtag { top: calc(var(--header-h) + 56px); max-width: 400px; padding: 16px 22px 17px; } .reel__xtag b { font-size: 20px; } .reel__xtag p { font-size: 15px; } }
+@media (scripting: enabled) and (min-width: 961px) and (max-height: 820px) { .reel__xtag { top: calc(var(--header-h) + 36px); } }
 /* 배경 움직임 멈춤: 작은 버튼 하나(3D 장면이 돌 때만 보임). 누르면 멈추고, 다시 누르면 돈다 */
 .reel__btn--motion { width: 36px; height: 36px; }
 .reel__btn--motion[hidden] { display: none; }

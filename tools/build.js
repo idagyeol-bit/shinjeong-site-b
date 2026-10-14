@@ -1035,9 +1035,11 @@ function reelFaces() {
 const SCENES = {
   catalyst: { poster: 'assets/3d/catalyst-poster.jpg', w: 1920, h: 1200, posterM: 'assets/3d/catalyst-poster-m.jpg', wM: 780, hM: 1600,
     alt: '절개한 탱크 바닥의 밝은 회색 입자 위 흡입 로봇과 탱크 밖 분리장치로 이어진 호스(3D 그림)', enter: '3D 자세히 보기' },
-  /* 53차: '자체 개발 로봇' 배경 — 이다결 님이 준 로봇 3D 모델(assets/3d/robot-show.glb, js/robot-scene.js). 자동 회전·동작 없음 */
-  robot: { poster: 'assets/3d/robot-poster.jpg', w: 1920, h: 1200, posterM: 'assets/3d/robot-poster-m.jpg', wM: 780, hM: 1456,
-    alt: '밝은 바탕 위, 앞쪽에 흡입 헤드가 달린 궤도형 로봇(3D 모델)', enter: '로봇 자세히 보기', still: true }
+  /* 53차: '자체 개발 로봇' 배경 — 이다결 님이 준 로봇 3D 모델을 다시 다듬은 판(assets/3d/robot-v2.glb, js/robot-scene.js). 자동 회전·동작 없음
+     tag = 탐색 모드에서 왼쪽 위에 보이는 이름표(HTML 글자). 이름은 사진 W05 의 설명, 문장은 현장 진행 방식의 문장 그대로. note = 모델의 한계 */
+  robot: { poster: 'assets/3d/robot-v2-poster.jpg', w: 1920, h: 1200, posterM: 'assets/3d/robot-v2-poster-m.jpg', wM: 780, hM: 1456,
+    alt: '밝은 바탕 위, 앞쪽에 흡입 헤드가 달린 궤도형 로봇(3D 모델)', enter: '로봇 자세히 보기', still: true,
+    tag: { label: '3D 모델', name: P('W05').cap, text: '로봇은 설비 안에서, 흡입차는 밖에서 호스로 연결해 작업합니다.', note: '앞 왼쪽 사진 한 장을 바탕으로 만든 모델이라, 오른쪽·뒤쪽 모양은 실제와 다를 수 있습니다.' } }
 };
 function scenePoster(sc) {
   return `<picture><source media="(max-width: 960px)" srcset="${sc.posterM}" width="${sc.wM}" height="${sc.hM}"><img src="${sc.poster}" width="${sc.w}" height="${sc.h}" alt="${esc(sc.alt)}" decoding="async"></picture>`;
@@ -1097,7 +1099,13 @@ ${faces.some((it) => it.media && it.media.scene) ? `${[...new Set(faces.filter((
           <button type="button" class="reel__xbtn reel__xbtn--close" data-x="close">닫기</button>
         </div>
       </div>
-` : ''}    </div>
+${[...new Set(faces.filter((it) => it.media && it.media.scene && SCENES[it.media.scene].tag).map((it) => it.media.scene))].map((k) => { const t = SCENES[k].tag; return `      <div class="reel__xtag" data-xtag="${k}">
+        <span class="reel__xtag-k">${esc(t.label)}</span>
+        <b>${esc(t.name)}</b>
+        <p>${esc(t.text)}</p>
+        <small>${esc(t.note)}</small>
+      </div>
+`; }).join('')}` : ''}    </div>
 
     <div class="reel-list">
       <div class="wrap reel-list__head">
