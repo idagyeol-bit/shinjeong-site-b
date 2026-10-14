@@ -1085,7 +1085,16 @@ ${faces.some((it) => it.media && it.media.scene) ? `        <button type="button
         <span class="reel__count"><b>01</b> / ${pad(nf)}</span>
         <button type="button" class="reel__btn" data-go="1" aria-label="다음 업무">${arrow(18)}</button>
       </div>
-    </div>
+${faces.some((it) => it.media && it.media.scene) ? `      <button type="button" class="reel__xenter" data-explore hidden>3D 자세히 보기</button>
+      <div class="reel__xbar" hidden>
+        <p class="reel__xhint"><span class="reel__xhint-mouse">끌어서 돌리고, 휠로 확대·축소합니다</span><span class="reel__xhint-touch">한 손가락으로 돌리고, 두 손가락으로 확대·축소합니다</span></p>
+        <div class="reel__xbtns">
+          <button type="button" class="reel__xbtn" data-x="pp" aria-pressed="false"><span class="reel__x-pause">일시정지</span><span class="reel__x-play">재생</span></button>
+          <button type="button" class="reel__xbtn" data-x="reset">기본 시점</button>
+          <button type="button" class="reel__xbtn reel__xbtn--close" data-x="close">닫기</button>
+        </div>
+      </div>
+` : ''}    </div>
 
     <div class="reel-list">
       <div class="wrap reel-list__head">

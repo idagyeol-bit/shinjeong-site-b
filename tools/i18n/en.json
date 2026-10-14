@@ -824,6 +824,12 @@
   "탱크 속 촉매·충진물을 로봇으로 회수하고, 회수물을 분리합니다.": "Our robots recover catalyst and packing media from inside tanks, and the recovered material is separated.",
   "절개한 탱크 바닥의 밝은 회색 입자 위 흡입 로봇과 탱크 밖 분리장치로 이어진 호스(3D 그림)": "Suction robot on light-grey pellets in a cutaway tank, with a hose running to a separator outside the tank (3D illustration)",
   "배경 움직임 멈춤": "Pause background motion",
+  "3D 자세히 보기": "View in 3D",
+  "끌어서 돌리고, 휠로 확대·축소합니다": "Drag to rotate, scroll to zoom",
+  "한 손가락으로 돌리고, 두 손가락으로 확대·축소합니다": "Drag with one finger to rotate, pinch to zoom",
+  "일시정지": "Pause",
+  "기본 시점": "Reset view",
+  "닫기": "Close",
   "푸른 하늘 아래 흰색 원통형 저장 탱크들": "White cylindrical storage tanks under a blue sky",
   "산업설비 클리닝 · 자체 개발 로봇 · 촉매·충진물 교체 · 화학세정 · 준설·슬러지 회수 · 관로 조사·보수": "Industrial Facility Cleaning · In-House Robots · Catalyst & Packing Media Replacement · Chemical Cleaning · Dredging & Sludge Recovery · Pipeline Survey & Repair"
  },
