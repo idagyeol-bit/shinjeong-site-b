@@ -1106,9 +1106,9 @@ ${faces.map((it, i) => `        <div class="reel__item${i ? '' : ' is-on'}" data
       </div>
       <div class="reel__ctrl">
 ${faces.some((it) => it.media && it.media.scene && !SCENES[it.media.scene].still) ? `        <button type="button" class="reel__btn reel__btn--motion" data-motion aria-pressed="false" aria-label="배경 움직임 멈춤" hidden><svg class="reel__i-pause" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1" fill="currentColor"/><rect x="14" y="5" width="4" height="14" rx="1" fill="currentColor"/></svg><svg class="reel__i-play" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg></button>
-` : ''}        <button type="button" class="reel__btn reel__btn--prev" data-go="-1" aria-label="이전 업무">${arrow(18)}</button>
+` : ''}        <button type="button" class="reel__btn reel__btn--prev" data-go="-1">${arrow(16)}<span>이전 사업</span></button>
         <span class="reel__count"><b>01</b> / ${pad(nf)}</span>
-        <button type="button" class="reel__btn" data-go="1" aria-label="다음 업무">${arrow(18)}</button>
+        <button type="button" class="reel__btn reel__btn--next" data-go="1"><span>다음 사업</span>${arrow(16)}</button>
       </div>
 ${faces.some((it) => it.media && it.media.scene) ? `${[...new Set(faces.filter((it) => it.media && it.media.scene).map((it) => it.media.scene))].map((k) => `      <button type="button" class="reel__xenter" data-explore="${k}" hidden>${SCENES[k].enter}</button>\n`).join('')}      <div class="reel__xbar" hidden>
         <p class="reel__xhint"><span class="reel__xhint-mouse">끌어서 돌리고, 휠로 확대·축소합니다</span><span class="reel__xhint-touch">한 손가락으로 돌리고, 두 손가락으로 확대·축소합니다</span></p>
