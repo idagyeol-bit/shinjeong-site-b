@@ -1437,6 +1437,28 @@ body[data-hero="reel"][data-page="home"].reel-dark .hdr .hdr__cta:hover { backgr
   .reel__item { padding: 18px 22px; }
   .reel__ctrl .reel__btn[data-go] { height: 44px; }
 }
+/* ===== 54차: 번외 슬라이드('자체 개발 로봇' = 우리가 일하는 방법) — 이 슬라이드에서만 쓰는 class(.reel__xtra-*, .reel__lbl-x, .reel__count-x, .reel.is-extra) =====
+   사업 번호 대신 큰 제목 위 주황 알약 이름표, 아래 카드는 작은 이름표 + 한 줄, 번호 자리에는 이름표 글, 넘김 버튼은 '이전'·'다음'. 제목·3D 는 그대로 */
+.reel__xtra-badge { position: absolute; z-index: 3; left: 50%; top: calc(var(--stage-top, 38%) + var(--reel-fs, 60px) * 0.22 - 46px); transform: translateX(-50%); padding: 7px 18px; border-radius: 999px; background: #c2410c; color: #fff; font-size: 15px; font-weight: 800; letter-spacing: 0.02em; white-space: nowrap; box-shadow: 0 2px 10px #c2410c33; pointer-events: none; opacity: 0; visibility: hidden; transition: opacity 0.4s ease, visibility 0s 0.4s; }
+@media (max-width: 960px) {
+  .reel__xtra-badge { top: calc(var(--stage-top, 38%) + var(--reel-fs, 60px) * 0.22 - 34px); padding: 5px 14px; font-size: 13px; }
+  .reel__item b.reel__xtra-desc { margin-top: 8px; font-size: 17px; }
+}
+.reel__xtra-badge.is-on { opacity: 1; visibility: visible; transition: opacity 0.4s ease 0.15s, visibility 0s 0s; }
+.reel.is-explore .reel__xtra-badge { opacity: 0; visibility: hidden; }
+.reel__xtra-tag { display: inline-block; padding: 3px 10px; border-radius: 999px; background: #fdecdf; color: #c2410c; font-size: 13px; font-weight: 800; }
+.reel__item b.reel__xtra-desc { display: block; margin-top: 10px; color: #14191f; font-size: 19px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.4; word-break: keep-all; }
+.reel__lbl-x, .reel__count-x { display: none; }
+.reel.is-extra .reel__ctrl .reel__lbl { display: none; }
+.reel.is-extra .reel__ctrl .reel__lbl-x { display: inline; }
+.reel.is-extra .reel__ctrl .reel__count-n { display: none; }
+.reel.is-extra .reel__ctrl .reel__count-x { display: inline; color: #c2410c; font-size: 13px; font-weight: 800; letter-spacing: 0; }
+@media (scripting: enabled) and (min-width: 961px) {
+  .reel__xtra-badge { padding: 9px 22px; font-size: 17px; }
+  .reel__xtra-tag { font-size: 14px; }
+  .reel__item b.reel__xtra-desc { font-size: clamp(21px, 1.7vw, 24px); }
+  .reel.is-extra .reel__ctrl .reel__count-x { font-size: 15px; line-height: 2.4; }
+}
 /* '3D 자세히 보기'(제목 아래 버튼 하나)와 탐색 모드(.reel.is-explore): 제목·설명·넘김 버튼을 0.3초에 걸쳐 숨기고 장면을 끌어 돌려 본다.
    머리말은 그대로. 이 모드에서만 아래에 작은 일시정지·기본 시점·닫기와(처음에만) 조작 안내 */
 .reel__xenter { position: absolute; z-index: 4; left: 50%; transform: translateX(-50%); top: calc(var(--stage-top, 38%) + var(--reel-fs) * 1.7 + 4px); height: 40px; padding: 0 18px; border-radius: 20px; border: 1px solid #14191f40; background: #fffffff2; color: #14191f; font: inherit; font-size: 14px; font-weight: 700; cursor: pointer; white-space: nowrap; box-shadow: 0 2px 10px #0000001a; transition: opacity 0.3s ease, background 0.2s ease; }

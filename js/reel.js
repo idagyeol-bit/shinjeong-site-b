@@ -19,6 +19,7 @@
   var figs = [].slice.call(root.querySelectorAll('.reel__fig'));
   var items = [].slice.call(root.querySelectorAll('.reel__item'));
   var countB = root.querySelector('.reel__ctrl .reel__count b');
+  var countX = root.querySelector('.reel__ctrl .reel__count-x');
   var btns = [].slice.call(root.querySelectorAll('.reel__ctrl .reel__btn[data-go]'));
   var N = faces.length;
   if (!N) return;
@@ -75,7 +76,12 @@
     faces.forEach(function (x, i) { x.classList.toggle('is-front', i === a); });
     figs.forEach(function (x, i) { x.classList.toggle('is-on', i === a); playOnly(x, i === a); });
     items.forEach(function (x, i) { x.classList.toggle('is-on', i === a); });
-    if (countB) countB.textContent = pad(a + 1);
+    /* 번호: 사업 슬라이드는 사업 번호(data-no, 번외 제외), 번외 슬라이드(data-extra)는 숫자 대신 이름표 글(54차) */
+    var it = items[a], xt = it && it.hasAttribute('data-extra') && it.querySelector('.reel__xtra-tag'), extra = xt ? xt.textContent : '';
+    root.classList.toggle('is-extra', !!extra);
+    if (countX) countX.textContent = extra || '';
+    if (countB) countB.textContent = (it && it.getAttribute('data-no')) || pad(a + 1);
+    [].forEach.call(root.querySelectorAll('[data-xtra]'), function (x) { x.classList.toggle('is-on', +x.getAttribute('data-xtra') === a); });
     btns.forEach(function (b) { var d = +b.getAttribute('data-go'); b.disabled = (d < 0 && a === 0) || (d > 0 && a === N - 1); });
     bright();
     if (s3) s3.update();

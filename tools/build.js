@@ -1026,8 +1026,8 @@ function reelFaces() {
   return CFG.hero.faces.map((x, i) => {
     const it = x.svc && list.find((y) => y.svc === x.svc);
     /* desc: 아래 설명을 이 문장으로 바꾼다 · name: false = 큰 글자와 겹치는 업무명(번호 포함)을 아래 설명에서 뺀다 (49차) */
-    return it ? { ...it, i, face: x.text, desc: x.desc || it.desc, name: x.name === false ? '' : it.name } : { i, svc: null, name: x.text, face: x.text, file: null, desc: null, media: x.media || null };
-  });
+    return it ? { ...it, i, face: x.text, desc: x.desc || it.desc, name: x.name === false ? '' : it.name } : { i, svc: null, name: x.text, face: x.text, file: null, desc: null, media: x.media || null, extra: x.extra || null };
+  }).map((it, i, all) => ({ ...it, no: it.extra ? 0 : all.slice(0, i + 1).filter((y) => !y.extra).length }));   /* no = 사업 번호(번외 슬라이드는 0, 사업만 1부터 센다, 54차) */
 }
 /* 배경 하나: 사진은 늘 넣고(영상이 불러오는 중이거나 재생에 실패해도 보이는 대체 사진), 영상이 있으면 그 위에 얹는다.
    영상은 js/reel.js 가 지금 업무일 때만 주소를 넣어 무음·반복으로 재생하고, 재생이 시작돼야 사진 위로 보인다 */
@@ -1078,7 +1078,7 @@ function heroReel() {
   const h = CFG.hero;
   const items = reelItems();            /* 업무 다섯 개 — 스크립트 없을 때의 목록(.reel-list) */
   const faces = reelFaces();            /* 돌아가는 큰 글자 — CFG.hero.faces 순서 */
-  const n = items.length, nf = faces.length;
+  const n = items.length, nf = faces.length, nb = faces.filter((it) => !it.extra).length;   /* nb = 사업 슬라이드 수(번외 제외) */
   const pad = (k) => String(k).padStart(2, '0');
   const intro = `<span class="eyebrow">${fill(h.eyebrow, { founded: C.founded })}</span>
         <p class="reel__lead">${h.lead}</p>`;
@@ -1101,14 +1101,14 @@ ${faces.map((it, i) => it.media
 ${faces.map((it, i) => `          <div class="reel__face${i ? '' : ' is-front'}" data-i="${i}"><span>${esc(it.face)}</span></div>`).join('\n')}
         </div>
       </div>
-      <div class="reel__info">
-${faces.map((it, i) => `        <div class="reel__item${i ? '' : ' is-on'}" data-i="${i}">${it.name ? `<b><span>${pad(i + 1)}</span>${esc(it.name)}</b>` : ''}${it.desc ? `<p>${esc(it.desc)}</p>` : ''}${it.file ? `<a href="${it.file}">자세히 보기 ${arrow(14)}</a>` : ''}${it.media && it.media.scene && SCENES[it.media.scene].robots ? robotPicker(SCENES[it.media.scene].robots) : ''}</div>`).join('\n')}
+${faces.filter((it) => it.extra).map((it) => `      <span class="reel__xtra-badge" data-xtra="${it.i}" aria-hidden="true">${esc(it.extra.tag)}</span>\n`).join('')}      <div class="reel__info">
+${faces.map((it, i) => `        <div class="reel__item${i ? '' : ' is-on'}" data-i="${i}"${it.extra ? ` data-extra` : ` data-no="${pad(it.no)}"`}>${it.extra ? `<span class="reel__xtra-tag">${esc(it.extra.tag)}</span><b class="reel__xtra-desc">${esc(it.extra.desc)}</b>` : ''}${it.name && !it.extra ? `<b><span>${pad(it.no)}</span>${esc(it.name)}</b>` : ''}${it.desc ? `<p>${esc(it.desc)}</p>` : ''}${it.file ? `<a href="${it.file}">자세히 보기 ${arrow(14)}</a>` : ''}${it.media && it.media.scene && SCENES[it.media.scene].robots ? robotPicker(SCENES[it.media.scene].robots) : ''}</div>`).join('\n')}
       </div>
       <div class="reel__ctrl">
 ${faces.some((it) => it.media && it.media.scene && !SCENES[it.media.scene].still) ? `        <button type="button" class="reel__btn reel__btn--motion" data-motion aria-pressed="false" aria-label="배경 움직임 멈춤" hidden><svg class="reel__i-pause" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1" fill="currentColor"/><rect x="14" y="5" width="4" height="14" rx="1" fill="currentColor"/></svg><svg class="reel__i-play" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg></button>
-` : ''}        <button type="button" class="reel__btn reel__btn--prev" data-go="-1">${arrow(16)}<span>이전 사업</span></button>
-        <span class="reel__count"><b>01</b> / ${pad(nf)}</span>
-        <button type="button" class="reel__btn reel__btn--next" data-go="1"><span>다음 사업</span>${arrow(16)}</button>
+` : ''}        <button type="button" class="reel__btn reel__btn--prev" data-go="-1">${arrow(16)}<span class="reel__lbl">이전 사업</span><span class="reel__lbl-x">이전</span></button>
+        <span class="reel__count"><span class="reel__count-n"><b>01</b> / ${pad(nb)}</span><span class="reel__count-x"></span></span>
+        <button type="button" class="reel__btn reel__btn--next" data-go="1"><span class="reel__lbl">다음 사업</span><span class="reel__lbl-x">다음</span>${arrow(16)}</button>
       </div>
 ${faces.some((it) => it.media && it.media.scene) ? `${[...new Set(faces.filter((it) => it.media && it.media.scene).map((it) => it.media.scene))].map((k) => `      <button type="button" class="reel__xenter" data-explore="${k}" hidden>${SCENES[k].enter}</button>\n`).join('')}      <div class="reel__xbar" hidden>
         <p class="reel__xhint"><span class="reel__xhint-mouse">끌어서 돌리고, 휠로 확대·축소합니다</span><span class="reel__xhint-touch">한 손가락으로 돌리고, 두 손가락으로 확대·축소합니다</span></p>

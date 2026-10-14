@@ -97,7 +97,7 @@ module.exports = {
     ],
     faces: [                       // 큰 틀 'reel'(시안 A) 첫 화면에서 돌아가는 큰 글자 — 이 순서대로 돈다(48차, 이다결 님 지정 문구)
       { text: '산업설비 클리닝', svc: 'S01' },  // svc = 배경 사진·아래 설명·자세히 보기를 이어 받을 업무 번호 (위 services 의 이름과 hero.media 를 쓴다)
-      { text: '자체 개발 로봇', media: { scene: 'robot' } },   // svc 없음 = 설명 없이 이름만. media.scene: 'robot' = 배경에 로봇 3D 모델(js/robot-scene.js, 53차). 자동 회전 없음, '로봇 자세히 보기'·로봇 클릭으로 돌려 본다
+      { text: '자체 개발 로봇', media: { scene: 'robot' }, extra: { tag: '우리가 일하는 방법', desc: '위험한 내부 작업은 로봇이 먼저 들어갑니다' } },   // svc 없음 = 사업이 아닌 번외 슬라이드. extra = 번호 대신 이름표(tag)와 설명 한 줄(desc), 사업 번호에서 빠진다(54차). media.scene: 'robot' = 배경에 로봇 3D 모델(js/robot-scene.js, 53차). 자동 회전 없음, '로봇 자세히 보기'·로봇 클릭으로 돌려 본다
       { text: '촉매·충진물 교체', svc: 'S02', name: false, desc: '탱크 속 촉매·충진물을 로봇으로 회수하고, 회수물을 분리합니다.' },   // 49차: 큰 글자와 겹치는 업무명은 빼고 아래 설명을 이 한 문장으로
       { text: '화학세정', svc: 'S03' },
       { text: '준설·슬러지 회수', svc: 'S04' },
