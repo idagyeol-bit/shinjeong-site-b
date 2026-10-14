@@ -934,7 +934,8 @@ function pcards(ids, titles, sizesAttr, subs, nums) {   // subs[i]가 있으면 
   return ids.map((id, i) => {
     const p = P(id);
     const t = titles && titles[i] ? titles[i] : p.cap;
-    return `        <figure class="pcard${nums ? ' pcard--num' : ''}" data-reveal${i ? ` data-delay="${i * 80}"` : ''}>
+    /* 첫 화면 로봇 이름표의 '자세히 보기'가 오는 사진 카드에는 자리 이름(id="photo-W05")을 붙인다(53차-3) */
+    return `        <figure class="pcard${nums ? ' pcard--num' : ''}"${robotAnchors().has(id) ? ` id="photo-${id}"` : ''} data-reveal${i ? ` data-delay="${i * 80}"` : ''}>
           <div class="pcard__fig">${photo(p, sz)}</div>
           <figcaption><b>${nums && nums[i] ? nums[i] : esc(t)}</b>${subs && subs[i] ? `<span>${esc(subs[i])}</span>` : ''}</figcaption>
         </figure>`;
@@ -1036,17 +1037,35 @@ const SCENES = {
   catalyst: { poster: 'assets/3d/catalyst-poster.jpg', w: 1920, h: 1200, posterM: 'assets/3d/catalyst-poster-m.jpg', wM: 780, hM: 1600,
     alt: '절개한 탱크 바닥의 밝은 회색 입자 위 흡입 로봇과 탱크 밖 분리장치로 이어진 호스(3D 그림)', enter: '3D 자세히 보기' },
   /* 53차: '자체 개발 로봇' 배경 — 이다결 님이 준 로봇 3D 모델을 다시 다듬은 판(assets/3d/robot-v2.glb, js/robot-scene.js). 자동 회전·동작 없음
-     tag = 탐색 모드에서 왼쪽 위에 보이는 이름표(HTML 글자). 이름은 사진 W05 의 설명, 문장은 현장 진행 방식의 문장 그대로. note = 모델의 한계 */
+     robots(53차-3) = 전시할 로봇 목록. 한 대마다 모델 파일 이름(model, assets/3d/<model>.glb), 썸네일 사진(photo), 이름(name), 사용 작업(use),
+     이름표가 가는 자세히 보기 주소(href), 모델의 한계(note). 로봇마다 같은 화면 위의 HTML 이름표 하나가 생기고, 2대 이상이면 아래에 선택 버튼이 생긴다.
+     지금은 사진으로 확인된 1대뿐(이름 = 사진 W05 의 설명, 사용 작업 = 이 사진이 실린 업무, 주소 = 그 페이지의 이 사진 자리).
+     같은 모델을 다른 로봇처럼 넣지 않는다. 새 로봇은 모델·이름·사용 작업·주소가 확인된 뒤에만 넣는다 */
   robot: { poster: 'assets/3d/robot-v2-poster.jpg', w: 1920, h: 1200, posterM: 'assets/3d/robot-v2-poster-m.jpg', wM: 780, hM: 1456,
     alt: '밝은 바탕 위, 앞쪽에 흡입 헤드가 달린 궤도형 로봇(3D 모델)', enter: '로봇 자세히 보기', still: true,
-    tag: { label: '3D 모델', name: P('W05').cap, text: '로봇은 설비 안에서, 흡입차는 밖에서 호스로 연결해 작업합니다.', note: '앞 왼쪽 사진 한 장을 바탕으로 만든 모델이라, 오른쪽·뒤쪽 모양은 실제와 다를 수 있습니다.' } }
+    robots: [
+      { model: 'robot-v2', photo: 'W05', name: P('W05').cap, use: '촉매·충진물 작업', href: 'service-catalyst-media.html#photo-W05',
+        note: '앞 왼쪽 사진 한 장을 바탕으로 만든 모델이라, 오른쪽·뒤쪽 모양은 실제와 다를 수 있습니다.' }
+    ] }
 };
+/* 로봇 전시: 이름표(로봇마다 하나, 지금 고른 것만 보임) · 선택 버튼(2대 이상일 때만) · 탐색 모드 아래의 모델 한계 문장 */
+function robotTags(robots) {
+  return robots.map((r, k) => `      <a class="reel__rtag${k ? '' : ' is-on'}" href="${r.href}" data-rtag="${k}" data-model="${r.model}">
+        <b>${esc(r.name)}</b><span>${esc(r.use)}</span><em>자세히 보기 ${arrow(12)}</em>
+      </a>
+`).join('');
+}
+function robotPicker(robots) {
+  if (robots.length < 2) return '';
+  return `<div class="reel__rsel" role="group" aria-label="로봇 고르기">${robots.map((r, k) => { const p = P(r.photo); return `<button type="button" class="reel__rpick" data-robot-pick="${k}" aria-pressed="${k ? 'false' : 'true'}"><img src="assets/photos/${r.photo}-640.jpg" width="640" height="${Math.round(640 * p.h / p.w)}" alt="" loading="lazy" decoding="async"><span>${esc(r.name)}</span></button>`; }).join('')}</div>`;
+}
+const robotAnchors = () => new Set(SCENES.robot.robots.map((r) => r.photo));
 function scenePoster(sc) {
   return `<picture><source media="(max-width: 960px)" srcset="${sc.posterM}" width="${sc.wM}" height="${sc.hM}"><img src="${sc.poster}" width="${sc.w}" height="${sc.h}" alt="${esc(sc.alt)}" decoding="async"></picture>`;
 }
 function reelMedia(m, eager, sizesAttr, withScene) {
   /* 3D 장면(scene: 'catalyst' · 'robot'): 밝은 정지 그림 위에 js/reel.js 가 장면(js/<이름>-scene.js)을 얹는다(스크립트 없는 목록은 사진 그대로) */
-  if (withScene && m.scene) return scenePoster(SCENES[m.scene]) + `<div class="reel-3d" data-kind="${m.scene}" data-scene="./js/${m.scene}-scene.js" data-models="assets/3d/"${SCENES[m.scene].still ? ' data-still' : ''} aria-hidden="true"></div>`;
+  if (withScene && m.scene) return scenePoster(SCENES[m.scene]) + `<div class="reel-3d" data-kind="${m.scene}" data-scene="./js/${m.scene}-scene.js" data-models="assets/3d/"${SCENES[m.scene].robots ? ` data-model="${SCENES[m.scene].robots[0].model}"` : ''}${SCENES[m.scene].still ? ' data-still' : ''} aria-hidden="true"></div>`;
   const img = photo(P(m.id), sizesAttr, eager);
   if (m.type !== 'video') return img;
   return img + `<video class="reel-video" data-src="${m.src}" muted playsinline loop preload="none" aria-hidden="true"></video>`;
@@ -1083,7 +1102,7 @@ ${faces.map((it, i) => `          <div class="reel__face${i ? '' : ' is-front'}"
         </div>
       </div>
       <div class="reel__info">
-${faces.map((it, i) => `        <div class="reel__item${i ? '' : ' is-on'}" data-i="${i}">${it.name ? `<b><span>${pad(i + 1)}</span>${esc(it.name)}</b>` : ''}${it.desc ? `<p>${esc(it.desc)}</p>` : ''}${it.file ? `<a href="${it.file}">자세히 보기 ${arrow(14)}</a>` : ''}</div>`).join('\n')}
+${faces.map((it, i) => `        <div class="reel__item${i ? '' : ' is-on'}" data-i="${i}">${it.name ? `<b><span>${pad(i + 1)}</span>${esc(it.name)}</b>` : ''}${it.desc ? `<p>${esc(it.desc)}</p>` : ''}${it.file ? `<a href="${it.file}">자세히 보기 ${arrow(14)}</a>` : ''}${it.media && it.media.scene && SCENES[it.media.scene].robots ? robotPicker(SCENES[it.media.scene].robots) : ''}</div>`).join('\n')}
       </div>
       <div class="reel__ctrl">
 ${faces.some((it) => it.media && it.media.scene && !SCENES[it.media.scene].still) ? `        <button type="button" class="reel__btn reel__btn--motion" data-motion aria-pressed="false" aria-label="배경 움직임 멈춤" hidden><svg class="reel__i-pause" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1" fill="currentColor"/><rect x="14" y="5" width="4" height="14" rx="1" fill="currentColor"/></svg><svg class="reel__i-play" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg></button>
@@ -1093,19 +1112,13 @@ ${faces.some((it) => it.media && it.media.scene && !SCENES[it.media.scene].still
       </div>
 ${faces.some((it) => it.media && it.media.scene) ? `${[...new Set(faces.filter((it) => it.media && it.media.scene).map((it) => it.media.scene))].map((k) => `      <button type="button" class="reel__xenter" data-explore="${k}" hidden>${SCENES[k].enter}</button>\n`).join('')}      <div class="reel__xbar" hidden>
         <p class="reel__xhint"><span class="reel__xhint-mouse">끌어서 돌리고, 휠로 확대·축소합니다</span><span class="reel__xhint-touch">한 손가락으로 돌리고, 두 손가락으로 확대·축소합니다</span></p>
-        <div class="reel__xbtns">
+${SCENES.robot.robots.map((r, k) => `        <p class="reel__xnote${k ? '' : ' is-on'}" data-rnote="${k}"><b>3D 모델</b> <span>${esc(r.note)}</span></p>\n`).join('')}${SCENES.robot.robots.length > 1 ? `        ${robotPicker(SCENES.robot.robots)}\n` : ''}        <div class="reel__xbtns">
           <button type="button" class="reel__xbtn" data-x="pp" aria-pressed="false"><span class="reel__x-pause">일시정지</span><span class="reel__x-play">재생</span></button>
           <button type="button" class="reel__xbtn" data-x="reset">기본 시점</button>
           <button type="button" class="reel__xbtn reel__xbtn--close" data-x="close">닫기</button>
         </div>
       </div>
-${[...new Set(faces.filter((it) => it.media && it.media.scene && SCENES[it.media.scene].tag).map((it) => it.media.scene))].map((k) => { const t = SCENES[k].tag; return `      <div class="reel__xtag" data-xtag="${k}">
-        <span class="reel__xtag-k">${esc(t.label)}</span>
-        <b>${esc(t.name)}</b>
-        <p>${esc(t.text)}</p>
-        <small>${esc(t.note)}</small>
-      </div>
-`; }).join('')}` : ''}    </div>
+${faces.some((it) => it.media && it.media.scene === 'robot') ? robotTags(SCENES.robot.robots) : ''}` : ''}    </div>
 
     <div class="reel-list">
       <div class="wrap reel-list__head">

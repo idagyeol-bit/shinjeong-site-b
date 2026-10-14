@@ -246,16 +246,10 @@
         var cands = [{ x: W / 2, t: btn.b + gap, prefer: 1.2 }];
         if (W / H >= 0.9) cands.push({ x: W * 0.6, t: side }, { x: W * 0.66, t: side });
         var xt = (hdr ? Math.max(0, hdr.getBoundingClientRect().bottom - fr.top) : 0) + gap;
-        var xb2 = H - (mqPC.matches ? H * 0.06 : 24) - 84;
+        /* 탐색 모드 아래 조작 줄의 높이: 버튼·안내(84) + 로봇 모델 한계 한 줄 + 로봇 선택 버튼(있을 때) */
+        var xbarH = 84 + (c.kind === 'robot' && xbar && xbar.querySelector('.reel__xnote') ? 34 : 0) + (xbar && xbar.querySelector('.reel__rsel') ? 118 : 0);
+        var xb2 = H - (mqPC.matches ? H * 0.06 : 24) - xbarH;
         var X = { l: W * 0.1, t: xt + (xb2 - xt) * 0.06, w: W * 0.8, h: (xb2 - xt) * 0.88 };
-        /* 탐색 이름표(왼쪽 위)가 있으면 그 아래 또는 그 오른쪽 중 로봇이 더 크게 들어가는 쪽 */
-        var tagEl = root.querySelector('.reel__xtag[data-xtag="' + c.kind + '"]');
-        if (tagEl) {
-          var tg = rel(tagEl), fitX = function (r) { return Math.min(r.w / 1.5, r.h); };
-          var below = { l: X.l, t: tg.b + gap, w: X.w, h: xb2 - tg.b - 2 * gap };
-          var right = { l: tg.r + 2 * gap, t: X.t, w: W - tg.r - 2 * gap - W * 0.04, h: X.h };
-          X = fitX(right) > fitX(below) ? right : below;
-        }
         return {
           cands: cands, avoid: avoid,
           bottom: H - Math.max(22, H * 0.05),                 /* 아래 끝은 바닥 그림자가 잘리지 않게 조금 남긴다 */
@@ -280,7 +274,7 @@
         var models = new URL(box.getAttribute('data-models'), document.baseURI).href;
         dynImport(src).then(function (m) {
           var make = m.create || m.createCatalystScene;
-          return make(box, { models: models, small: !mqPC.matches, explorable: true, frame: frameFor(c), onLost: function () { lost(c); } });
+          return make(box, { models: models, model: box.getAttribute('data-model') || undefined, small: !mqPC.matches, explorable: true, frame: frameFor(c), onLost: function () { lost(c); }, onFrame: function () { placeTag(c); } });
         }).then(function (s) { c.scene = s; c.loading = false; box.__scene = s; if (c.paused) s.pause(); fig.classList.add('is-3d-ready'); update(); if (done) done(); })
           .catch(function (err) { c.loading = false; c.failed = true; box.__error = String((err && err.message) || err); update(); if (done) done(); });
       };
@@ -288,10 +282,106 @@
         c.enterBtn.addEventListener('pointerdown', function (e) { e.stopPropagation(); });   /* 버튼 누름이 업무명 끌기로 처리되지 않게 */
         c.enterBtn.addEventListener('click', function (e) { e.preventDefault(); enter(c); });
       }
+      /* 로봇 전시(53차-3): 로봇마다 이름표 하나(지금 고른 것만 보임) */
+      c.tags = c.kind === 'robot' ? [].slice.call(root.querySelectorAll('[data-rtag]')) : [];
+      c.sel = 0; c.want = 0; c.pinned = false;
+      c.tags.forEach(tagEvents);
       return c;
     }).filter(Boolean);
     if (!ctls.length) return null;
     var at = function (i) { for (var k = 0; k < ctls.length; k++) if (ctls[k].idx === i) return ctls[k]; return null; };
+
+    /* ---------- 로봇 이름표: 로봇 화면 상자 옆에 붙인다 ----------
+       후보 자리(위 오른쪽 → 위 → 오른쪽 → 위 왼쪽 → 왼쪽)를 차례로 보고, 화면 안(메뉴 아래)이면서 큰 제목·진입 버튼·카드·넘김 버튼·
+       탐색 조작 줄과 겹치지 않는 첫 자리에 둔다. 탐색 중 로봇이 화면을 벗어나거나 둘 곳이 없으면 메뉴 아래 왼쪽에 고정한다(.is-pinned).
+       3D 가 없으면(정지 그림) 오른쪽 아래 넘김 버튼 위에 둔다 */
+    function placeTag(c) {
+      var tag = c.tags[c.sel];
+      var on = !!(tag && shown() && active === c.idx && c.usable());
+      root.classList.toggle('show-rtag', on);
+      if (!on) return;
+      var pr = pin.getBoundingClientRect(), W = pr.width, H = pr.height;
+      var rel = function (el) { var r = el.getBoundingClientRect(); return r.width ? { l: r.left - pr.left, t: r.top - pr.top, r: r.right - pr.left, b: r.bottom - pr.top } : null; };
+      var tw = tag.offsetWidth, th = tag.offsetHeight, gut = W < 600 ? 14 : 22, pad = 8;
+      var top = (hdr ? Math.max(0, hdr.getBoundingClientRect().bottom - pr.top) : 0) + 12, bottom = H - 12;
+      var exploring = cur === c, obst = [];
+      if (exploring) { if (xbar && !xbar.hidden) obst.push(rel(xbar)); }
+      else {
+        var span = faces[c.idx] && faces[c.idx].firstElementChild;
+        [span, c.enterBtn && !c.enterBtn.hidden ? c.enterBtn : null, items[c.idx], root.querySelector('.reel__ctrl'), root.querySelector('.reel__intro')].forEach(function (el) { if (el) obst.push(rel(el)); });
+      }
+      obst = obst.filter(Boolean);
+      var free = function (x, y) {
+        if (x < gut || x + tw > W - gut || y < top || y + th > bottom) return false;
+        for (var i = 0; i < obst.length; i++) { var o = obst[i]; if (x < o.r + pad && x + tw > o.l - pad && y < o.b + pad && y + th > o.t - pad) return false; }
+        return true;
+      };
+      var pos = null, pinned = false;
+      if (c.scene) {
+        var b = c.scene.onScreen(), cr = c.scene.canvas.getBoundingClientRect();
+        var rb = { l: cr.left - pr.left + b.l, r: cr.left - pr.left + b.r, t: cr.top - pr.top + b.t, b: cr.top - pr.top + b.b };
+        var gone = rb.l < -24 || rb.r > W + 24 || rb.t < top - 24 || rb.b > H + 24;
+        if (!(exploring && gone)) {
+          var cands = [[rb.r - tw * 0.75, rb.t - th * 0.35], [(rb.l + rb.r) / 2 - tw / 2, rb.t - th - 8], [rb.r + 10, rb.t + 6], [rb.l + tw * 0.1, rb.t - th - 8], [rb.l - tw - 10, rb.t + 6]];
+          for (var k = 0; k < cands.length && !pos; k++) {
+            var x = Math.min(Math.max(cands[k][0], gut), W - gut - tw), y = cands[k][1];
+            if (free(x, y)) pos = [x, y];
+          }
+        }
+        if (!pos && exploring) { pos = [gut, top + 4]; pinned = true; }
+      }
+      if (!pos) { var ct = rel(root.querySelector('.reel__ctrl')) || { t: H - 80 }; pos = [W - gut - tw, Math.max(top, ct.t - th - 12)]; }
+      tag.classList.toggle('is-pinned', pinned); c.pinned = pinned;
+      tag.style.transform = 'translate(' + Math.round(pos[0]) + 'px,' + Math.round(pos[1]) + 'px)';
+    }
+    /* 이름표 = 자세히 보기 링크. 누른 채 끈 것(6px 넘게)은 링크로 치지 않는다. 누를 때 로봇 돌리기·업무명 끌기가 시작되지 않게 하고,
+       탐색 중에 누르면 탐색을 정리한 뒤 이동한다. 탐색 중 이름표 위의 휠은 로봇 확대·축소로 넘긴다 */
+    function tagEvents(tag) {
+      var d0 = null;
+      tag.addEventListener('pointerdown', function (e) { d0 = { x: e.clientX, y: e.clientY, moved: false }; e.stopPropagation(); });
+      tag.addEventListener('pointermove', function (e) { if (d0 && Math.abs(e.clientX - d0.x) + Math.abs(e.clientY - d0.y) > 6) d0.moved = true; });
+      tag.addEventListener('click', function (e) {
+        var moved = d0 && d0.moved; d0 = null;
+        if (moved) { e.preventDefault(); return; }
+        if (cur) exit(false);
+      });
+      tag.addEventListener('dragstart', function (e) { e.preventDefault(); });
+      tag.addEventListener('wheel', function (e) {
+        if (!cur || !cur.scene) return;
+        e.preventDefault();
+        cur.scene.canvas.dispatchEvent(new WheelEvent('wheel', { bubbles: true, cancelable: true, deltaX: e.deltaX, deltaY: e.deltaY, deltaMode: e.deltaMode, clientX: e.clientX, clientY: e.clientY }));
+      }, { passive: false });
+    }
+    /* ---------- 로봇 고르기(2대 이상일 때만 버튼이 있다) ----------
+       고른 모델이 준비될 때까지 지금 로봇·이름표를 그대로 두고(빈 화면 없음), 준비되면 모델과 이름표를 함께 바꾼다.
+       빠르게 여러 번 눌러도 마지막으로 누른 로봇만 남는다. 다른 로봇은 버튼에 마우스를 올리거나 눌렀을 때 처음 받는다 */
+    var robotCtl = null; ctls.forEach(function (c) { if (c.kind === 'robot') robotCtl = c; });
+    function pressed(k, busy) {
+      [].forEach.call(root.querySelectorAll('[data-robot-pick]'), function (b) {
+        var i = +b.getAttribute('data-robot-pick');
+        b.setAttribute('aria-pressed', i === k ? 'true' : 'false');
+        if (busy && i === k) b.setAttribute('aria-busy', 'true'); else b.removeAttribute('aria-busy');
+      });
+    }
+    function pick(k) {
+      var c = robotCtl;
+      if (!c || !c.scene || !c.tags[k]) return;
+      c.want = k;
+      pressed(k, k !== c.sel);
+      c.scene.setModel(c.tags[k].getAttribute('data-model')).then(function (ok) {
+        if (!ok || c.want !== k) return;
+        c.sel = k;
+        c.tags.forEach(function (t, i) { t.classList.toggle('is-on', i === k); });
+        [].forEach.call(root.querySelectorAll('[data-rnote]'), function (n) { n.classList.toggle('is-on', +n.getAttribute('data-rnote') === k); });
+        pressed(k, false);
+        placeTag(c);
+      }).catch(function () { if (c.want === k) { c.want = c.sel; pressed(c.sel, false); } });
+    }
+    root.addEventListener('click', function (e) { var b = e.target.closest && e.target.closest('[data-robot-pick]'); if (b) { e.preventDefault(); pick(+b.getAttribute('data-robot-pick')); } });
+    root.addEventListener('pointerover', function (e) {
+      var b = e.target.closest && e.target.closest('[data-robot-pick]'), c = robotCtl;
+      if (b && c && c.scene && c.tags[+b.getAttribute('data-robot-pick')]) c.scene.prefetch(c.tags[+b.getAttribute('data-robot-pick')].getAttribute('data-model'));
+    });
 
     /* 그래픽이 끊기면(드물다) 정지 그림으로 돌아간다 */
     function lost(c) { if (cur === c) exit(false); c.failed = true; c.scene = null; c.fig.classList.remove('is-3d-ready'); update(); }
@@ -302,6 +392,7 @@
         if (cur === c && (!on || !c.usable() || !c.scene)) exit(false);
         if (c.scene) c.scene.setActive(on && c.usable());
         if (c.enterBtn) c.enterBtn.hidden = !(on && c.scene && c.usable());
+        if (c.tags.length) placeTag(c);
       });
       var a = at(active);
       if (motion) motion.hidden = !(a && a.scene && a.scene.animated !== false && !flat());
@@ -314,7 +405,7 @@
       if (xb('pp')) xb('pp').setAttribute('aria-pressed', p ? 'true' : 'false');
     }
     function togglePlay() { var a = cur || at(active); if (!a || !a.scene) return; a.paused = !a.scene.toggle(); syncPaused(); }
-    function relayout() { ctls.forEach(function (c) { if (c.scene && c.scene.relayout) c.scene.relayout(); }); }
+    function relayout() { ctls.forEach(function (c) { if (c.scene && c.scene.relayout) c.scene.relayout(); if (c.tags.length) placeTag(c); }); }
 
     /* 탐색 중: 휠·스크롤 키가 페이지(= 업무명 넘김)를 움직이지 않게 */
     function noWheel(e) { e.preventDefault(); }

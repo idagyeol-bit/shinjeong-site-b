@@ -8,6 +8,8 @@
      텍스처가 화면에서 2배 넘게 늘어나지 않는 거리까지만(없는 디테일을 확대로 만들지 않음), 새로 만든 판·라벨 쪽은 더 가까이.
    - 필요할 때만 그린다(조작·감속·구도 이동·크기 바뀜). 손을 놓으면 짧게 감속한 뒤 멈추고, 그리기도 멈춘다.
    - 로봇을 놓을 자리(제목 아래 빈 곳 후보와 피할 상자)는 부르는 쪽(js/reel.js)이 opt.frame() 으로 알려 준다.
+     그릴 때마다 opt.onFrame() 을 불러 부르는 쪽이 HTML 이름표를 로봇 옆으로 옮기게 한다(53차-3).
+   - 로봇이 여러 대이면 setModel(이름)으로 같은 화면에서 모델만 바꾼다(한 번 받은 모델은 다시 쓴다).
    - 3D 를 못 쓰면 Promise 가 실패하고, 부르는 쪽은 밝은 정지 그림을 그대로 둔다. */
 import * as THREE from './vendor/three/three.module.min.js';
 import { GLTFLoader } from './vendor/three/loaders/GLTFLoader.js';
@@ -45,31 +47,58 @@ export async function create(host, opt = {}) {
   const key = new THREE.DirectionalLight(0xffffff, 1.5); key.position.set(-3, 5, 4); scene.add(key);
   const fill = new THREE.DirectionalLight(0xffffff, 0.5); fill.position.set(4, 2, -3); scene.add(fill);
 
-  /* ---------- 로봇 (처음 한 번만 불러온다). 앞(흡입 헤드)이 -X, 'SUCTION ROBOT' 글자가 있는 옆면이 +Z ---------- */
-  const gltf = await new GLTFLoader().loadAsync(base + 'robot-v2' + (small || lite ? '-m' : '') + '.glb');
-  const robot = gltf.scene;
-  const box0 = new THREE.Box3().setFromObject(robot), c0 = box0.getCenter(new THREE.Vector3());
-  robot.position.set(-c0.x, -box0.min.y, -c0.z);                      /* 바닥(y=0) 위, 가운데 */
-  scene.add(robot);
-  robot.updateMatrixWorld(true);
-  robot.traverse((o) => { o.matrixAutoUpdate = false; });
-  const box = new THREE.Box3().setFromObject(robot), size = box.getSize(new THREE.Vector3());
-  const target = box.getCenter(new THREE.Vector3());                  /* 돌려 볼 때의 중심 = 로봇 한가운데 */
-  const R = box.getBoundingSphere(new THREE.Sphere()).radius;
-  /* 화면에서 로봇이 차지하는 크기를 재는 표본 점(꼭짓점 일부). scanPts = 원본 형상 부분(텍스처 밀도가 정해진 곳)
-     라벨은 판 바로 위의 얇은 판이라 깊이 차이로 깜빡이지 않게 앞으로 당겨 그린다 */
-  const sample = [], scanPts = []; let texels = Infinity;
-  robot.traverse((o) => {
-    if (!o.isMesh) return;
-    if (o.material && /^decal-/.test(o.material.name)) { o.material.polygonOffset = true; o.material.polygonOffsetFactor = -2; o.material.polygonOffsetUnits = -2; o.renderOrder = 2; }
-    const tpu = o.userData && o.userData.texelsPerUnit;
-    if (tpu) texels = Math.min(texels, tpu);
-    const p = o.geometry.attributes.position, step = Math.max(1, Math.floor(p.count / 1500));
-    for (let i = 0; i < p.count; i += step) { const v = new THREE.Vector3().fromBufferAttribute(p, i).applyMatrix4(o.matrixWorld); sample.push(v); if (tpu) scanPts.push(v); }
-  });
-  /* 바닥의 부드러운 그림자 판(그림자 지도 대신 — 느린 그래픽에서도 가볍다) */
-  const blob = new THREE.Mesh(new THREE.PlaneGeometry(size.x * 1.3, size.z * 1.5), new THREE.MeshBasicMaterial({ color: 0x1b2026, alphaMap: blobTex(), transparent: true, opacity: 0.4, depthWrite: false }));
+  /* ---------- 로봇 모델: 이름마다 한 번만 불러와 다시 쓴다(robot-v2 → assets/3d/robot-v2.glb, 휴대폰 -m).
+     한 화면에 지금 고른 모델 하나만 둔다. 앞(흡입 헤드)이 -X, 'SUCTION ROBOT' 글자가 있는 옆면이 +Z ---------- */
+  const loader = new GLTFLoader(), cache = new Map();
+  function loadModel(name) {
+    if (cache.has(name)) return cache.get(name);
+    const p = loader.loadAsync(base + name + (small || lite ? '-m' : '') + '.glb').then((g) => {
+      const group = g.scene;
+      const b0 = new THREE.Box3().setFromObject(group), c0 = b0.getCenter(new THREE.Vector3());
+      group.position.set(-c0.x, -b0.min.y, -c0.z);                    /* 바닥(y=0) 위, 가운데 */
+      group.updateMatrixWorld(true);
+      group.traverse((o) => { o.matrixAutoUpdate = false; });
+      const bx = new THREE.Box3().setFromObject(group);
+      const m = { name, group, box: bx, size: bx.getSize(new THREE.Vector3()), target: bx.getCenter(new THREE.Vector3()), R: bx.getBoundingSphere(new THREE.Sphere()).radius, sample: [], scanPts: [], texels: Infinity, warm: null };
+      /* 화면에서 로봇이 차지하는 크기를 재는 표본 점(꼭짓점 일부). scanPts = 원본 형상 부분(텍스처 밀도가 정해진 곳)
+         라벨은 판 바로 위의 얇은 판이라 깊이 차이로 깜빡이지 않게 앞으로 당겨 그린다 */
+      group.traverse((o) => {
+        if (!o.isMesh) return;
+        if (o.material && /^decal-/.test(o.material.name)) { o.material.polygonOffset = true; o.material.polygonOffsetFactor = -2; o.material.polygonOffsetUnits = -2; o.renderOrder = 2; }
+        const tpu = o.userData && o.userData.texelsPerUnit;
+        if (tpu) m.texels = Math.min(m.texels, tpu);
+        const pa = o.geometry.attributes.position, step = Math.max(1, Math.floor(pa.count / 1500));
+        for (let i = 0; i < pa.count; i += step) { const v = new THREE.Vector3().fromBufferAttribute(pa, i).applyMatrix4(o.matrixWorld); m.sample.push(v); if (tpu) m.scanPts.push(v); }
+      });
+      return m;
+    });
+    cache.set(name, p);
+    p.catch(() => cache.delete(name));                                /* 실패하면 다음에 다시 시도할 수 있게 */
+    return p;
+  }
+  /* 셰이더·텍스처를 미리 올린다(보이기 전에, 멈칫하지 않게). 텍스처는 한 장씩 나눠 올린다 */
+  function warm(m) {
+    if (!m.warm) m.warm = (async () => {
+      if (renderer.compileAsync) await renderer.compileAsync(m.group, camera, scene); else renderer.compile(m.group, camera, scene);
+      const texs = new Set();
+      m.group.traverse((o) => { if (o.material) ['map', 'normalMap', 'roughnessMap', 'metalnessMap'].forEach((k) => { if (o.material[k]) texs.add(o.material[k]); }); });
+      for (const t of texs) { renderer.initTexture(t); await new Promise((r) => setTimeout(r, 0)); }
+    })();
+    return m.warm;
+  }
+  /* 지금 보이는 모델과 그 치수(아래 함수들이 모두 이것을 쓴다) */
+  let M = null, robot, box, size, target, R, sample, scanPts, texels, want;
+  /* 바닥의 부드러운 그림자 판(그림자 지도 대신 — 느린 그래픽에서도 가볍다). 크기는 모델에 맞춘다 */
+  const blob = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), new THREE.MeshBasicMaterial({ color: 0x1b2026, alphaMap: blobTex(), transparent: true, opacity: 0.4, depthWrite: false }));
   blob.rotation.x = -Math.PI / 2; blob.position.set(0, 0.004, 0); blob.renderOrder = 1; scene.add(blob);
+  function use(m) {
+    if (M) scene.remove(M.group);
+    M = m; robot = m.group; box = m.box; size = m.size; target = m.target; R = m.R; sample = m.sample; scanPts = m.scanPts; texels = m.texels;
+    scene.add(robot);
+    blob.scale.set(size.x * 1.3, size.z * 1.5, 1);
+  }
+  use(await loadModel(opt.model || 'robot-v2'));
+  want = M.name;
 
   /* ---------- 카메라·조작 ---------- */
   const camera = new THREE.PerspectiveCamera(30, 1, 0.05, 80);
@@ -218,6 +247,7 @@ export async function create(host, opt = {}) {
     inFrame = false;
     renderer.render(scene, camera);
     dirty = false;
+    if (opt.onFrame) opt.onFrame();                                   /* 부르는 쪽: 이름표를 로봇 옆으로(그린 화면과 같은 순간에) */
     adapt(now);
     if (more || now - lastChange < 100) kick();
     else { lastT = 0; if (controls.enabled) { inFrame = true; flush(); inFrame = false; } }
@@ -238,13 +268,14 @@ export async function create(host, opt = {}) {
 
   /* ---------- 미리 준비: 셰이더·텍스처를 올리고 첫 화면을 그려 둔다(업무를 넘길 때 멈칫하지 않게) ---------- */
   fit();
-  if (renderer.compileAsync) await renderer.compileAsync(scene, camera); else renderer.compile(scene, camera);
-  /* 텍스처는 한 장씩 나눠 올린다(한 번에 올리면 화면이 잠깐 멈출 수 있다) */
-  const texs = new Set();
-  robot.traverse((o) => { if (o.material) ['map', 'normalMap', 'roughnessMap', 'metalnessMap'].forEach((k) => { if (o.material[k]) texs.add(o.material[k]); }); });
-  for (const t of texs) { renderer.initTexture(t); await new Promise((r) => setTimeout(r, 0)); }
+  await warm(M);
   renderer.render(scene, camera); dirty = false;
   host.appendChild(canvas);
+  /* 모델을 바꿀 때 잠깐 앞 화면을 덮어 두는 그림(빈 화면 없이 부드럽게 바뀌게) */
+  const snap = document.createElement('canvas');
+  snap.className = 'c3d__snap'; snap.setAttribute('aria-hidden', 'true');
+  snap.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:0';
+  host.appendChild(snap);
   if (ro) ro.observe(host); else window.addEventListener('resize', onResize);
   canvas.addEventListener('webglcontextlost', (e) => { e.preventDefault(); if (raf) cancelAnimationFrame(raf); raf = 0; if (opt.onLost) opt.onLost(); });
 
@@ -282,6 +313,30 @@ export async function create(host, opt = {}) {
       tweenTo(on ? xpView() : homeView(), 650);
     },
     resetView() { tweenTo(view.exploring ? xpView() : homeView(), 550); },
+    get model() { return M.name; },
+    /* 다른 로봇으로 바꾸기: 그 모델이 준비될 때까지 지금 로봇을 그대로 두고(빈 화면 없음), 준비되면 앞 화면을 잠깐 덮어 둔 채
+       바꾼 뒤 걷어 낸다(약 0.3초). 그 사이 다른 로봇을 또 고르면 마지막으로 고른 것만 보인다(앞 요청은 false).
+       바꿀 때만 새 로봇 전체가 보이는 구도로 옮긴다(탐색 중이면 탐색 첫 구도, 아니면 첫 화면 구도) */
+    async setModel(name) {
+      want = name;
+      if (M.name === name) return true;
+      let m;
+      try { m = await loadModel(name); await warm(m); } catch (err) { if (want === name) want = M.name; throw err; }
+      if (want !== name) return false;
+      renderer.render(scene, camera);
+      snap.width = canvas.width; snap.height = canvas.height; snap.getContext('2d').drawImage(canvas, 0, 0);
+      snap.style.transition = 'none'; snap.style.opacity = '1';
+      use(m);
+      view.tween = null;
+      fit();
+      if (view.exploring) { flush(); view.ox = xp.ox; view.oy = xp.oy; applyOffset(); placeCam(XDEF.az, XDEF.polar, xp.dist); }
+      renderer.render(scene, camera); dirty = false;
+      if (opt.onFrame) opt.onFrame();
+      requestAnimationFrame(() => requestAnimationFrame(() => { snap.style.transition = reduce.matches ? 'none' : 'opacity 0.3s ease'; snap.style.opacity = '0'; }));
+      return true;
+    },
+    /* 미리 받아 두기(보이지는 않음) */
+    prefetch(name) { return loadModel(name).then(warm).catch(() => {}); },
     capture(type, q) { renderer.render(scene, camera); return canvas.toDataURL(type || 'image/jpeg', q || 0.88); },
     /* 시험용 */
     camCheck() {

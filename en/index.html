@@ -95,7 +95,7 @@
     <div class="reel__pin">
       <div class="reel__bg">
         <figure class="reel__fig is-on is-light" data-i="0" style="--pos: 30% 50%; --pos-m: 52% 50%"><img src="../assets/photos/U01-1672.jpg" srcset="../assets/photos/U01-800.jpg 800w, ../assets/photos/U01-1200.jpg 1200w, ../assets/photos/U01-1672.jpg 1672w" sizes="(orientation: portrait) 178vh, 100vw" width="1672" height="941" alt="White cylindrical storage tanks under a blue sky" fetchpriority="high" decoding="async"></figure>
-        <figure class="reel__fig has-3d is-light" data-i="1" style="--pos: 50% 50%; --pos-m: 50% 50%"><picture><source media="(max-width: 960px)" srcset="../assets/3d/robot-v2-poster-m.jpg" width="780" height="1456"><img src="../assets/3d/robot-v2-poster.jpg" width="1920" height="1200" alt="Tracked robot with a suction head at the front, on a light background (3D model)" decoding="async"></picture><div class="reel-3d" data-kind="robot" data-scene=".././js/robot-scene.js" data-models="../assets/3d/" data-still aria-hidden="true"></div></figure>
+        <figure class="reel__fig has-3d is-light" data-i="1" style="--pos: 50% 50%; --pos-m: 50% 50%"><picture><source media="(max-width: 960px)" srcset="../assets/3d/robot-v2-poster-m.jpg" width="780" height="1456"><img src="../assets/3d/robot-v2-poster.jpg" width="1920" height="1200" alt="Tracked robot with a suction head at the front, on a light background (3D model)" decoding="async"></picture><div class="reel-3d" data-kind="robot" data-scene=".././js/robot-scene.js" data-models="../assets/3d/" data-model="robot-v2" data-still aria-hidden="true"></div></figure>
         <figure class="reel__fig has-3d is-light" data-i="2" style="--pos: 50% 50%; --pos-m: 56% 50%"><picture><source media="(max-width: 960px)" srcset="../assets/3d/catalyst-poster-m.jpg" width="780" height="1600"><img src="../assets/3d/catalyst-poster.jpg" width="1920" height="1200" alt="Suction robot on light-grey pellets in a cutaway tank, with a hose running to a separator outside the tank (3D illustration)" decoding="async"></picture><div class="reel-3d" data-kind="catalyst" data-scene=".././js/catalyst-scene.js" data-models="../assets/3d/" aria-hidden="true"></div></figure>
         <figure class="reel__fig" data-i="3" style="--pos: 38% 58%; --pos-m: 20% 58%"><img src="../assets/photos/M10-1351.jpg" srcset="../assets/photos/M10-640.jpg 640w, ../assets/photos/M10-1000.jpg 1000w, ../assets/photos/M10-1351.jpg 1351w" sizes="100vw" width="1000" height="667" alt="Vacuum truck at an industrial site with a safety cordon set up" loading="lazy" decoding="async"></figure>
         <figure class="reel__fig" data-i="4" style="--pos: 50% 62%; --pos-m: 52% 62%"><img src="../assets/photos/W10-1600.jpg" srcset="../assets/photos/W10-640.jpg 640w, ../assets/photos/W10-1000.jpg 1000w, ../assets/photos/W10-1600.jpg 1600w" sizes="100vw" width="1000" height="667" alt="Workers running a hose into a manhole beside a vacuum truck" loading="lazy" decoding="async"></figure>
@@ -136,18 +136,16 @@
       <button type="button" class="reel__xenter" data-explore="catalyst" hidden>View in 3D</button>
       <div class="reel__xbar" hidden>
         <p class="reel__xhint"><span class="reel__xhint-mouse">Drag to rotate, scroll to zoom</span><span class="reel__xhint-touch">Drag with one finger to rotate, pinch to zoom</span></p>
+        <p class="reel__xnote is-on" data-rnote="0"><b>3D model</b> <span>This model is based on a single photo of the front-left side, so the right side and rear may differ from the actual robot.</span></p>
         <div class="reel__xbtns">
           <button type="button" class="reel__xbtn" data-x="pp" aria-pressed="false"><span class="reel__x-pause">Pause</span><span class="reel__x-play">Play</span></button>
           <button type="button" class="reel__xbtn" data-x="reset">Reset view</button>
           <button type="button" class="reel__xbtn reel__xbtn--close" data-x="close">Close</button>
         </div>
       </div>
-      <div class="reel__xtag" data-xtag="robot">
-        <span class="reel__xtag-k">3D model</span>
-        <b>Screw-drive suction robot</b>
-        <p>The robot works inside the equipment; the vacuum truck stays outside, connected by hose.</p>
-        <small>This model is based on a single photo of the front-left side, so the right side and rear may differ from the actual robot.</small>
-      </div>
+      <a class="reel__rtag is-on" href="service-catalyst-media.html#photo-W05" data-rtag="0" data-model="robot-v2">
+        <b>Screw-drive suction robot</b><span>Catalyst &amp; Packing Media</span><em>Learn more <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M13 6.5l5.5 5.5L13 17.5"/></svg></em>
+      </a>
     </div>
 
     <div class="reel-list">
