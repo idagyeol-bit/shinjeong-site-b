@@ -6,7 +6,8 @@
      움직임이 멈추면 움직인 방향의 가까운 업무 정면으로 맞춘다(짧은 입력은 제자리). 구역 처음·끝 밖으로는 맞추지 않아 갇히지 않는다.
    - 휴대폰·움직임 줄이기: 고정하지 않는다. 가로 끌기·이전·다음 버튼·← → 키로 f 를 바꾼다(세로 스와이프는 페이지 스크롤).
      움직임 줄이기에서는 회전 없이 이름만 바뀐다.
-   - 시간에 따라 저절로 돌지 않는다. 화면에 보이는 글은 HTML 에만 있다(영어판은 build-en 이 HTML 을 옮긴다). */
+   - 시간에 따라 저절로 돌지 않는다. 화면에 보이는 글은 HTML 에만 있다(영어판은 build-en 이 HTML 을 옮긴다).
+   - 배경에 3D 장면이 있는 업무(.reel__fig.has-3d)는 아래 '3D 장면'에서 js/catalyst-scene.js 를 불러와 사진 위에 얹는다. */
 (function () {
   'use strict';
   var root = document.getElementById('reel');
@@ -76,6 +77,7 @@
     items.forEach(function (x, i) { x.classList.toggle('is-on', i === a); });
     if (countB) countB.textContent = pad(a + 1);
     btns.forEach(function (b) { var d = +b.getAttribute('data-go'); b.disabled = (d < 0 && a === 0) || (d > 0 && a === N - 1); });
+    if (s3) s3.update();
   }
   function tick() {
     if (dragging || flat()) f = target;
@@ -195,6 +197,71 @@
   stage.addEventListener('pointercancel', function (e) { if (e.pointerId === pid) { var was = dragging; dragging = false; pid = null; stage.classList.remove('is-grabbing'); if (was) go(Math.round(linked() ? scrollF() : target)); } });
   stage.addEventListener('click', function (e) { if (moved) { e.preventDefault(); e.stopPropagation(); moved = false; } }, true);
 
+  /* ---------- 3D 장면 (.reel__fig.has-3d, 지금은 '촉매·충진물 교체'): 그 업무에 가까워지면 불러와 대표 사진 위에 얹는다 ----------
+     - 지금 업무일 때만 돌고, 다른 업무·화면 밖·숨은 탭에서는 멈춘다. 움직임 줄이기·3D 미지원·불러오기 실패면 사진 그대로.
+     - 평소에는 배경일 뿐이라 끌기·휠은 업무명 회전이 받는다. '3D로 둘러보기'를 누르면 3D 조작 모드: 글자를 걷고 끌어서 돌려 본다.
+       '3D 끝내기'·Esc·다른 업무로 넘어가기·구역 밖으로 스크롤하면 끝난다. 휠은 계속 페이지 스크롤이라 갇히지 않는다 */
+  var s3 = (function () {
+    var fig = root.querySelector('.reel__fig.has-3d');
+    var bar = root.querySelector('.reel__3d');
+    var box = fig && fig.querySelector('.reel-3d');
+    if (!fig || !bar || !box) return null;
+    var idx = figs.indexOf(fig);
+    var scene = null, loading = false, failed = false, mode = false;
+    var mqPC = window.matchMedia ? window.matchMedia('(min-width: 961px)') : { matches: true };
+    var btn = function (k) { return bar.querySelector('[data-3d="' + k + '"]'); };
+    var dynImport = null;
+    try { dynImport = new Function('u', 'return import(u)'); } catch (err) { dynImport = null; }   /* 오래된 브라우저에서 이 파일 전체가 멈추지 않게 */
+    function can() { return dynImport && !flat() && !failed && !!window.WebGLRenderingContext; }
+    function load() {
+      if (scene || loading || !can()) return;
+      loading = true;
+      var src = new URL(box.getAttribute('data-scene'), document.baseURI).href;
+      var models = new URL(box.getAttribute('data-models'), document.baseURI).href;
+      dynImport(src).then(function (m) { return m.createCatalystScene(box, { models: models, small: !mqPC.matches }); })
+        .then(function (s) { scene = s; loading = false; s.setInteractive(false); fig.classList.add('is-3d-ready'); update(); })
+        .catch(function () { loading = false; failed = true; update(); });
+    }
+    function update() {
+      var near = shown() && Math.abs(active - idx) <= 1;
+      var on = shown() && active === idx;
+      if (near) load();
+      if (scene) scene.setActive(on && !flat());
+      bar.hidden = !(scene && on && !flat());
+      if (mode && (!on || flat())) exit();
+    }
+    function enter() {
+      if (!scene || mode) return;
+      mode = true;
+      root.classList.add('is-3d');
+      scene.setInteractive(true, { touch: true });
+      btn('exit').focus({ preventScroll: true });
+    }
+    function exit() {
+      if (!mode) return;
+      mode = false;
+      root.classList.remove('is-3d');
+      if (scene) scene.setInteractive(false);
+      if (bar.contains(document.activeElement)) btn('enter').focus({ preventScroll: true });
+    }
+    btn('enter').addEventListener('click', enter);
+    btn('exit').addEventListener('click', exit);
+    btn('reset').addEventListener('click', function () { if (scene) scene.resetView(); });
+    btn('pp').addEventListener('click', function () { if (!scene) return; var on = scene.toggle(); btn('pp').classList.toggle('is-paused', !on); });
+    document.addEventListener('keydown', function (e) { if (mode && e.key === 'Escape') { e.preventDefault(); exit(); } });
+    /* 구역을 벗어나면 끝낸다 */
+    window.addEventListener('scroll', function () {
+      if (!mode) return;
+      var r = root.getBoundingClientRect();
+      if (r.bottom < window.innerHeight * 0.5 || r.top > window.innerHeight * 0.5) exit();
+    }, { passive: true });
+    /* PC: 첫 화면을 보고 있으면 잠시 뒤 미리 불러 둔다(휴대폰은 그 업무 가까이 갔을 때만) */
+    window.addEventListener('load', function () {
+      setTimeout(function () { if (mqPC.matches && shown() && root.getBoundingClientRect().top > -window.innerHeight) load(); }, 3000);
+    });
+    return { update: update, exit: exit };
+  })();
+
   /* ---------- 시작·크기 바뀜 ---------- */
   function layout() {
     root.classList.toggle('is-flat', flat());
@@ -204,6 +271,7 @@
     else { f = target = clamp(Math.round(target), 0, N - 1); }
     render();
     darkHeader();
+    if (s3) s3.update();
   }
   window.addEventListener('scroll', onScroll, { passive: true });
   window.addEventListener('resize', layout);

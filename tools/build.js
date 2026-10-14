@@ -1026,8 +1026,10 @@ function reelFaces() {
 }
 /* 배경 하나: 사진은 늘 넣고(영상이 불러오는 중이거나 재생에 실패해도 보이는 대체 사진), 영상이 있으면 그 위에 얹는다.
    영상은 js/reel.js 가 지금 업무일 때만 주소를 넣어 무음·반복으로 재생하고, 재생이 시작돼야 사진 위로 보인다 */
-function reelMedia(m, eager, sizesAttr) {
+function reelMedia(m, eager, sizesAttr, withScene) {
   const img = photo(P(m.id), sizesAttr, eager);
+  /* 3D 장면(scene: 'catalyst'): 사진은 그대로 두고(불러오는 중·3D 를 못 쓸 때·움직임 줄이기의 대표 그림) 그 위에 js/reel.js 가 장면을 얹는다 */
+  if (withScene && m.scene) return img + `<div class="reel-3d" data-scene="./js/${m.scene}-scene.js" data-models="assets/3d/" aria-hidden="true"></div>`;
   if (m.type !== 'video') return img;
   return img + `<video class="reel-video" data-src="${m.src}" muted playsinline loop preload="none" aria-hidden="true"></video>`;
 }
@@ -1045,7 +1047,7 @@ function heroReel() {
     <div class="reel__pin">
       <div class="reel__bg">
 ${faces.map((it, i) => it.media
-  ? `        <figure class="reel__fig${i ? '' : ' is-on'}" data-i="${i}" style="${reelPos(it.media)}">${reelMedia(it.media, i === 0, '100vw')}</figure>`
+  ? `        <figure class="reel__fig${i ? '' : ' is-on'}${it.media.scene ? ' has-3d' : ''}" data-i="${i}" style="${reelPos(it.media)}">${reelMedia(it.media, i === 0, '100vw', true)}</figure>`
   : `        <figure class="reel__fig${i ? '' : ' is-on'}" data-i="${i}"></figure>`).join('\n')}
       </div>
       <div class="reel__shade" aria-hidden="true"></div>
@@ -1067,7 +1069,14 @@ ${faces.map((it, i) => `        <div class="reel__item${i ? '' : ' is-on'}" data
         <span class="reel__count"><b>01</b> / ${pad(nf)}</span>
         <button type="button" class="reel__btn" data-go="1" aria-label="다음 업무">${arrow(18)}</button>
       </div>
-    </div>
+${faces.some((it) => it.media && it.media.scene) ? `      <div class="reel__3d" hidden>
+        <span class="reel__3dnote">설명용 3D 장면</span>
+        <button type="button" class="reel__3dbtn reel__3dbtn--enter" data-3d="enter">3D로 둘러보기</button>
+        <button type="button" class="reel__3dbtn" data-3d="pp"><span class="reel__3d-pause">멈춤</span><span class="reel__3d-play">재생</span></button>
+        <button type="button" class="reel__3dbtn" data-3d="reset">기본 시점</button>
+        <button type="button" class="reel__3dbtn reel__3dbtn--exit" data-3d="exit">3D 끝내기</button>
+      </div>
+` : ''}    </div>
 
     <div class="reel-list">
       <div class="wrap reel-list__head">
@@ -1978,6 +1987,7 @@ function checkConfig() {
     const m = CFG.hero.media[k];
     if (!svc(k)) configError(`첫 화면 사진의 업무 번호 '${k}'이 없습니다 (설정 hero.media)`);
     if (!PHOTOS[m.id]) configError(`첫 화면 ${m.type === 'video' ? '영상의 대체 ' : ''}사진 번호 '${m.id}'이 사진 목록에 없습니다 (설정 hero.media.${k}) — 영상도 불러오는 중·재생 실패 때 보일 사진(id)이 있어야 합니다`);
+    if (m.scene && m.scene !== 'catalyst') configError(`첫 화면 3D 장면 이름 '${m.scene}'은 없습니다 (설정 hero.media.${k}.scene) — 쓸 수 있는 것: catalyst`);
     if (m.type === 'video' && !m.src) configError(`첫 화면 영상 주소(src)가 없습니다 (설정 hero.media.${k})`);
     if (m.type !== 'photo' && m.type !== 'video') configError(`첫 화면 사진 종류는 'photo' 또는 'video' 입니다 (설정 hero.media.${k})`);
   });
@@ -2131,9 +2141,9 @@ function loadVariants(only) {
 
 /* 시안 폴더 안의 페이지에서 assets/·css/·js/ 로 가는 주소 앞에 ../ 를 붙인다 (같은 폴더의 .html 링크와 바깥 주소는 그대로) */
 function relocate(html) {
-  const up = (u) => (/^(assets|css|js)\//.test(u) ? '../' + u : u);
+  const up = (u) => (/^(\.\/)?(assets|css|js)\//.test(u) ? '../' + u.replace(/^\.\//, '') : u);
   return html
-    .replace(/(\s)(href|src|poster|data-fallback)="([^"]*)"/g, (m, sp, a, u) => `${sp}${a}="${up(u)}"`)
+    .replace(/(\s)(href|src|poster|data-fallback|data-scene|data-models)="([^"]*)"/g, (m, sp, a, u) => `${sp}${a}="${up(u)}"`)
     .replace(/(\s)srcset="([^"]*)"/g, (m, sp, v) => `${sp}srcset="${v.split(',').map((p) => { const t = p.trim().split(/\s+/); t[0] = up(t[0]); return t.join(' '); }).join(', ')}"`);
 }
 

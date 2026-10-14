@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>촉매·충진물 교체 3D 미리보기</title>
+<!-- 시안 A 첫 화면 '촉매·충진물 교체' 배경용 3D 장면을 따로 확인하는 페이지 (생성기가 만들지 않는 도구 페이지). 장면 코드: js/catalyst-scene.js -->
+<style>
+  :root { --bg: #eef0f2; --ink: #1b2026; --sub: #5d6670; --line: #d3d8dd; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.6 Pretendard, system-ui, sans-serif; }
+  @font-face { font-family: Pretendard; src: url(../../assets/fonts/sub/PretendardVariable-0.woff2) format('woff2'); font-weight: 45 920; }
+  header { padding: 20px 16px 8px; max-width: 1200px; margin: 0 auto; }
+  h1 { margin: 0; font-size: 20px; letter-spacing: -0.02em; }
+  header p { margin: 4px 0 0; color: var(--sub); font-size: 14px; }
+  .c3d { position: relative; max-width: 1200px; margin: 12px auto; aspect-ratio: 16 / 9; background: var(--bg); overflow: hidden; border-radius: 14px; border: 1px solid var(--line); }
+  @media (max-width: 700px) { .c3d { aspect-ratio: 3 / 4; border-radius: 0; border-inline: 0; } }
+  .c3d__gl { position: absolute; inset: 0; width: 100%; height: 100%; display: block; cursor: grab; }
+  .c3d__gl:active { cursor: grabbing; }
+  .c3d__veil { position: absolute; inset: 0; pointer-events: none; }
+  .c3d__fallback { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: none; }
+  .c3d.is-fallback .c3d__fallback { display: block; }
+  .c3d__bar { position: absolute; right: 12px; bottom: 12px; display: flex; gap: 8px; }
+  .c3d__bar button { height: 38px; padding: 0 14px; border-radius: 19px; border: 1px solid #c5ccd3; background: #ffffffe6; color: var(--ink); font: inherit; font-size: 14px; cursor: pointer; }
+  .c3d__bar button:focus-visible { outline: 2px solid #1d5fd1; outline-offset: 2px; }
+  .c3d.is-fallback .c3d__bar, .c3d.is-fallback .c3d__note { display: none; }   /* 대표 사진은 실제 사진이므로 '설명용' 표시를 붙이지 않는다 */
+  .c3d__note { position: absolute; left: 12px; bottom: 12px; font-size: 12px; color: var(--sub); background: #ffffffcc; padding: 4px 10px; border-radius: 12px; }
+  .c3d__msg { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); color: var(--sub); font-size: 14px; }
+  main { padding: 0 16px 40px; }
+  #dbg { max-width: 1200px; margin: 0 auto; white-space: pre-wrap; font: 12px/1.5 ui-monospace, monospace; color: var(--sub); }
+</style>
+</head>
+<body>
+<header>
+  <h1>촉매·충진물 교체 — 3D 장면 미리보기</h1>
+  <p>끌어서 보는 방향을 바꿀 수 있습니다. 작업 흐름을 보여 주는 설명용 장면입니다.</p>
+</header>
+<main>
+  <div class="c3d" id="c3d" role="img" aria-label="절개한 탱크 안에서 흡입 로봇이 바닥의 밝은 회색 입자를 거두어 들이고, 호스가 탱크 밖 분리장치로 이어지는 설명용 3D 장면">
+    <img class="c3d__fallback" src="../../assets/photos/P03-1000.jpg" alt="" width="1000" height="667">
+    <span class="c3d__msg" id="msg">불러오는 중…</span>
+    <span class="c3d__note">설명용 장면 · 실제 치수·원리와 다를 수 있음</span>
+    <div class="c3d__bar">
+      <button type="button" id="pp">일시정지</button>
+      <button type="button" id="rv">기본 시점</button>
+    </div>
+  </div>
+  <pre id="dbg"></pre>
+</main>
+<script type="module">
+  const box = document.getElementById('c3d'), msg = document.getElementById('msg');
+  const q = new URLSearchParams(location.search);
+  const small = q.has('small') ? q.get('small') === '1' : Math.min(screen.width, screen.height) < 700;
+  if (q.has('hold')) { const g = new Image(); g.src = 'http://localhost:4175/slow?ms=' + q.get('hold'); document.body.appendChild(g); }   /* 시험용: 찍기 전 기다림 */
+  const fail = (why) => { box.classList.add('is-fallback'); msg.textContent = ''; window.__fail = String(why); };
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches && !q.has('motion')) fail('reduced-motion');
+  else {
+    try {
+      const { createCatalystScene } = await import('../../js/catalyst-scene.js');
+      const s = await createCatalystScene(box, { models: '../../assets/3d/', small, allowReduced: q.has('motion') });
+      window.__scene = s; msg.remove();
+      s.setInteractive(true, { zoom: !small });
+      const pp = document.getElementById('pp');
+      pp.onclick = () => { pp.textContent = s.toggle() ? '일시정지' : '재생'; };
+      document.getElementById('rv').onclick = () => s.resetView();
+      /* 시험용: ?at=초 → 멈추고 그 순간을 그림, ?az=도 → 그 방향에서 봄(사용자가 돌린 것처럼) */
+      if (q.has('az')) { const c = s.camera, t = s.controls.target, d = c.position.distanceTo(t), a = +q.get('az') * Math.PI / 180, el = +(q.get('el') || 30) * Math.PI / 180; c.position.set(t.x + Math.sin(a) * Math.cos(el) * d, t.y + Math.sin(el) * d, t.z + Math.cos(a) * Math.cos(el) * d); s.controls.dispatchEvent({ type: 'start' }); s.controls.update(); }
+      if (q.has('at')) { s.pause(); pp.textContent = '재생'; s.seek(+q.get('at')); }
+      if (q.has('dbg')) {
+        let fr = 0, fps = 0, t0 = performance.now(), worst = { hoseFloor: 9, hoseBed: 9, hoseWall: 9, hoseGround: 9, hoseRobot: 9, hoseSep: 9, robotWall: 9, ends: 0 };
+        const cnt = () => { fr++; requestAnimationFrame(cnt); }; requestAnimationFrame(cnt);
+        setInterval(() => {
+          const now = performance.now(); fps = Math.round(fr * 1000 / (now - t0)); fr = 0; t0 = now;
+          const c = s.check(); Object.keys(c).forEach((k) => { worst[k] = k === 'ends' ? Math.max(worst[k], c[k]) : Math.min(worst[k], c[k]); });
+          document.getElementById('dbg').textContent = JSON.stringify({ loops: +(s.time / s.LOOP).toFixed(2), fps, ...s.stats(), worst });
+        }, 250);
+      }
+    } catch (e) { console.warn(e); fail(e && e.message); }
+  }
+</script>
+</body>
+</html>

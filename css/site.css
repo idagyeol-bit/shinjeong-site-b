@@ -1317,6 +1317,44 @@ html.is-preview .hdr { padding-top: var(--pv-h); }
   .reel { height: calc(100vh + (var(--n) - 1) * 70vh); }
   .reel__pin { position: sticky; top: 0; }
 }
+/* 3D 장면 (촉매·충진물 교체 배경, js/catalyst-scene.js): 대표 사진 위에 얹고, 준비되면 서서히 보인다.
+   평소에는 배경일 뿐(누를 수 없음)이고 글자가 읽히도록 어둡게 덮는다. '3D로 둘러보기'(.reel.is-3d)에서는 글자를 걷고 밝은 장면을 그대로 보이며 끌어서 돌린다 */
+.reel-3d { position: absolute; inset: 0; opacity: 0; transition: opacity 0.9s ease; pointer-events: none; }
+.reel__fig.is-3d-ready .reel-3d { opacity: 1; }
+.reel-3d .c3d__gl { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.reel-3d .c3d__veil { position: absolute; inset: 0; pointer-events: none; }
+.reel-3d::after { content: ""; position: absolute; inset: 0; background: #06080a; opacity: 0.45; transition: opacity 0.5s ease; pointer-events: none; }
+.reel.is-flat .reel-3d { display: none; }
+.reel.is-3d .reel-3d { pointer-events: auto; }
+.reel.is-3d .reel-3d::after { opacity: 0; }
+.reel-3d::before { content: ""; position: absolute; z-index: 1; left: 0; right: 0; top: 0; height: calc(var(--header-h) + 48px); background: linear-gradient(180deg, #06080ad9, #06080a00); opacity: 0; transition: opacity 0.5s ease; pointer-events: none; }
+.reel.is-3d .reel-3d::before { opacity: 1; }   /* 밝은 장면 위에서도 머리말(흰 글자)이 읽히게 */
+.reel.is-3d .reel-3d .c3d__gl { cursor: grab; }
+.reel.is-3d .reel-3d .c3d__gl:active { cursor: grabbing; }
+.reel.is-3d .reel__shade, .reel.is-3d .reel__stage, .reel.is-3d .reel__info, .reel.is-3d .reel__intro, .reel.is-3d .reel__ctrl { opacity: 0; visibility: hidden; transition: opacity 0.35s ease, visibility 0s 0.35s; }
+.reel__shade, .reel__stage, .reel__info, .reel__intro, .reel__ctrl { transition: opacity 0.35s ease; }
+.reel__3d { position: absolute; z-index: 4; left: 50%; transform: translateX(-50%); top: calc(38% + var(--reel-fs) * 1.7 + 6px); display: flex; align-items: center; gap: 8px; white-space: nowrap; }
+.reel__3d[hidden] { display: none; }
+.reel__3dbtn { height: 40px; padding: 0 16px; border-radius: 20px; border: 1px solid #ffffff73; background: #08090b59; color: #fff; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+.reel__3dbtn:hover { background: #ffffff26; }
+.reel__3dbtn:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+.reel__3dbtn .reel__3d-play, .reel__3dbtn.is-paused .reel__3d-pause { display: none; }
+.reel__3dbtn.is-paused .reel__3d-play { display: inline; }
+.reel__3dnote { font-size: 12px; color: #4a535c; background: #ffffffd9; padding: 4px 10px; border-radius: 12px; }
+.reel__3d [data-3d="pp"], .reel__3d [data-3d="reset"], .reel__3d [data-3d="exit"], .reel__3dnote { display: none; }
+.reel.is-3d .reel__3d { top: auto; bottom: 22px; }
+.reel.is-3d .reel__3d [data-3d="enter"] { display: none; }
+.reel.is-3d .reel__3d [data-3d="pp"], .reel.is-3d .reel__3d [data-3d="reset"], .reel.is-3d .reel__3d [data-3d="exit"] { display: inline-block; }
+.reel.is-3d .reel__3dnote { display: inline-block; }
+.reel.is-3d .reel__3dbtn { background: #fffffff2; color: #1b2026; border-color: #c9d0d6; }
+.reel.is-3d .reel__3dbtn:hover { background: #fff; border-color: #9aa3ad; }
+.reel.is-3d .reel__3dbtn:focus-visible { outline-color: #1d5fd1; }
+.reel.is-3d .reel__3dbtn--exit { background: #1b2026; color: #fff; border-color: #1b2026; }
+@media (max-width: 520px) { .reel.is-3d .reel__3d { flex-wrap: wrap; justify-content: center; width: calc(100% - 32px); } .reel.is-3d .reel__3dnote { flex-basis: 100%; text-align: center; background: none; } }
+@media (scripting: enabled) and (min-width: 961px) {
+  .reel__3d { top: calc(max(34vh, calc(var(--header-h) + 140px)) + var(--reel-fs) * 1.7 + 6px); }
+  .reel.is-3d .reel__3d { bottom: 10vh; }
+}
 /* 고정된 구역 위에서는 머리말을 어둡고 반투명하게 (js/reel.js 가 body 에 reel-dark 를 붙인다) */
 body.reel-dark[data-page="home"] .hdr { background: #08090bb3; color: #fff; border-color: transparent; -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
 body.reel-dark[data-page="home"] .hdr::before { display: none; }

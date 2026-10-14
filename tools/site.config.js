@@ -107,7 +107,7 @@ module.exports = {
     button: { label: '사업분야 보기', href: 'services.html' }, // 버튼 문구와 가는 주소
     media: {                       // 큰 틀 'reel'(시안 A)에서 업무마다 화면 전체를 채우는 배경 사진(또는 영상). 사진은 사진 목록(tools/build.js PHOTOS)에 있는 것만
       S01: { type: 'photo', id: 'P01', pos: '50% 55%', posM: '30% 55%' },   // 탱크 클리닝 — 탱크 안에서 고압 세척을 하는 작업자
-      S02: { type: 'photo', id: 'P03', pos: '50% 50%', posM: '56% 50%' },   // 촉매·충진물 — 반응기 안 흡입 로봇과 호스
+      S02: { type: 'photo', id: 'P03', pos: '50% 50%', posM: '56% 50%', scene: 'catalyst' },   // 촉매·충진물 — 반응기 안 흡입 로봇과 호스. scene: 'catalyst' = 이 사진 위에 3D 장면(js/catalyst-scene.js, 모델 assets/3d/)을 얹는다. 3D 를 못 쓰거나 움직임 줄이기면 사진 그대로
       S03: { type: 'photo', id: 'M10', pos: '38% 58%', posM: '20% 58%' },   // 화학세정 — 화학세정 페이지와 같은 사진(화학세정 장면 사진은 아직 없음)
       S04: { type: 'photo', id: 'W10', pos: '50% 62%', posM: '52% 62%' },   // 준설 — 맨홀에 호스를 연결해 작업하는 작업자들
       S05: { type: 'photo', id: 'P08', pos: '50% 58%', posM: '44% 60%' }    // 관로 조사 — GPR 장비로 조사하는 작업자

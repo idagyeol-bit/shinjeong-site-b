@@ -24,7 +24,7 @@ const JS_FILES = ['site.js', 'contact.js', 'projects.js', 'process-scene.js', 'p
 /* 글자를 옮겨야 하는 속성. 여기에 없는 속성에 한글이 있으면 오류로 알려 준다 */
 const TEXT_ATTRS = ['alt', 'aria-label', 'placeholder', 'title', 'content', 'data-search', 'data-cat', 'data-filter', 'data-label', 'data-h', 'value', 'label'];
 /* 주소를 ../ 로 고쳐야 하는 속성 */
-const URL_ATTRS = ['href', 'src', 'srcset', 'poster', 'data-fallback'];
+const URL_ATTRS = ['href', 'src', 'srcset', 'poster', 'data-fallback', 'data-scene', 'data-models'];   // data-scene·data-models: 시안 A 첫 화면 3D 장면(./js/… 로 적어 영어판에서 ../js/ 가 되게 한다)
 
 const dict = JSON.parse(fs.readFileSync(DICT_FILE, 'utf8'));
 const T = dict.text || {};         // 한국어 → 영어 (모든 페이지 공통)
