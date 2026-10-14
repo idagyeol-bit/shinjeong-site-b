@@ -1021,15 +1021,24 @@ function reelFaces() {
   if (!CFG.hero.faces) return list;
   return CFG.hero.faces.map((x, i) => {
     const it = x.svc && list.find((y) => y.svc === x.svc);
-    return it ? { ...it, i, face: x.text } : { i, svc: null, name: x.text, face: x.text, file: null, desc: null, media: null };
+    /* desc: 아래 설명을 이 문장으로 바꾼다 · name: false = 큰 글자와 겹치는 업무명(번호 포함)을 아래 설명에서 뺀다 (49차) */
+    return it ? { ...it, i, face: x.text, desc: x.desc || it.desc, name: x.name === false ? '' : it.name } : { i, svc: null, name: x.text, face: x.text, file: null, desc: null, media: null };
   });
 }
 /* 배경 하나: 사진은 늘 넣고(영상이 불러오는 중이거나 재생에 실패해도 보이는 대체 사진), 영상이 있으면 그 위에 얹는다.
    영상은 js/reel.js 가 지금 업무일 때만 주소를 넣어 무음·반복으로 재생하고, 재생이 시작돼야 사진 위로 보인다 */
+/* 3D 장면의 밝은 정지 그림: 장면의 첫 화면을 그대로 찍은 것(assets/3d/, PC 가로·휴대폰 세로). 불러오는 중·움직임 줄이기·3D 를 못 쓸 때 보인다 */
+const SCENES = {
+  catalyst: { poster: 'assets/3d/catalyst-poster.jpg', w: 1920, h: 1200, posterM: 'assets/3d/catalyst-poster-m.jpg', wM: 780, hM: 1600,
+    alt: '절개한 탱크 바닥의 밝은 회색 입자 위 흡입 로봇과 탱크 밖 분리장치로 이어진 호스(3D 그림)' }
+};
+function scenePoster(sc) {
+  return `<picture><source media="(max-width: 960px)" srcset="${sc.posterM}" width="${sc.wM}" height="${sc.hM}"><img src="${sc.poster}" width="${sc.w}" height="${sc.h}" alt="${esc(sc.alt)}" decoding="async"></picture>`;
+}
 function reelMedia(m, eager, sizesAttr, withScene) {
+  /* 3D 장면(scene: 'catalyst'): 밝은 정지 그림 위에 js/reel.js 가 장면을 얹는다(스크립트 없는 목록은 사진 그대로) */
+  if (withScene && m.scene) return scenePoster(SCENES[m.scene]) + `<div class="reel-3d" data-scene="./js/${m.scene}-scene.js" data-models="assets/3d/" aria-hidden="true"></div>`;
   const img = photo(P(m.id), sizesAttr, eager);
-  /* 3D 장면(scene: 'catalyst'): 사진은 그대로 두고(불러오는 중·3D 를 못 쓸 때·움직임 줄이기의 대표 그림) 그 위에 js/reel.js 가 장면을 얹는다 */
-  if (withScene && m.scene) return img + `<div class="reel-3d" data-scene="./js/${m.scene}-scene.js" data-models="assets/3d/" aria-hidden="true"></div>`;
   if (m.type !== 'video') return img;
   return img + `<video class="reel-video" data-src="${m.src}" muted playsinline loop preload="none" aria-hidden="true"></video>`;
 }
@@ -1062,21 +1071,15 @@ ${faces.map((it, i) => `          <div class="reel__face${i ? '' : ' is-front'}"
         </div>
       </div>
       <div class="reel__info">
-${faces.map((it, i) => `        <div class="reel__item${i ? '' : ' is-on'}" data-i="${i}"><b><span>${pad(i + 1)}</span>${esc(it.name)}</b>${it.desc ? `<p>${esc(it.desc)}</p>` : ''}${it.file ? `<a href="${it.file}">자세히 보기 ${arrow(14)}</a>` : ''}</div>`).join('\n')}
+${faces.map((it, i) => `        <div class="reel__item${i ? '' : ' is-on'}" data-i="${i}">${it.name ? `<b><span>${pad(i + 1)}</span>${esc(it.name)}</b>` : ''}${it.desc ? `<p>${esc(it.desc)}</p>` : ''}${it.file ? `<a href="${it.file}">자세히 보기 ${arrow(14)}</a>` : ''}</div>`).join('\n')}
       </div>
       <div class="reel__ctrl">
-        <button type="button" class="reel__btn reel__btn--prev" data-go="-1" aria-label="이전 업무">${arrow(18)}</button>
+${faces.some((it) => it.media && it.media.scene) ? `        <button type="button" class="reel__btn reel__btn--motion" data-motion aria-pressed="false" aria-label="배경 움직임 멈춤" hidden><svg class="reel__i-pause" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1" fill="currentColor"/><rect x="14" y="5" width="4" height="14" rx="1" fill="currentColor"/></svg><svg class="reel__i-play" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg></button>
+` : ''}        <button type="button" class="reel__btn reel__btn--prev" data-go="-1" aria-label="이전 업무">${arrow(18)}</button>
         <span class="reel__count"><b>01</b> / ${pad(nf)}</span>
         <button type="button" class="reel__btn" data-go="1" aria-label="다음 업무">${arrow(18)}</button>
       </div>
-${faces.some((it) => it.media && it.media.scene) ? `      <div class="reel__3d" hidden>
-        <span class="reel__3dnote">설명용 3D 장면</span>
-        <button type="button" class="reel__3dbtn reel__3dbtn--enter" data-3d="enter">3D로 둘러보기</button>
-        <button type="button" class="reel__3dbtn" data-3d="pp"><span class="reel__3d-pause">멈춤</span><span class="reel__3d-play">재생</span></button>
-        <button type="button" class="reel__3dbtn" data-3d="reset">기본 시점</button>
-        <button type="button" class="reel__3dbtn reel__3dbtn--exit" data-3d="exit">3D 끝내기</button>
-      </div>
-` : ''}    </div>
+    </div>
 
     <div class="reel-list">
       <div class="wrap reel-list__head">

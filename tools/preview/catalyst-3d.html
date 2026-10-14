@@ -38,7 +38,7 @@
 </header>
 <main>
   <div class="c3d" id="c3d" role="img" aria-label="절개한 탱크 안에서 흡입 로봇이 바닥의 밝은 회색 입자를 거두어 들이고, 호스가 탱크 밖 분리장치로 이어지는 설명용 3D 장면">
-    <img class="c3d__fallback" src="../../assets/photos/P03-1000.jpg" alt="" width="1000" height="667">
+    <img class="c3d__fallback" src="../../assets/3d/catalyst-poster.jpg" alt="" width="1920" height="1200">
     <span class="c3d__msg" id="msg">불러오는 중…</span>
     <span class="c3d__note">설명용 장면 · 실제 치수·원리와 다를 수 있음</span>
     <div class="c3d__bar">
@@ -58,9 +58,8 @@
   else {
     try {
       const { createCatalystScene } = await import('../../js/catalyst-scene.js');
-      const s = await createCatalystScene(box, { models: '../../assets/3d/', small, allowReduced: q.has('motion') });
+      const s = await createCatalystScene(box, { models: '../../assets/3d/', small, interactive: true, zoom: !small, active: true, allowReduced: q.has('motion') });
       window.__scene = s; msg.remove();
-      s.setInteractive(true, { zoom: !small });
       const pp = document.getElementById('pp');
       pp.onclick = () => { pp.textContent = s.toggle() ? '일시정지' : '재생'; };
       document.getElementById('rv').onclick = () => s.resetView();

@@ -19,7 +19,7 @@
   var figs = [].slice.call(root.querySelectorAll('.reel__fig'));
   var items = [].slice.call(root.querySelectorAll('.reel__item'));
   var countB = root.querySelector('.reel__ctrl .reel__count b');
-  var btns = [].slice.call(root.querySelectorAll('.reel__ctrl .reel__btn'));
+  var btns = [].slice.call(root.querySelectorAll('.reel__ctrl .reel__btn[data-go]'));
   var N = faces.length;
   if (!N) return;
   var STEP = 360 / N;
@@ -79,14 +79,18 @@
     btns.forEach(function (b) { var d = +b.getAttribute('data-go'); b.disabled = (d < 0 && a === 0) || (d > 0 && a === N - 1); });
     if (s3) s3.update();
   }
-  function tick() {
+  var lastT = 0;
+  function tick(now) {
+    /* 따라가는 정도를 시간으로 정한다(화면이 1초에 몇 번 그려지든 같은 빠르기 — 60번일 때 한 번에 20%) */
+    var dt = lastT ? Math.min(0.1, (now - lastT) / 1000) : 1 / 60; lastT = now;
     if (dragging || flat()) f = target;
-    else f += (target - f) * 0.2;
+    else f += (target - f) * (1 - Math.pow(0.8, dt * 60));
     if (Math.abs(target - f) < 0.0005) f = target;
     render();
     raf = f !== target ? requestAnimationFrame(tick) : 0;
+    if (!raf) lastT = 0;
   }
-  function kick() { if (!raf) raf = requestAnimationFrame(tick); }
+  function kick() { if (!raf) { lastT = 0; raf = requestAnimationFrame(tick); } }
 
   /* 배경 영상(있을 때만): 지금 업무의 영상만 무음·반복 재생. 재생이 시작돼야 대체 사진 위로 보이고, 실패하면 사진이 보인다.
      회전과는 따로 움직인다. 움직임 줄이기에서는 재생하지 않는다 */
@@ -197,19 +201,20 @@
   stage.addEventListener('pointercancel', function (e) { if (e.pointerId === pid) { var was = dragging; dragging = false; pid = null; stage.classList.remove('is-grabbing'); if (was) go(Math.round(linked() ? scrollF() : target)); } });
   stage.addEventListener('click', function (e) { if (moved) { e.preventDefault(); e.stopPropagation(); moved = false; } }, true);
 
-  /* ---------- 3D 장면 (.reel__fig.has-3d, 지금은 '촉매·충진물 교체'): 그 업무에 가까워지면 불러와 대표 사진 위에 얹는다 ----------
-     - 지금 업무일 때만 돌고, 다른 업무·화면 밖·숨은 탭에서는 멈춘다. 움직임 줄이기·3D 미지원·불러오기 실패면 사진 그대로.
-     - 평소에는 배경일 뿐이라 끌기·휠은 업무명 회전이 받는다. '3D로 둘러보기'를 누르면 3D 조작 모드: 글자를 걷고 끌어서 돌려 본다.
-       '3D 끝내기'·Esc·다른 업무로 넘어가기·구역 밖으로 스크롤하면 끝난다. 휠은 계속 페이지 스크롤이라 갇히지 않는다 */
+  /* ---------- 3D 장면 (.reel__fig.has-3d, 지금은 '촉매·충진물 교체') ----------
+     - 페이지를 다 불러온 뒤 한가할 때 한 번만 준비해 두고(모델·셰이더·첫 화면), 업무를 넘길 때마다 다시 만들지 않는다.
+       준비되기 전에는 밝은 정지 그림이 보이고, 준비되면 같은 첫 화면의 장면으로 자연스럽게 바뀐다.
+     - 그 업무가 되면 클릭 없이 처음부터 돌고, 다른 업무·화면 밖·숨은 탭에서는 그리지 않는다. 배경일 뿐이라 휠·끌기는 업무명 회전이 받는다.
+     - 밝은 배경이라 그 업무에서는 화면을 어둡게 덮는 효과를 걷고 글자를 진한 색으로 바꾼다(.reel.is-bright, body.reel-bright).
+     - 움직임 줄이기면 장면을 만들지 않고 정지 그림만 둔다. 자동 움직임은 작은 멈춤 버튼(.reel__btn--motion)으로 멈출 수 있다 */
   var s3 = (function () {
     var fig = root.querySelector('.reel__fig.has-3d');
-    var bar = root.querySelector('.reel__3d');
     var box = fig && fig.querySelector('.reel-3d');
-    if (!fig || !bar || !box) return null;
+    if (!fig || !box) return null;
     var idx = figs.indexOf(fig);
-    var scene = null, loading = false, failed = false, mode = false;
+    var motion = root.querySelector('[data-motion]');
+    var scene = null, loading = false, failed = false, paused = false;
     var mqPC = window.matchMedia ? window.matchMedia('(min-width: 961px)') : { matches: true };
-    var btn = function (k) { return bar.querySelector('[data-3d="' + k + '"]'); };
     var dynImport = null;
     try { dynImport = new Function('u', 'return import(u)'); } catch (err) { dynImport = null; }   /* 오래된 브라우저에서 이 파일 전체가 멈추지 않게 */
     function can() { return dynImport && !flat() && !failed && !!window.WebGLRenderingContext; }
@@ -219,47 +224,29 @@
       var src = new URL(box.getAttribute('data-scene'), document.baseURI).href;
       var models = new URL(box.getAttribute('data-models'), document.baseURI).href;
       dynImport(src).then(function (m) { return m.createCatalystScene(box, { models: models, small: !mqPC.matches }); })
-        .then(function (s) { scene = s; loading = false; s.setInteractive(false); fig.classList.add('is-3d-ready'); update(); })
-        .catch(function () { loading = false; failed = true; update(); });
+        .then(function (s) { scene = s; loading = false; box.__scene = s; if (paused) s.pause(); fig.classList.add('is-3d-ready'); update(); })
+        .catch(function (err) { loading = false; failed = true; box.__error = String((err && err.message) || err); update(); });
     }
     function update() {
-      var near = shown() && Math.abs(active - idx) <= 1;
       var on = shown() && active === idx;
-      if (near) load();
+      root.classList.toggle('is-bright', on);
+      document.body.classList.toggle('reel-bright', on);
+      if (on || (shown() && Math.abs(active - idx) <= 1)) load();
       if (scene) scene.setActive(on && !flat());
-      bar.hidden = !(scene && on && !flat());
-      if (mode && (!on || flat())) exit();
+      if (motion) motion.hidden = !(on && scene && !flat());
     }
-    function enter() {
-      if (!scene || mode) return;
-      mode = true;
-      root.classList.add('is-3d');
-      scene.setInteractive(true, { touch: true });
-      btn('exit').focus({ preventScroll: true });
-    }
-    function exit() {
-      if (!mode) return;
-      mode = false;
-      root.classList.remove('is-3d');
-      if (scene) scene.setInteractive(false);
-      if (bar.contains(document.activeElement)) btn('enter').focus({ preventScroll: true });
-    }
-    btn('enter').addEventListener('click', enter);
-    btn('exit').addEventListener('click', exit);
-    btn('reset').addEventListener('click', function () { if (scene) scene.resetView(); });
-    btn('pp').addEventListener('click', function () { if (!scene) return; var on = scene.toggle(); btn('pp').classList.toggle('is-paused', !on); });
-    document.addEventListener('keydown', function (e) { if (mode && e.key === 'Escape') { e.preventDefault(); exit(); } });
-    /* 구역을 벗어나면 끝낸다 */
-    window.addEventListener('scroll', function () {
-      if (!mode) return;
-      var r = root.getBoundingClientRect();
-      if (r.bottom < window.innerHeight * 0.5 || r.top > window.innerHeight * 0.5) exit();
-    }, { passive: true });
-    /* PC: 첫 화면을 보고 있으면 잠시 뒤 미리 불러 둔다(휴대폰은 그 업무 가까이 갔을 때만) */
-    window.addEventListener('load', function () {
-      setTimeout(function () { if (mqPC.matches && shown() && root.getBoundingClientRect().top > -window.innerHeight) load(); }, 3000);
+    if (motion) motion.addEventListener('click', function () {
+      if (!scene) return;
+      paused = !scene.toggle();
+      motion.setAttribute('aria-pressed', paused ? 'true' : 'false');
     });
-    return { update: update, exit: exit };
+    /* 미리 준비: 페이지를 다 불러오고 한가할 때 (데이터 절약 설정이면 그 업무 가까이 갔을 때만) */
+    function idle(fn) { if (window.requestIdleCallback) window.requestIdleCallback(fn, { timeout: 2500 }); else setTimeout(fn, 1200); }
+    window.addEventListener('load', function () {
+      var save = navigator.connection && navigator.connection.saveData;
+      if (!save) idle(load);
+    });
+    return { update: update };
   })();
 
   /* ---------- 시작·크기 바뀜 ---------- */
