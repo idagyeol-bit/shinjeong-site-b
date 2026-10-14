@@ -1333,27 +1333,84 @@ html.is-preview .hdr { padding-top: var(--pv-h); }
   .reel.is-bright .reel__shade { opacity: 0; }
   .reel__face span, .reel__pin .eyebrow, .reel__lead, .reel__more, .reel__item b, .reel__item b span, .reel__item p, .reel__item a, .reel__count, .reel__count b, .reel__btn { transition: color 0.45s ease, text-shadow 0.45s ease, border-color 0.45s ease, background-color 0.45s ease; }
   .reel.is-bright .reel__face span { color: #14191f; text-shadow: 0 0 2px #ffffffb3, 0 2px 18px #ffffff99; }
-  .reel.is-bright .reel__pin .eyebrow { color: #1f2933; font-weight: 700; text-shadow: 0 0 3px #fff, 0 0 10px #fff, 0 0 18px #ffffffcc; }   /* 작은 글자는 사진의 가는 선(난간 등) 위에서도 읽히게 흰 테두리 빛 */
-  .reel.is-bright .reel__lead { color: #14191f; text-shadow: 0 0 3px #fff, 0 0 12px #fff, 0 0 20px #ffffffb3; }
-  .reel.is-bright .reel__more { text-shadow: 0 0 3px #fff, 0 0 10px #fff; }
-  .reel.is-bright .reel__more, .reel.is-bright .reel__item a { color: #14191f; }
-  .reel.is-bright .reel__item b { color: #14191f; text-shadow: none; }
-  .reel.is-bright .reel__item b span { color: #5d6670; }
-  .reel.is-bright .reel__item p { color: #1f252b; font-weight: 600; text-shadow: 0 0 10px #ffffffe6, 0 0 2px #fff; }
-  .reel.is-bright .reel__count { color: #5d6670; }
-  .reel.is-bright .reel__count b { color: #14191f; }
-  .reel.is-bright .reel__btn { border-color: #1b202666; background: #ffffffbf; color: #14191f; }
-  .reel.is-bright .reel__btn:hover:not(:disabled) { background: #fff; }
-  .reel.is-bright .reel__btn:focus-visible { outline-color: #14191f; }
   .reel.is-bright .reel__stage:focus-visible { box-shadow: inset 0 0 0 2px #14191f80; }
+}
+
+/* ===== 52차: 첫 화면 상단을 밝고 깔끔하게 통일 — 메뉴 바·왼쪽 위 회사 소개·왼쪽 아래 설명 카드·오른쪽 아래 번호 (메인 body[data-hero="reel"]에만) =====
+   가운데 큰 제목(크기·입체 회전·여섯 업무 순서)은 그대로. 작은 글자는 밝은 판 위에 두어 어느 배경에서도 읽히게 하고, 화면 전체는 어둡게 덮지 않는다 */
+body[data-hero="reel"][data-page="home"] .hdr,
+body[data-hero="reel"][data-page="home"] .hdr:not(.is-scrolled),
+body[data-hero="reel"][data-page="home"].reel-dark .hdr { background: #F8FAFC; color: #17324D; border-bottom: 1px solid #E2E8F0; box-shadow: 0 1px 2px #0f172a0a; -webkit-backdrop-filter: none; backdrop-filter: none; }
+body[data-hero="reel"][data-page="home"] .hdr::before,
+body[data-hero="reel"][data-page="home"] .hdr:not(.is-scrolled)::before,
+body[data-hero="reel"][data-page="home"].reel-dark .hdr::before,
+body[data-hero="reel"][data-page="home"].reel-bright .hdr:not(.is-scrolled)::before { display: none; }
+body[data-hero="reel"][data-page="home"] .hdr .hdr__logo,
+body[data-hero="reel"][data-page="home"] .hdr:not(.is-scrolled) .hdr__logo,
+body[data-hero="reel"][data-page="home"].reel-dark .hdr .hdr__logo { filter: none; }   /* 로고는 다른 페이지(밝은 머리말)와 같은 공식 색 그대로 */
+body[data-hero="reel"][data-page="home"] .hdr .hdr__cta,
+body[data-hero="reel"][data-page="home"] .hdr:not(.is-scrolled) .hdr__cta { background: #17324D; border-color: #17324D; color: #fff; }
+body[data-hero="reel"][data-page="home"] .hdr .hdr__cta:hover,
+body[data-hero="reel"][data-page="home"] .hdr:not(.is-scrolled) .hdr__cta:hover,
+body[data-hero="reel"][data-page="home"].reel-dark .hdr .hdr__cta:hover { background: #0f2338; border-color: #0f2338; color: #fff; }
+@media (scripting: enabled) {
+  /* 큰 제목 자리: 회사 소개 판 아래에서 시작(휴대폰은 화면 높이의 36% 또는 머리말+120px 중 아래쪽). '3D 자세히 보기'는 제목 바로 아래 */
+  .reel__pin { --stage-top: max(36%, calc(var(--header-h) + 120px)); }
+  .reel__stage { top: var(--stage-top); }
+  .reel__xenter { top: calc(var(--stage-top) + var(--reel-fs) * 1.7 + 4px); }
+  /* 사진 위 어둡게 덮기는 흰 큰 제목 둘레만 옅게(작은 글자는 밝은 판이 있으므로 위·아래를 진하게 덮지 않는다) */
+  .reel__shade { background: linear-gradient(180deg, #06080a33 0%, #06080a26 26%, #06080a5c 46%, #06080a38 68%, #06080a1f 100%); }
+  /* 왼쪽 위 회사 소개: 옅은 흰 판 */
+  .reel__intro { right: auto; max-width: calc(100% - 2 * var(--gutter)); top: calc(var(--header-h) + 12px); padding: 12px 18px 14px; background: #f8fafcdb; border-radius: 12px; box-shadow: 0 1px 2px #0f172a0f; }
+  .reel__pin .eyebrow { color: #475569; text-shadow: none; }
+  .reel__lead { margin: 6px 0 0; color: #17324D; font-size: 16px; font-weight: 700; letter-spacing: -0.02em; text-shadow: none; }
+  .reel__more { margin-top: 10px; color: #17324D; font-size: 14px; text-shadow: none; }
+  /* 왼쪽 아래 설명 카드: 흰 90% 판 하나(무거운 흐림 없음). 업무가 바뀌면 같은 자리에서 내용만 바뀐다 */
+  .reel__info { bottom: 86px; min-height: 0; }
+  .reel__item { padding: 16px 18px; background: #ffffffe6; border: 1px solid #e2e8f0; border-radius: 14px; box-shadow: 0 6px 20px #0f172a14; }
+  .reel__item b { color: #17324D; font-size: 18px; text-shadow: none; }
+  .reel__item b span { color: #64748b; }
+  .reel__item p { margin: 6px 0 10px; color: #334155; font-size: 14.5px; font-weight: 400; line-height: 1.5; text-shadow: none; }
+  .reel__item p:first-child { margin-top: 0; }
+  .reel__item a { color: #17324D; text-shadow: none; }
+  /* 오른쪽 아래 번호·화살표: 같은 밝은 판 */
+  .reel__ctrl { bottom: 16px; gap: 10px; padding: 6px 8px; background: #f8fafcdb; border-radius: 30px; box-shadow: 0 1px 2px #0f172a0f; }
+  .reel__count, .reel.is-bright .reel__count { color: #64748b; }
+  .reel__count b, .reel.is-bright .reel__count b { color: #17324D; }
+  .reel__btn, .reel.is-bright .reel__btn { border-color: #17324D40; background: #fff; color: #17324D; }
+  .reel__btn:hover:not(:disabled) { background: #eef2f6; }
+  .reel__btn:focus-visible { outline-color: #17324D; }
+}
+@media (scripting: enabled) and (min-width: 961px) {
+  .reel__pin { --stage-top: max(34vh, calc(var(--header-h) + 150px)); }
+  .reel__shade { background: linear-gradient(180deg, #06080a26 0%, #06080a1f 24%, #06080a52 46%, #06080a2e 68%, #06080a14 100%); }
+  .reel__intro { top: calc(var(--header-h) + 56px); max-width: 460px; padding: 16px 24px 18px; }   /* 메뉴 아래 56px, 왼쪽 기준선은 아래 카드와 같다 */
+  .reel__lead { font-size: 19px; }
+  .reel__more { margin-top: 16px; font-size: 15px; }
+  .reel__info { width: clamp(360px, 30vw, 420px); bottom: 9vh; }
+  .reel__item { padding: 24px; }
+  .reel__item b { font-size: clamp(22px, 1.7vw, 24px); }
+  .reel__item p { margin: 10px 0 14px; font-size: clamp(16px, 1.15vw, 17px); }
+  .reel__ctrl { bottom: 9vh; }
+}
+/* 높이가 낮은 PC 화면: 큰 제목·카드·여백을 조금씩 줄여 겹치지 않게 */
+@media (scripting: enabled) and (min-width: 961px) and (max-height: 820px) {
+  .reel__pin { --reel-fs: clamp(64px, min(9.6vw, 17vh), 172px); }
+  .reel__intro { top: calc(var(--header-h) + 36px); padding: 12px 22px 14px; }
+  .reel__more { margin-top: 10px; }
+  .reel__info { bottom: 5vh; }
+  .reel__item { padding: 18px 22px; }
+  .reel__item b { font-size: 21px; }
+  .reel__item p { margin: 6px 0 10px; font-size: 15.5px; }
+  .reel__ctrl { bottom: 5vh; }
 }
 /* '3D 자세히 보기'(제목 아래 버튼 하나)와 탐색 모드(.reel.is-explore): 제목·설명·넘김 버튼을 0.3초에 걸쳐 숨기고 장면을 끌어 돌려 본다.
    머리말은 그대로. 이 모드에서만 아래에 작은 일시정지·기본 시점·닫기와(처음에만) 조작 안내 */
-.reel__xenter { position: absolute; z-index: 4; left: 50%; transform: translateX(-50%); top: calc(38% + var(--reel-fs) * 1.7 + 4px); height: 40px; padding: 0 18px; border-radius: 20px; border: 1px solid #14191f40; background: #fffffff2; color: #14191f; font: inherit; font-size: 14px; font-weight: 700; cursor: pointer; white-space: nowrap; box-shadow: 0 2px 10px #0000001a; transition: opacity 0.3s ease, background 0.2s ease; }
+.reel__xenter { position: absolute; z-index: 4; left: 50%; transform: translateX(-50%); top: calc(var(--stage-top, 38%) + var(--reel-fs) * 1.7 + 4px); height: 40px; padding: 0 18px; border-radius: 20px; border: 1px solid #14191f40; background: #fffffff2; color: #14191f; font: inherit; font-size: 14px; font-weight: 700; cursor: pointer; white-space: nowrap; box-shadow: 0 2px 10px #0000001a; transition: opacity 0.3s ease, background 0.2s ease; }
 .reel__xenter:hover { background: #fff; border-color: #14191f80; }
 .reel__xenter:focus-visible { outline: 2px solid #14191f; outline-offset: 3px; }
 .reel__xenter[hidden] { display: none; }
-@media (scripting: enabled) and (min-width: 961px) { .reel__xenter { top: calc(max(34vh, calc(var(--header-h) + 140px)) + var(--reel-fs) * 1.7 + 6px); } }
+@media (scripting: enabled) and (min-width: 961px) { .reel__xenter { top: calc(var(--stage-top) + var(--reel-fs) * 1.7 + 6px); } }
 .reel__stage, .reel__info, .reel__intro, .reel__ctrl { transition: opacity 0.3s ease, visibility 0s 0s; }
 .reel.is-explore .reel__stage, .reel.is-explore .reel__info, .reel.is-explore .reel__intro, .reel.is-explore .reel__ctrl, .reel.is-explore .reel__xenter { opacity: 0; visibility: hidden; pointer-events: none; transition: opacity 0.3s ease, visibility 0s 0.3s; }
 .reel.is-explore .reel-3d .c3d__gl:active { cursor: grabbing; }

@@ -283,6 +283,9 @@
     }
     if (motion) motion.addEventListener('click', togglePlay);
     document.addEventListener('keydown', function (e) { if (exploring && (e.key === 'Escape' || e.key === 'Esc')) { e.preventDefault(); exit(true); } });
+    /* 메뉴(머리말·휴대폰 전체 메뉴·하단 문의)로 다른 곳에 가거나 메뉴를 열면 탐색을 정리한다 */
+    document.addEventListener('click', function (e) { if (exploring && e.target.closest && e.target.closest('.hdr, .drawer, .mcta')) exit(false); }, true);
+    window.addEventListener('pagehide', function () { exit(false); });
     /* 미리 준비: 페이지를 다 불러오고 한가할 때 (데이터 절약 설정이면 그 업무 가까이 갔을 때만) */
     function idle(fn) { if (window.requestIdleCallback) window.requestIdleCallback(fn, { timeout: 2500 }); else setTimeout(fn, 1200); }
     window.addEventListener('load', function () {
