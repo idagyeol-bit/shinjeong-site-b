@@ -77,7 +77,14 @@
     items.forEach(function (x, i) { x.classList.toggle('is-on', i === a); });
     if (countB) countB.textContent = pad(a + 1);
     btns.forEach(function (b) { var d = +b.getAttribute('data-go'); b.disabled = (d < 0 && a === 0) || (d > 0 && a === N - 1); });
+    bright();
     if (s3) s3.update();
+  }
+  /* 밝은 배경 업무(.reel__fig.is-light: 밝은 사진·3D 장면)에서는 어두운 덮개를 걷고 글자를 진한 색으로 */
+  function bright() {
+    var on = shown() && !!figs[active] && figs[active].classList.contains('is-light');
+    root.classList.toggle('is-bright', on);
+    document.body.classList.toggle('reel-bright', on);
   }
   var lastT = 0;
   function tick(now) {
@@ -150,7 +157,8 @@
     if (linked()) window.scrollTo({ top: yOf(i), behavior: 'smooth' });
     else { target = i; kick(); }
   }
-  btns.forEach(function (b) { b.addEventListener('click', function () { go(Math.round(f) + (+b.getAttribute('data-go'))); }); });
+  /* 빠르게 여러 번 눌러도 누른 만큼 넘어가게: 지금 그려진 위치가 아니라 가고 있는 업무에서 센다 */
+  btns.forEach(function (b) { b.addEventListener('click', function () { go((linked() ? settled : Math.round(target)) + (+b.getAttribute('data-go'))); }); });
   stage.addEventListener('keydown', function (e) {
     if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { e.preventDefault(); go(Math.round(f) + 1); }
     else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); go(Math.round(f) - 1); }
@@ -229,8 +237,6 @@
     }
     function update() {
       var on = shown() && active === idx;
-      root.classList.toggle('is-bright', on);
-      document.body.classList.toggle('reel-bright', on);
       if (on || (shown() && Math.abs(active - idx) <= 1)) load();
       if (scene) scene.setActive(on && !flat());
       if (motion) motion.hidden = !(on && scene && !flat());
@@ -252,12 +258,13 @@
   /* ---------- 시작·크기 바뀜 ---------- */
   function layout() {
     root.classList.toggle('is-flat', flat());
-    if (!shown()) { document.body.classList.remove('reel-dark'); return; }
+    if (!shown()) { document.body.classList.remove('reel-dark'); bright(); return; }
     measure();
     if (linked()) { f = target = scrollF(); settled = Math.round(f); }
     else { f = target = clamp(Math.round(target), 0, N - 1); }
     render();
     darkHeader();
+    bright();
     if (s3) s3.update();
   }
   window.addEventListener('scroll', onScroll, { passive: true });

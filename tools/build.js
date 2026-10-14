@@ -115,6 +115,9 @@ const PHOTOS = {
   /* P 사진(11차, 이다결 님 결정으로 '사진은 ZIP에서만' 규칙의 예외): 회사소개서(2024)·기술소개서(2025) PDF에 실린 작업 사진.
      파일은 준비된 것을 그대로 쓴다(다시 만들거나 크기를 바꾸지 않음). sizes는 실제 있는 파일 폭만. 출처는 tools/photo-plan.json */
   P01: { id: 'P01', w: 1000, h: 667, sizes: [640, 800], alt: '탱크 안에서 고압 세척을 하는 작업자 두 명', cap: '탱크 내부 세척 작업' },
+  /* U 사진(50차, 이다결 님 제공): 클라이언트 ZIP·소개서 PDF 에서 온 사진이 아니다('사진은 ZIP에서만' 규칙의 예외 — 이다결 님 결정, 시안 A 첫 화면 배경에만).
+     원본은 tools/photo-src/U01-original.png(1672x941, 그대로 보관), 웹용은 축소만(확대 없음). 출처는 tools/photo-plan.json */
+  U01: { id: 'U01', w: 1672, h: 941, sizes: [800, 1200, 1672], alt: '푸른 하늘 아래 흰색 원통형 저장 탱크들', cap: '푸른 하늘과 흰색 저장 탱크' },
   P03: { id: 'P03', w: 1000, h: 667, sizes: [640, 1000, 1600], alt: '촉매가 쌓인 반응기 안에 투입된 흡입 로봇과 호스', cap: '반응기 안에서 촉매를 제거하는 로봇' },
   P06: { id: 'P06', w: 1000, h: 667, sizes: [640], alt: '진공흡입차 앞에서 호스 작업을 지켜보는 신정개발 작업자', cap: '흡입차와 신정개발 작업자' },
   P08: { id: 'P08', w: 1000, h: 667, sizes: [640, 800], alt: '도로 위에서 GPR 장비를 밀며 조사하는 작업자', cap: '도로 GPR 조사' },
@@ -1043,6 +1046,9 @@ function reelMedia(m, eager, sizesAttr, withScene) {
   return img + `<video class="reel-video" data-src="${m.src}" muted playsinline loop preload="none" aria-hidden="true"></video>`;
 }
 const reelPos = (m) => `--pos: ${m.pos || '50% 50%'}; --pos-m: ${m.posM || m.pos || '50% 50%'}`;
+/* 밝은 배경(사진 bright: true 또는 3D 장면): 어두운 덮개를 걷고 글자를 진한 색으로(.reel.is-bright, js/reel.js 가 업무마다 바꾼다).
+   첫 업무가 밝으면 처음부터 is-bright 를 붙여 둔다(불러올 때 흰 글자가 잠깐 보이지 않게). 밝은 사진은 세로 화면에서도 큰 파일을 고르게 sizes 를 준다 */
+const light = (it) => !!(it && it.media && (it.media.bright || it.media.scene));
 function heroReel() {
   const h = CFG.hero;
   const items = reelItems();            /* 업무 다섯 개 — 스크립트 없을 때의 목록(.reel-list) */
@@ -1052,11 +1058,11 @@ function heroReel() {
   const intro = `<span class="eyebrow">${fill(h.eyebrow, { founded: C.founded })}</span>
         <p class="reel__lead">${h.lead}</p>`;
   return `  <!-- ===== 히어로: 사업분야 가로 흐름 (큰 틀 'reel', 시안 A) ===== -->
-  <section class="reel" id="reel" style="--n: ${nf}" aria-label="신정개발이 하는 일">
+  <section class="reel${light(faces[0]) ? ' is-bright' : ''}" id="reel" style="--n: ${nf}" aria-label="신정개발이 하는 일">
     <div class="reel__pin">
       <div class="reel__bg">
 ${faces.map((it, i) => it.media
-  ? `        <figure class="reel__fig${i ? '' : ' is-on'}${it.media.scene ? ' has-3d' : ''}" data-i="${i}" style="${reelPos(it.media)}">${reelMedia(it.media, i === 0, '100vw', true)}</figure>`
+  ? `        <figure class="reel__fig${i ? '' : ' is-on'}${it.media.scene ? ' has-3d' : ''}${light(it) ? ' is-light' : ''}" data-i="${i}" style="${reelPos(it.media)}">${reelMedia(it.media, i === 0, light(it) ? '(orientation: portrait) 178vh, 100vw' : '100vw', true)}</figure>`
   : `        <figure class="reel__fig${i ? '' : ' is-on'}" data-i="${i}"></figure>`).join('\n')}
       </div>
       <div class="reel__shade" aria-hidden="true"></div>
