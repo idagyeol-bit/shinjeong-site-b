@@ -7,7 +7,7 @@
    - 휴대폰·움직임 줄이기: 고정하지 않는다. 가로 끌기·이전·다음 버튼·← → 키로 f 를 바꾼다(세로 스와이프는 페이지 스크롤).
      움직임 줄이기에서는 회전 없이 이름만 바뀐다.
    - 시간에 따라 저절로 돌지 않는다. 화면에 보이는 글은 HTML 에만 있다(영어판은 build-en 이 HTML 을 옮긴다).
-   - 배경에 3D 장면이 있는 업무(.reel__fig.has-3d)는 아래 '3D 장면'에서 js/catalyst-scene.js 를 불러와 사진 위에 얹는다. */
+   - 배경에 3D 장면이 있는 업무(.reel__fig.has-3d)는 아래 '3D 장면'에서 장면 파일(js/robot-scene.js, js/catalyst-scene.js)을 불러와 정지 그림 위에 얹는다. */
 (function () {
   'use strict';
   var root = document.getElementById('reel');
@@ -209,90 +209,196 @@
   stage.addEventListener('pointercancel', function (e) { if (e.pointerId === pid) { var was = dragging; dragging = false; pid = null; stage.classList.remove('is-grabbing'); if (was) go(Math.round(linked() ? scrollF() : target)); } });
   stage.addEventListener('click', function (e) { if (moved) { e.preventDefault(); e.stopPropagation(); moved = false; } }, true);
 
-  /* ---------- 3D 장면 (.reel__fig.has-3d, 지금은 '촉매·충진물 교체') ----------
-     - 페이지를 다 불러온 뒤 한가할 때 한 번만 준비해 두고(모델·셰이더·첫 화면), 업무를 넘길 때마다 다시 만들지 않는다.
-       준비되기 전에는 밝은 정지 그림이 보이고, 준비되면 같은 첫 화면의 장면으로 자연스럽게 바뀐다.
-     - 그 업무가 되면 클릭 없이 처음부터 돌고, 다른 업무·화면 밖·숨은 탭에서는 그리지 않는다. 평소에는 배경일 뿐이라 휠·끌기는 업무명 회전이 받는다.
-     - '3D 자세히 보기'를 눌렀을 때만 탐색 모드(.reel.is-explore): 제목·설명·넘김 버튼을 0.3초에 걸쳐 숨기고, 같은 장면을 가까운 구도로 옮겨
-       끌기 회전·휠(두 손가락) 확대를 켠다. '닫기'·Esc·다른 업무로 넘어가기로 끝나고, 끝나면 원래 구도·글자·초점(진입 버튼)으로 돌아간다.
-     - 움직임 줄이기면 장면을 만들지 않고 정지 그림만 둔다. 자동 움직임은 작은 멈춤 버튼(.reel__btn--motion)으로 멈출 수 있다 */
+  /* ---------- 3D 장면 (.reel__fig.has-3d: '자체 개발 로봇'의 로봇, '촉매·충진물 교체'의 장면) ----------
+     - 장면마다 한 번만 준비한다(모델·셰이더·첫 화면). 페이지를 다 불러온 뒤 한가할 때 가까운 업무부터 하나씩 준비하고(휴대폰은 바로 옆 업무만),
+       업무를 넘길 때마다 다시 만들지 않는다. 준비되기 전에는 밝은 정지 그림이 보이고, 준비되면 같은 첫 화면의 장면으로 바뀐다.
+     - 평소에는 배경일 뿐이라 휠·끌기는 업무명 회전이 받는다. 다른 업무·숨은 탭에서는 그리지 않는다.
+     - '로봇 자세히 보기'·'3D 자세히 보기'를 누르거나 로봇을 클릭(끌기가 아닌 짧은 누름)하면 탐색 모드(.reel.is-explore): 제목·설명·넘김 버튼을
+       0.3초에 걸쳐 숨기고, 같은 장면을 가까운 구도로 옮겨 끌기 회전·휠(두 손가락) 확대를 켠다. 탐색 중 휠은 확대·축소만 하고 업무명은 넘어가지 않는다.
+       '닫기'·Esc·메뉴 누르기로 끝나고, 끝나면 원래 구도·글자·휠 동작·초점(진입 버튼)으로 돌아간다.
+     - 움직이는 장면(촉매)은 움직임 줄이기면 만들지 않고 정지 그림만 둔다. 움직이지 않는 장면(로봇, data-still)은 움직임 줄이기에서도 쓴다 */
   var s3 = (function () {
-    var fig = root.querySelector('.reel__fig.has-3d');
-    var box = fig && fig.querySelector('.reel-3d');
-    if (!fig || !box) return null;
-    var idx = figs.indexOf(fig);
-    var motion = root.querySelector('[data-motion]');
-    var enterBtn = root.querySelector('[data-explore]');
     var xbar = root.querySelector('.reel__xbar');
     var xb = function (k) { return xbar && xbar.querySelector('[data-x="' + k + '"]'); };
-    var scene = null, loading = false, failed = false, paused = false, exploring = false, hinted = false, hideT = 0;
+    var motion = root.querySelector('[data-motion]');
+    var hdr = document.querySelector('.hdr');
     var mqPC = window.matchMedia ? window.matchMedia('(min-width: 961px)') : { matches: true };
     var dynImport = null;
     try { dynImport = new Function('u', 'return import(u)'); } catch (err) { dynImport = null; }   /* 오래된 브라우저에서 이 파일 전체가 멈추지 않게 */
-    function can() { return dynImport && !flat() && !failed && !!window.WebGLRenderingContext; }
-    function load() {
-      if (scene || loading || !can()) return;
-      loading = true;
-      var src = new URL(box.getAttribute('data-scene'), document.baseURI).href;
-      var models = new URL(box.getAttribute('data-models'), document.baseURI).href;
-      dynImport(src).then(function (m) { return m.createCatalystScene(box, { models: models, small: !mqPC.matches, explorable: true }); })
-        .then(function (s) { scene = s; loading = false; box.__scene = s; if (paused) s.pause(); fig.classList.add('is-3d-ready'); update(); })
-        .catch(function (err) { loading = false; failed = true; box.__error = String((err && err.message) || err); update(); });
+    var cur = null, hinted = false, hideT = 0, pageLoaded = false, busy = false;
+
+    /* 로봇을 놓을 자리(그림 안 px): 후보는 ① 진입 버튼 바로 아래 가운데 ② 제목 글자 아래, 버튼 오른쪽(낮은 화면에서 더 크게 보일 때).
+       제목 글자·진입 버튼·아래 설명 카드·넘김 버튼·위 소개 카드(avoid)에 닿지 않게 장면이 크기와 자리를 고른다. 탐색 때는 메뉴 아래~조작 버튼 위 */
+    function frameFor(c) {
+      return function (W, H) {
+        var fr = c.fig.getBoundingClientRect();
+        if (!fr.width) return null;
+        var rel = function (el) { var r = el.getBoundingClientRect(); return { l: r.left - fr.left, t: r.top - fr.top, r: r.right - fr.left, b: r.bottom - fr.top }; };
+        var gap = Math.max(12, H * 0.016);
+        var st = rel(stage), mid = (st.t + st.b) / 2;
+        var span = faces[c.idx] && faces[c.idx].firstElementChild;
+        var fs = span ? parseFloat(getComputedStyle(span).fontSize) : 60, tw = span ? span.scrollWidth : W * 0.6;
+        var title = { l: (W - tw) / 2, t: mid - fs * 0.52, r: (W + tw) / 2, b: mid + fs * 0.52 };   /* 큰 제목 글자 */
+        var btn = { l: W / 2 - 90, t: st.b + 4, r: W / 2 + 90, b: st.b + 46 };                  /* 진입 버튼 자리(숨어 있어도 같은 곳) */
+        var avoid = [title, btn];
+        [items[c.idx], root.querySelector('.reel__ctrl'), root.querySelector('.reel__intro')].forEach(function (el) { if (el) avoid.push(rel(el)); });
+        var side = title.b + gap * 2;
+        var cands = [{ x: W / 2, t: btn.b + gap, prefer: 1.2 }];
+        if (W / H >= 0.9) cands.push({ x: W * 0.6, t: side }, { x: W * 0.66, t: side });
+        var xt = (hdr ? Math.max(0, hdr.getBoundingClientRect().bottom - fr.top) : 0) + gap;
+        var xb2 = H - (mqPC.matches ? H * 0.06 : 24) - 84;
+        return {
+          cands: cands, avoid: avoid,
+          bottom: H - Math.max(22, H * 0.05),                 /* 아래 끝은 바닥 그림자가 잘리지 않게 조금 남긴다 */
+          maxW: W * (W / H < 0.9 ? 0.9 : 0.52),               /* 배경으로 남게: 가로는 화면의 52%(세로 화면 90%)까지 */
+          edge: Math.max(16, W * 0.03),
+          explore: { l: W * 0.1, t: xt + (xb2 - xt) * 0.06, w: W * 0.8, h: (xb2 - xt) * 0.88 }
+        };
+      };
+    }
+
+    var ctls = figs.map(function (fig, idx) {
+      var box = fig.classList.contains('has-3d') && fig.querySelector('.reel-3d');
+      if (!box) return null;
+      var c = { fig: fig, box: box, idx: idx, kind: box.getAttribute('data-kind') || 'scene', still: box.hasAttribute('data-still'), scene: null, loading: false, failed: false, paused: false };
+      c.enterBtn = root.querySelector('[data-explore="' + c.kind + '"]');
+      c.usable = function () { return c.still || !flat(); };
+      c.can = function () { return dynImport && c.usable() && !c.failed && !!window.WebGLRenderingContext; };
+      c.load = function (done) {
+        if (c.scene || c.loading || !c.can()) { if (done) done(); return; }
+        c.loading = true;
+        var src = new URL(box.getAttribute('data-scene'), document.baseURI).href;
+        var models = new URL(box.getAttribute('data-models'), document.baseURI).href;
+        dynImport(src).then(function (m) {
+          var make = m.create || m.createCatalystScene;
+          return make(box, { models: models, small: !mqPC.matches, explorable: true, frame: frameFor(c), onLost: function () { lost(c); } });
+        }).then(function (s) { c.scene = s; c.loading = false; box.__scene = s; if (c.paused) s.pause(); fig.classList.add('is-3d-ready'); update(); if (done) done(); })
+          .catch(function (err) { c.loading = false; c.failed = true; box.__error = String((err && err.message) || err); update(); if (done) done(); });
+      };
+      if (c.enterBtn) {
+        c.enterBtn.addEventListener('pointerdown', function (e) { e.stopPropagation(); });   /* 버튼 누름이 업무명 끌기로 처리되지 않게 */
+        c.enterBtn.addEventListener('click', function (e) { e.preventDefault(); enter(c); });
+      }
+      return c;
+    }).filter(Boolean);
+    if (!ctls.length) return null;
+    var at = function (i) { for (var k = 0; k < ctls.length; k++) if (ctls[k].idx === i) return ctls[k]; return null; };
+
+    /* 그래픽이 끊기면(드물다) 정지 그림으로 돌아간다 */
+    function lost(c) { if (cur === c) exit(false); c.failed = true; c.scene = null; c.fig.classList.remove('is-3d-ready'); update(); }
+    function update() {
+      ctls.forEach(function (c) {
+        var on = shown() && active === c.idx;
+        if (on || (pageLoaded && shown() && Math.abs(active - c.idx) <= 1)) c.load();
+        if (cur === c && (!on || !c.usable() || !c.scene)) exit(false);
+        if (c.scene) c.scene.setActive(on && c.usable());
+        if (c.enterBtn) c.enterBtn.hidden = !(on && c.scene && c.usable());
+      });
+      var a = at(active);
+      if (motion) motion.hidden = !(a && a.scene && a.scene.animated !== false && !flat());
+      syncPaused();
+      if (!(a && a.scene && a.scene.hitTest)) root.classList.remove('is-hit');
     }
     function syncPaused() {
-      if (motion) motion.setAttribute('aria-pressed', paused ? 'true' : 'false');
-      if (xb('pp')) xb('pp').setAttribute('aria-pressed', paused ? 'true' : 'false');
+      var a = cur || at(active), p = !!(a && a.paused);
+      if (motion) motion.setAttribute('aria-pressed', p ? 'true' : 'false');
+      if (xb('pp')) xb('pp').setAttribute('aria-pressed', p ? 'true' : 'false');
     }
-    function togglePlay() { if (!scene) return; paused = !scene.toggle(); syncPaused(); }
-    function update() {
-      var on = shown() && active === idx;
-      if (on || (shown() && Math.abs(active - idx) <= 1)) load();
-      if (exploring && (!on || flat() || !scene)) exit(false);
-      if (scene) scene.setActive(on && !flat());
-      var ok = on && scene && !flat();
-      if (motion) motion.hidden = !ok;
-      if (enterBtn) enterBtn.hidden = !ok;
+    function togglePlay() { var a = cur || at(active); if (!a || !a.scene) return; a.paused = !a.scene.toggle(); syncPaused(); }
+    function relayout() { ctls.forEach(function (c) { if (c.scene && c.scene.relayout) c.scene.relayout(); }); }
+
+    /* 탐색 중: 휠·스크롤 키가 페이지(= 업무명 넘김)를 움직이지 않게 */
+    function noWheel(e) { e.preventDefault(); }
+    function noKeys(e) {
+      var k = e.key;
+      if ((k === 'ArrowUp' || k === 'ArrowDown' || k === 'PageUp' || k === 'PageDown' || k === 'Home' || k === 'End' || (k === ' ' && !(e.target.closest && e.target.closest('button, a')))) && !(e.target.closest && e.target.closest('input, textarea, select'))) e.preventDefault();
+      if (k === 'Escape' || k === 'Esc') { e.preventDefault(); exit(true); }
     }
-    function enter() {
-      if (!scene || exploring || flat()) return;
-      exploring = true;
+    function enter(c) {
+      if (cur || !c.scene || !c.usable()) return;
+      cur = c;
       clearTimeout(hideT);
+      root.classList.remove('is-hit');
+      if (xb('pp')) xb('pp').hidden = c.scene.animated === false;   /* 움직이지 않는 로봇에는 일시정지가 없다 */
       xbar.hidden = false;
       root.classList.add('is-explore');
-      scene.setExplore(true);
+      c.scene.setExplore(true);
+      root.addEventListener('wheel', noWheel, { passive: false });
+      document.addEventListener('keydown', noKeys);
+      syncPaused();
       if (!hinted) { hinted = true; root.classList.add('show-hint'); setTimeout(function () { root.classList.remove('show-hint'); }, 3200); }   /* 조작 안내는 처음에만 */
-      setTimeout(function () { if (exploring && xb('close')) xb('close').focus({ preventScroll: true }); }, 50);
+      setTimeout(function () { if (cur === c && xb('close')) xb('close').focus({ preventScroll: true }); }, 50);
     }
     function exit(focusBack) {
-      if (!exploring) return;
-      exploring = false;
+      var c = cur;
+      if (!c) return;
+      cur = null;
       root.classList.remove('is-explore', 'show-hint');
-      if (scene) scene.setExplore(false);
-      hideT = setTimeout(function () { if (!exploring) xbar.hidden = true; }, 320);
-      if (focusBack !== false && enterBtn) enterBtn.focus({ preventScroll: true });
-    }
-    if (enterBtn) {
-      /* 버튼을 누른 것이 업무명 끌기로 처리되지 않게 */
-      enterBtn.addEventListener('pointerdown', function (e) { e.stopPropagation(); });
-      enterBtn.addEventListener('click', function (e) { e.preventDefault(); enter(); });
+      root.removeEventListener('wheel', noWheel, { passive: false });
+      document.removeEventListener('keydown', noKeys);
+      if (c.scene) c.scene.setExplore(false);
+      hideT = setTimeout(function () { if (!cur) xbar.hidden = true; }, 320);
+      if (focusBack !== false && c.enterBtn && !c.enterBtn.hidden) c.enterBtn.focus({ preventScroll: true });
     }
     if (xbar) {
       xb('pp').addEventListener('click', togglePlay);
-      xb('reset').addEventListener('click', function () { if (scene) scene.resetView(); });
+      xb('reset').addEventListener('click', function () { if (cur && cur.scene) cur.scene.resetView(); });
       xb('close').addEventListener('click', function () { exit(true); });
     }
     if (motion) motion.addEventListener('click', togglePlay);
-    document.addEventListener('keydown', function (e) { if (exploring && (e.key === 'Escape' || e.key === 'Esc')) { e.preventDefault(); exit(true); } });
     /* 메뉴(머리말·휴대폰 전체 메뉴·하단 문의)로 다른 곳에 가거나 메뉴를 열면 탐색을 정리한다 */
-    document.addEventListener('click', function (e) { if (exploring && e.target.closest && e.target.closest('.hdr, .drawer, .mcta')) exit(false); }, true);
+    document.addEventListener('click', function (e) { if (cur && e.target.closest && e.target.closest('.hdr, .drawer, .mcta')) exit(false); }, true);
     window.addEventListener('pagehide', function () { exit(false); });
-    /* 미리 준비: 페이지를 다 불러오고 한가할 때 (데이터 절약 설정이면 그 업무 가까이 갔을 때만) */
-    function idle(fn) { if (window.requestIdleCallback) window.requestIdleCallback(fn, { timeout: 2500 }); else setTimeout(fn, 1200); }
-    window.addEventListener('load', function () {
-      var save = navigator.connection && navigator.connection.saveData;
-      if (!save) idle(load);
+
+    /* 로봇 클릭으로 들어가기: 짧게 누르고(0.6초 안) 거의 움직이지 않았을 때(6px 안)만. 끌기(업무명 넘김·세로 스크롤)는 들어가지 않는다.
+       글자·버튼·카드 위, 큰 제목 글자 위는 제외. 로봇 위에 마우스를 올리면 손가락 모양 */
+    var down = null, hoverT = 0;
+    function onRobot(e) {
+      var a = at(active);
+      if (cur || !a || !a.scene || !a.scene.hitTest || !a.usable() || !shown()) return null;
+      if (e.target.closest && e.target.closest('a, button, input, .reel__intro, .reel__info, .reel__ctrl, .reel__xbar')) return null;
+      var t = faces[active] && faces[active].firstElementChild;
+      if (t) { var r = t.getBoundingClientRect(); if (e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom) return null; }
+      return a.scene.hitTest(e.clientX, e.clientY) ? a : null;
+    }
+    pin.addEventListener('pointerdown', function (e) {
+      down = cur || (e.pointerType === 'mouse' && e.button !== 0) ? null : { id: e.pointerId, x: e.clientX, y: e.clientY, t: performance.now(), far: 0 };
     });
-    return { update: update, exit: exit, get exploring() { return exploring; } };
+    pin.addEventListener('pointermove', function (e) {
+      if (down && e.pointerId === down.id) down.far = Math.max(down.far, Math.abs(e.clientX - down.x), Math.abs(e.clientY - down.y));
+      if (e.pointerType !== 'mouse' || e.buttons || cur) return;
+      var now = performance.now();
+      if (now - hoverT < 100) return;
+      hoverT = now;
+      root.classList.toggle('is-hit', !!onRobot(e));
+    });
+    pin.addEventListener('pointerup', function (e) {
+      var d = down;
+      down = null;
+      if (!d || e.pointerId !== d.id || cur || dragging) return;
+      if (Math.max(d.far, Math.abs(e.clientX - d.x), Math.abs(e.clientY - d.y)) > 6 || performance.now() - d.t > 600) return;
+      var c = onRobot(e);
+      if (c) enter(c);
+    });
+    pin.addEventListener('pointercancel', function () { down = null; });
+    pin.addEventListener('pointerleave', function () { root.classList.remove('is-hit'); });
+
+    /* 미리 준비: 페이지를 다 불러오고 한가할 때 가까운 업무부터 하나씩(휴대폰은 바로 옆 업무만, 데이터 절약 설정이면 하지 않음) */
+    function idle(fn) { if (window.requestIdleCallback) window.requestIdleCallback(fn, { timeout: 2500 }); else setTimeout(fn, 1200); }
+    function preload() {
+      if (busy) return;
+      var next = ctls.filter(function (c) { return !c.scene && !c.loading && c.can() && (mqPC.matches || Math.abs(active - c.idx) <= 1); })
+        .sort(function (p, q) { return Math.abs(active - p.idx) - Math.abs(active - q.idx); })[0];
+      if (!next) return;
+      busy = true;
+      next.load(function () { busy = false; idle(preload); });
+    }
+    window.addEventListener('load', function () {
+      pageLoaded = true;
+      var save = navigator.connection && navigator.connection.saveData;
+      if (!save) idle(preload);
+    });
+    return { update: update, relayout: relayout, exit: exit, get exploring() { return !!cur; }, ctls: ctls };
   })();
 
   /* ---------- 시작·크기 바뀜 ---------- */
@@ -305,7 +411,7 @@
     render();
     darkHeader();
     bright();
-    if (s3) s3.update();
+    if (s3) { s3.update(); s3.relayout(); }
   }
   window.addEventListener('scroll', onScroll, { passive: true });
   window.addEventListener('resize', layout);

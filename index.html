@@ -95,8 +95,8 @@
     <div class="reel__pin">
       <div class="reel__bg">
         <figure class="reel__fig is-on is-light" data-i="0" style="--pos: 30% 50%; --pos-m: 52% 50%"><img src="assets/photos/U01-1672.jpg" srcset="assets/photos/U01-800.jpg 800w, assets/photos/U01-1200.jpg 1200w, assets/photos/U01-1672.jpg 1672w" sizes="(orientation: portrait) 178vh, 100vw" width="1672" height="941" alt="푸른 하늘 아래 흰색 원통형 저장 탱크들" fetchpriority="high" decoding="async"></figure>
-        <figure class="reel__fig" data-i="1"></figure>
-        <figure class="reel__fig has-3d is-light" data-i="2" style="--pos: 50% 50%; --pos-m: 56% 50%"><picture><source media="(max-width: 960px)" srcset="assets/3d/catalyst-poster-m.jpg" width="780" height="1600"><img src="assets/3d/catalyst-poster.jpg" width="1920" height="1200" alt="절개한 탱크 바닥의 밝은 회색 입자 위 흡입 로봇과 탱크 밖 분리장치로 이어진 호스(3D 그림)" decoding="async"></picture><div class="reel-3d" data-scene="./js/catalyst-scene.js" data-models="assets/3d/" aria-hidden="true"></div></figure>
+        <figure class="reel__fig has-3d is-light" data-i="1" style="--pos: 50% 50%; --pos-m: 50% 50%"><picture><source media="(max-width: 960px)" srcset="assets/3d/robot-poster-m.jpg" width="780" height="1456"><img src="assets/3d/robot-poster.jpg" width="1920" height="1200" alt="밝은 바탕 위, 앞쪽에 흡입 헤드가 달린 궤도형 로봇(3D 모델)" decoding="async"></picture><div class="reel-3d" data-kind="robot" data-scene="./js/robot-scene.js" data-models="assets/3d/" data-still aria-hidden="true"></div></figure>
+        <figure class="reel__fig has-3d is-light" data-i="2" style="--pos: 50% 50%; --pos-m: 56% 50%"><picture><source media="(max-width: 960px)" srcset="assets/3d/catalyst-poster-m.jpg" width="780" height="1600"><img src="assets/3d/catalyst-poster.jpg" width="1920" height="1200" alt="절개한 탱크 바닥의 밝은 회색 입자 위 흡입 로봇과 탱크 밖 분리장치로 이어진 호스(3D 그림)" decoding="async"></picture><div class="reel-3d" data-kind="catalyst" data-scene="./js/catalyst-scene.js" data-models="assets/3d/" aria-hidden="true"></div></figure>
         <figure class="reel__fig" data-i="3" style="--pos: 38% 58%; --pos-m: 20% 58%"><img src="assets/photos/M10-1351.jpg" srcset="assets/photos/M10-640.jpg 640w, assets/photos/M10-1000.jpg 1000w, assets/photos/M10-1351.jpg 1351w" sizes="100vw" width="1000" height="667" alt="안전 구획을 설치한 산업설비 현장에 배치된 진공흡입차" loading="lazy" decoding="async"></figure>
         <figure class="reel__fig" data-i="4" style="--pos: 50% 62%; --pos-m: 52% 62%"><img src="assets/photos/W10-1600.jpg" srcset="assets/photos/W10-640.jpg 640w, assets/photos/W10-1000.jpg 1000w, assets/photos/W10-1600.jpg 1600w" sizes="100vw" width="1000" height="667" alt="진공흡입차 옆에서 맨홀에 호스를 연결해 작업하는 작업자들" loading="lazy" decoding="async"></figure>
         <figure class="reel__fig" data-i="5" style="--pos: 50% 58%; --pos-m: 44% 60%"><img src="assets/photos/P08-800.jpg" srcset="assets/photos/P08-640.jpg 640w, assets/photos/P08-800.jpg 800w" sizes="100vw" width="1000" height="667" alt="도로 위에서 GPR 장비를 밀며 조사하는 작업자" loading="lazy" decoding="async"></figure>
@@ -132,7 +132,8 @@
         <span class="reel__count"><b>01</b> / 06</span>
         <button type="button" class="reel__btn" data-go="1" aria-label="다음 업무"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M13 6.5l5.5 5.5L13 17.5"/></svg></button>
       </div>
-      <button type="button" class="reel__xenter" data-explore hidden>3D 자세히 보기</button>
+      <button type="button" class="reel__xenter" data-explore="robot" hidden>로봇 자세히 보기</button>
+      <button type="button" class="reel__xenter" data-explore="catalyst" hidden>3D 자세히 보기</button>
       <div class="reel__xbar" hidden>
         <p class="reel__xhint"><span class="reel__xhint-mouse">끌어서 돌리고, 휠로 확대·축소합니다</span><span class="reel__xhint-touch">한 손가락으로 돌리고, 두 손가락으로 확대·축소합니다</span></p>
         <div class="reel__xbtns">

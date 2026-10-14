@@ -1018,29 +1018,33 @@ function reelItems() {
   });
 }
 /* 돌아가는 큰 글자(48차): CFG.hero.faces 가 있으면 그 순서·문구로 돈다. svc 가 있는 글자는 그 업무의 배경·설명을 그대로 이어 받고,
-   svc 가 없는 글자는 배경·설명 없이 이름만 둔다(정해지지 않은 자료를 다른 업무에서 빌려 오지 않는다). 글자가 없으면 업무 이름 그대로 */
+   svc 가 없는 글자는 설명 없이 이름만 둔다(정해지지 않은 자료를 다른 업무에서 빌려 오지 않는다). 배경은 media 를 적었을 때만(3D 장면, 53차). 글자가 없으면 업무 이름 그대로 */
 function reelFaces() {
   const list = reelItems();
   if (!CFG.hero.faces) return list;
   return CFG.hero.faces.map((x, i) => {
     const it = x.svc && list.find((y) => y.svc === x.svc);
     /* desc: 아래 설명을 이 문장으로 바꾼다 · name: false = 큰 글자와 겹치는 업무명(번호 포함)을 아래 설명에서 뺀다 (49차) */
-    return it ? { ...it, i, face: x.text, desc: x.desc || it.desc, name: x.name === false ? '' : it.name } : { i, svc: null, name: x.text, face: x.text, file: null, desc: null, media: null };
+    return it ? { ...it, i, face: x.text, desc: x.desc || it.desc, name: x.name === false ? '' : it.name } : { i, svc: null, name: x.text, face: x.text, file: null, desc: null, media: x.media || null };
   });
 }
 /* 배경 하나: 사진은 늘 넣고(영상이 불러오는 중이거나 재생에 실패해도 보이는 대체 사진), 영상이 있으면 그 위에 얹는다.
    영상은 js/reel.js 가 지금 업무일 때만 주소를 넣어 무음·반복으로 재생하고, 재생이 시작돼야 사진 위로 보인다 */
 /* 3D 장면의 밝은 정지 그림: 장면의 첫 화면을 그대로 찍은 것(assets/3d/, PC 가로·휴대폰 세로). 불러오는 중·움직임 줄이기·3D 를 못 쓸 때 보인다 */
+/* enter = 제목 아래 탐색 모드 버튼 문구 · still: true = 스스로 움직이지 않는 장면(움직임 줄이기에서도 쓴다, 일시정지 버튼 없음) */
 const SCENES = {
   catalyst: { poster: 'assets/3d/catalyst-poster.jpg', w: 1920, h: 1200, posterM: 'assets/3d/catalyst-poster-m.jpg', wM: 780, hM: 1600,
-    alt: '절개한 탱크 바닥의 밝은 회색 입자 위 흡입 로봇과 탱크 밖 분리장치로 이어진 호스(3D 그림)' }
+    alt: '절개한 탱크 바닥의 밝은 회색 입자 위 흡입 로봇과 탱크 밖 분리장치로 이어진 호스(3D 그림)', enter: '3D 자세히 보기' },
+  /* 53차: '자체 개발 로봇' 배경 — 이다결 님이 준 로봇 3D 모델(assets/3d/robot-show.glb, js/robot-scene.js). 자동 회전·동작 없음 */
+  robot: { poster: 'assets/3d/robot-poster.jpg', w: 1920, h: 1200, posterM: 'assets/3d/robot-poster-m.jpg', wM: 780, hM: 1456,
+    alt: '밝은 바탕 위, 앞쪽에 흡입 헤드가 달린 궤도형 로봇(3D 모델)', enter: '로봇 자세히 보기', still: true }
 };
 function scenePoster(sc) {
   return `<picture><source media="(max-width: 960px)" srcset="${sc.posterM}" width="${sc.wM}" height="${sc.hM}"><img src="${sc.poster}" width="${sc.w}" height="${sc.h}" alt="${esc(sc.alt)}" decoding="async"></picture>`;
 }
 function reelMedia(m, eager, sizesAttr, withScene) {
-  /* 3D 장면(scene: 'catalyst'): 밝은 정지 그림 위에 js/reel.js 가 장면을 얹는다(스크립트 없는 목록은 사진 그대로) */
-  if (withScene && m.scene) return scenePoster(SCENES[m.scene]) + `<div class="reel-3d" data-scene="./js/${m.scene}-scene.js" data-models="assets/3d/" aria-hidden="true"></div>`;
+  /* 3D 장면(scene: 'catalyst' · 'robot'): 밝은 정지 그림 위에 js/reel.js 가 장면(js/<이름>-scene.js)을 얹는다(스크립트 없는 목록은 사진 그대로) */
+  if (withScene && m.scene) return scenePoster(SCENES[m.scene]) + `<div class="reel-3d" data-kind="${m.scene}" data-scene="./js/${m.scene}-scene.js" data-models="assets/3d/"${SCENES[m.scene].still ? ' data-still' : ''} aria-hidden="true"></div>`;
   const img = photo(P(m.id), sizesAttr, eager);
   if (m.type !== 'video') return img;
   return img + `<video class="reel-video" data-src="${m.src}" muted playsinline loop preload="none" aria-hidden="true"></video>`;
@@ -1080,13 +1084,12 @@ ${faces.map((it, i) => `          <div class="reel__face${i ? '' : ' is-front'}"
 ${faces.map((it, i) => `        <div class="reel__item${i ? '' : ' is-on'}" data-i="${i}">${it.name ? `<b><span>${pad(i + 1)}</span>${esc(it.name)}</b>` : ''}${it.desc ? `<p>${esc(it.desc)}</p>` : ''}${it.file ? `<a href="${it.file}">자세히 보기 ${arrow(14)}</a>` : ''}</div>`).join('\n')}
       </div>
       <div class="reel__ctrl">
-${faces.some((it) => it.media && it.media.scene) ? `        <button type="button" class="reel__btn reel__btn--motion" data-motion aria-pressed="false" aria-label="배경 움직임 멈춤" hidden><svg class="reel__i-pause" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1" fill="currentColor"/><rect x="14" y="5" width="4" height="14" rx="1" fill="currentColor"/></svg><svg class="reel__i-play" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg></button>
+${faces.some((it) => it.media && it.media.scene && !SCENES[it.media.scene].still) ? `        <button type="button" class="reel__btn reel__btn--motion" data-motion aria-pressed="false" aria-label="배경 움직임 멈춤" hidden><svg class="reel__i-pause" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1" fill="currentColor"/><rect x="14" y="5" width="4" height="14" rx="1" fill="currentColor"/></svg><svg class="reel__i-play" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg></button>
 ` : ''}        <button type="button" class="reel__btn reel__btn--prev" data-go="-1" aria-label="이전 업무">${arrow(18)}</button>
         <span class="reel__count"><b>01</b> / ${pad(nf)}</span>
         <button type="button" class="reel__btn" data-go="1" aria-label="다음 업무">${arrow(18)}</button>
       </div>
-${faces.some((it) => it.media && it.media.scene) ? `      <button type="button" class="reel__xenter" data-explore hidden>3D 자세히 보기</button>
-      <div class="reel__xbar" hidden>
+${faces.some((it) => it.media && it.media.scene) ? `${[...new Set(faces.filter((it) => it.media && it.media.scene).map((it) => it.media.scene))].map((k) => `      <button type="button" class="reel__xenter" data-explore="${k}" hidden>${SCENES[k].enter}</button>\n`).join('')}      <div class="reel__xbar" hidden>
         <p class="reel__xhint"><span class="reel__xhint-mouse">끌어서 돌리고, 휠로 확대·축소합니다</span><span class="reel__xhint-touch">한 손가락으로 돌리고, 두 손가락으로 확대·축소합니다</span></p>
         <div class="reel__xbtns">
           <button type="button" class="reel__xbtn" data-x="pp" aria-pressed="false"><span class="reel__x-pause">일시정지</span><span class="reel__x-play">재생</span></button>
@@ -2000,12 +2003,13 @@ function checkConfig() {
   (CFG.hero.faces || []).forEach((x, i) => {
     if (!x.text) configError(`첫 화면 돌아가는 글자 ${i + 1}번째의 문구(text)가 없습니다 (설정 hero.faces)`);
     if (x.svc && !CFG.hero.services.some((y) => y.svc === x.svc)) configError(`첫 화면 돌아가는 글자 '${x.text}'의 업무 번호 '${x.svc}'이 hero.services 에 없습니다 (설정 hero.faces)`);
+    if (x.media && (x.svc || !x.media.scene || !SCENES[x.media.scene])) configError(`첫 화면 돌아가는 글자 '${x.text}'의 media 는 업무 번호(svc)가 없는 글자에 3D 장면(scene: ${Object.keys(SCENES).join(' · ')})으로만 적습니다 (설정 hero.faces)`);
   });
   Object.keys(CFG.hero.media || {}).forEach((k) => {
     const m = CFG.hero.media[k];
     if (!svc(k)) configError(`첫 화면 사진의 업무 번호 '${k}'이 없습니다 (설정 hero.media)`);
     if (!PHOTOS[m.id]) configError(`첫 화면 ${m.type === 'video' ? '영상의 대체 ' : ''}사진 번호 '${m.id}'이 사진 목록에 없습니다 (설정 hero.media.${k}) — 영상도 불러오는 중·재생 실패 때 보일 사진(id)이 있어야 합니다`);
-    if (m.scene && m.scene !== 'catalyst') configError(`첫 화면 3D 장면 이름 '${m.scene}'은 없습니다 (설정 hero.media.${k}.scene) — 쓸 수 있는 것: catalyst`);
+    if (m.scene && !SCENES[m.scene]) configError(`첫 화면 3D 장면 이름 '${m.scene}'은 없습니다 (설정 hero.media.${k}.scene) — 쓸 수 있는 것: ${Object.keys(SCENES).join(', ')}`);
     if (m.type === 'video' && !m.src) configError(`첫 화면 영상 주소(src)가 없습니다 (설정 hero.media.${k})`);
     if (m.type !== 'photo' && m.type !== 'video') configError(`첫 화면 사진 종류는 'photo' 또는 'video' 입니다 (설정 hero.media.${k})`);
   });
