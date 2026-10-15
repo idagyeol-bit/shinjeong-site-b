@@ -1527,3 +1527,66 @@ body.reel-dark[data-page="home"] .hdr::before { display: none; }
 body.reel-dark[data-page="home"] .hdr .hdr__logo { filter: brightness(0) invert(1); }
 body.reel-dark[data-page="home"] .hdr .hdr__cta:hover { background: #fff; border-color: #fff; color: var(--navy); }
 @media print { .reel { height: auto !important; } .reel__pin { display: none !important; } .reel-list { display: block !important; } }
+
+/* ========== 시안 B — 첫 화면 구호·가치 5장면 자동 전환 (큰 틀 'slides', tools/build.js heroSlides · js/hero-slides.js, 시안B 1차) ==========
+   장면마다 화면 전체 사진 + 아래쪽 어두운 그라데이션 + 이름표·큰 글·작은 글. 7초마다 교차 흐림(1.1초), 사진은 9초에 걸쳐 1.07→1.0 느린 축소,
+   글은 이름표→큰 글→작은 글 순서로 0.15·0.3·0.5초 시차를 두고 아래서 올라온다. 기존 .hero · .reel 규칙은 건드리지 않는다(다른 갈래가 쓴다) */
+.heroB { position: relative; height: 100vh; height: 100svh; min-height: 560px; overflow: hidden; background: #05121c; color: #fff; }
+.heroB__stage { position: absolute; inset: 0; }
+.heroB__slide { position: absolute; inset: 0; opacity: 0; visibility: hidden; transition: opacity 1.1s ease, visibility 0s linear 1.1s; }
+.heroB__slide.is-on { opacity: 1; visibility: visible; transition: opacity 1.1s ease; }
+.heroB__ph { position: absolute; inset: 0; overflow: hidden; }
+.heroB__ph img { width: 100%; height: 100%; object-fit: cover; transform: scale(1); }
+.heroB__slide.is-on .heroB__ph img { animation: heroB-kb 9s ease-out forwards; }
+.heroB__scrim { position: absolute; inset: 0; background: linear-gradient(to top, #050c16d1 0%, #050c1659 38%, #050c161f 60%, #050c1640 100%); }
+.heroB__txt { position: absolute; left: var(--gutter); right: var(--gutter); bottom: 150px; max-width: 900px; word-break: keep-all; }
+.heroB__tag { display: inline-flex; align-items: center; gap: 10px; margin-bottom: 18px; font-size: 14px; font-weight: 600; letter-spacing: 0.22em; color: #8fe492; }
+.heroB__tag::before { content: ""; width: 34px; height: 2px; background: currentColor; }
+.heroB__title { margin: 0; max-width: none; color: #fff; font-size: clamp(32px, 3.75vw, 54px); font-weight: 800; line-height: 1.28; letter-spacing: -0.02em; text-shadow: 0 2px 24px #00000073; }
+.heroB__sub { margin: 20px 0 0; max-width: 46em; font-size: clamp(15px, 1.3vw, 18.5px); line-height: 1.6; color: #ffffffe0; }
+.heroB__note { margin: 10px 0 0; font-size: 12.5px; line-height: 1.5; color: #ffffff8c; }
+.heroB__slide.is-on .heroB__tag { animation: heroB-up 0.8s 0.15s ease both; }
+.heroB__slide.is-on .heroB__title { animation: heroB-up 0.9s 0.3s ease both; }
+.heroB__slide.is-on .heroB__sub { animation: heroB-up 0.9s 0.5s ease both; }
+.heroB__slide.is-on .heroB__note { animation: heroB-up 0.9s 0.65s ease both; }
+@keyframes heroB-kb { from { transform: scale(1.07); } to { transform: scale(1); } }
+@keyframes heroB-up { from { opacity: 0; transform: translateY(26px); } to { opacity: 1; transform: translateY(0); } }
+
+/* 조작 줄 (왼쪽 아래) · 장면 이름표 (오른쪽 아래) — 스크립트가 있을 때만 */
+.heroB__ctrl, .heroB__tabs { position: absolute; bottom: 64px; z-index: 3; display: none; align-items: center; }
+.heroB.is-ready .heroB__ctrl, .heroB.is-ready .heroB__tabs { display: flex; }
+.heroB__ctrl { left: var(--gutter); gap: 18px; }
+.heroB__btn { flex: 0 0 auto; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; padding: 0; border: 1px solid #ffffff80; border-radius: 50%; background: transparent; color: #fff; cursor: pointer; transition: background 0.2s; }
+.heroB__btn:hover { background: #ffffff26; }
+.heroB__btn:focus-visible, .heroB__tab:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+.heroB__i-play { display: none; }
+.heroB:not(.is-playing) .heroB__i-pause { display: none; }
+.heroB:not(.is-playing) .heroB__i-play { display: block; }
+.heroB__count { flex: 0 0 auto; font-size: 14px; letter-spacing: 0.12em; color: #ffffffd9; white-space: nowrap; }
+.heroB__count b { font-size: 16px; color: #fff; }
+.heroB__bar { flex: 0 1 220px; width: 220px; min-width: 40px; height: 2px; overflow: hidden; background: #ffffff4d; }
+.heroB__bar i { display: block; width: 0; height: 100%; background: #fff; }
+.heroB.is-playing .heroB__bar i { animation: heroB-bar 7s linear forwards; }
+@keyframes heroB-bar { from { width: 0; } to { width: 100%; } }
+.heroB__tabs { right: var(--gutter); gap: 22px; }
+.heroB__tab { padding: 0 0 6px; border: 0; border-bottom: 2px solid transparent; background: none; font: inherit; font-size: 13.5px; color: #ffffff8c; cursor: pointer; transition: color 0.2s, border-color 0.2s; }
+.heroB__tab:hover { color: #fff; }
+.heroB__tab.is-on { color: #fff; border-bottom-color: #8fe492; }
+
+@media (max-width: 960px) {
+  .heroB.is-ready .heroB__tabs { display: none; }   /* 좁은 화면: 이름표는 숨기고 버튼·번호로 넘긴다 */
+  .heroB__txt { bottom: 130px; }
+}
+@media (max-width: 767.98px) {   /* 휴대폰: 아래 고정 문의 띠(.mcta, 높이 54px + 16px)를 피해 위로 올린다 */
+  .heroB__ctrl { bottom: 92px; gap: 12px; right: var(--gutter); }
+  .heroB__txt { bottom: 156px; }
+  .heroB__tag { margin-bottom: 14px; font-size: 12.5px; letter-spacing: 0.18em; }
+  .heroB__tag::before { width: 26px; }
+  .heroB__sub { margin-top: 14px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .heroB__slide, .heroB__slide.is-on { transition: none; }
+  .heroB__slide.is-on .heroB__ph img, .heroB__slide.is-on .heroB__tag, .heroB__slide.is-on .heroB__title,
+  .heroB__slide.is-on .heroB__sub, .heroB__slide.is-on .heroB__note, .heroB__bar i { animation: none !important; opacity: 1; transform: none; }
+}
+@media print { .heroB { height: auto; min-height: 0; } .heroB__slide:not(:first-child), .heroB__ctrl, .heroB__tabs { display: none !important; } .heroB__slide { position: relative; opacity: 1; visibility: visible; } }

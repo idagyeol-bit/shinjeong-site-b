@@ -118,6 +118,9 @@ const PHOTOS = {
   /* U 사진(50차, 이다결 님 제공): 클라이언트 ZIP·소개서 PDF 에서 온 사진이 아니다('사진은 ZIP에서만' 규칙의 예외 — 이다결 님 결정, 시안 A 첫 화면 배경에만).
      원본은 tools/photo-src/U01-original.png(1672x941, 그대로 보관), 웹용은 축소만(확대 없음). 출처는 tools/photo-plan.json */
   U01: { id: 'U01', w: 1672, h: 941, sizes: [800, 1200, 1672], alt: '푸른 하늘 아래 흰색 원통형 저장 탱크들', cap: '푸른 하늘과 흰색 저장 탱크' },
+  /* AI 사진(시안B 1차, 이다결 님 제공): 이다결 님이 Meshy 로 만든 로봇 3D 그림. 클라이언트 ZIP·소개서 PDF 사진이 아니다('사진은 ZIP에서만' 규칙의 예외 — 이다결 님 결정).
+     시안 B 첫 화면 5장면(발전)에만 쓰고, 실제 장비처럼 설명하지 않는다(장면에 'AI로 만든 3D 예시 그림' 표시). 파일은 받은 그대로 */
+  AI01: { id: 'AI01', w: 1536, h: 1024, sizes: [1536], alt: '차세대 로봇 3D 그림' },
   P03: { id: 'P03', w: 1000, h: 667, sizes: [640, 1000, 1600], alt: '촉매가 쌓인 반응기 안에 투입된 흡입 로봇과 호스', cap: '반응기 안에서 촉매를 제거하는 로봇' },
   P06: { id: 'P06', w: 1000, h: 667, sizes: [640], alt: '진공흡입차 앞에서 호스 작업을 지켜보는 신정개발 작업자', cap: '흡입차와 신정개발 작업자' },
   P08: { id: 'P08', w: 1000, h: 667, sizes: [640, 800], alt: '도로 위에서 GPR 장비를 밀며 조사하는 작업자', cap: '도로 GPR 조사' },
@@ -1146,6 +1149,47 @@ ${items.map((it, i) => `        <article class="reel-list__slide" data-i="${i}" 
 `;
 }
 
+/* ---------- 큰 틀 'slides'의 첫 화면 — 구호·가치 5장면 자동 전환 (시안 B, 시안B 1차) ----------
+   장면마다 화면 전체를 채우는 사진 위에 이름표·큰 글·작은 글을 얹고, 7초마다 다음 장면으로 교차 흐림(js/hero-slides.js).
+   왼쪽 아래 이전·멈춤·다음 버튼, 01 / 05 번호, 진행 막대, 오른쪽 아래 장면 이름표(누르면 그 장면으로).
+   스크립트가 없거나 움직임 줄이기면 1장면이 멈춰 보인다. 문구·사진은 CFG.hero.scenes (첫 화면에는 숫자를 쓰지 않는다).
+   class 는 모두 heroB- 로 시작한다(기본판·시안 A 의 .hero · .reel 규칙과 섞이지 않게) */
+function heroSlides() {
+  const list = CFG.hero.scenes;
+  const pad = (k) => String(k).padStart(2, '0');
+  const img = (sc, i) => {
+    const p = P(sc.photo);
+    const srcset = p.sizes.map((w) => `assets/photos/${p.id}-${w}.jpg ${w}w`).join(', ');
+    return `<img src="assets/photos/${p.id}-${p.sizes[p.sizes.length - 1]}.jpg" srcset="${srcset}" sizes="100vw" width="${p.w}" height="${p.h}" alt="${esc(sc.alt || p.alt)}" decoding="async"${i ? '' : ' fetchpriority="high"'}>`;
+  };
+  return `  <!-- ===== 히어로: 구호·가치 5장면 자동 전환 (큰 틀 'slides', 시안 B) ===== -->
+  <section class="heroB" id="heroB" aria-roledescription="carousel" aria-label="신정개발이 중요하게 생각하는 것">
+    <div class="heroB__stage" aria-live="off">
+${list.map((sc, i) => `      <div class="heroB__slide${i ? '' : ' is-on'}" data-i="${i}" role="group" aria-roledescription="slide" aria-label="${esc(sc.name)}"${i ? ' aria-hidden="true"' : ''}>
+        <div class="heroB__ph">${img(sc, i)}</div>
+        <div class="heroB__scrim" aria-hidden="true"></div>
+        <div class="heroB__txt">
+          <span class="heroB__tag">${esc(sc.tag)}</span>
+          <${i ? 'h2' : 'h1'} class="heroB__title">${sc.title}</${i ? 'h2' : 'h1'}>
+          <p class="heroB__sub">${esc(fill(sc.sub, { founded: C.founded }))}</p>${sc.note ? `
+          <p class="heroB__note">${esc(sc.note)}</p>` : ''}
+        </div>
+      </div>`).join('\n')}
+    </div>
+    <div class="heroB__ctrl">
+      <button type="button" class="heroB__btn" data-go="-1" aria-label="이전 장면"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <button type="button" class="heroB__btn heroB__btn--pp" data-pp aria-label="자동 전환 멈춤"><svg class="heroB__i-pause" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><rect x="7" y="5" width="3.5" height="14" rx="1" fill="currentColor"/><rect x="13.5" y="5" width="3.5" height="14" rx="1" fill="currentColor"/></svg><svg class="heroB__i-play" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg></button>
+      <button type="button" class="heroB__btn" data-go="1" aria-label="다음 장면"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <span class="heroB__count" aria-hidden="true"><b>01</b> / ${pad(list.length)}</span>
+      <span class="heroB__bar" aria-hidden="true"><i></i></span>
+    </div>
+    <div class="heroB__tabs" role="group" aria-label="장면 고르기">
+${list.map((sc, i) => `      <button type="button" class="heroB__tab${i ? '' : ' is-on'}" data-to="${i}"${i ? '' : ' aria-current="true"'} aria-label="${esc(sc.name)} 장면 보기">${esc(sc.name)}</button>`).join('\n')}
+    </div>
+  </section>
+`;
+}
+
 /* 큰 틀 'base'의 메인 구역 여섯 개 — 40차 전의 구역 그대로. 각 함수는 바탕 이름(bg)을 받는다 */
 const HOME_SECTIONS = {
   /* 신뢰 숫자 — 숫자(TRUST)·주요 현장(TRUST_SITES)·출처(TRUST_SRC)는 사실 데이터 */
@@ -1294,7 +1338,7 @@ ${pcards(c.cards.map((k) => k.photo), c.cards.map((k) => k.title), null, c.cards
    설정 파일의 frame 칸(hero / sections / header)이 여기서 이름으로 고른다. 지금은 'base'(40차 전의 모양) 하나뿐이다.
    새 큰 틀은 그림 시안으로 고른 뒤 지시서로 여기에 이름을 더한다. */
 const FRAMES = {
-  hero: { base: heroBase, reel: heroReel },
+  hero: { base: heroBase, reel: heroReel, slides: heroSlides },
   sections: { base: HOME_SECTIONS },
   header: { base: headerBase }
 };
@@ -1322,7 +1366,7 @@ pages['index.html'] = () => {
   }) + header('home', null, 'index.html') + `
 <main id="main">
 
-` + frame('hero')() + '\n' + CFG.home.sections.map((s) => S[s.id](s.bg)).join('\n') + '\n' + cta({ home: true }) + MAIN_END + footer() + foot(CFG.frame.hero === 'reel' ? ['reel.js'] : []);
+` + frame('hero')() + '\n' + CFG.home.sections.map((s) => S[s.id](s.bg)).join('\n') + '\n' + cta({ home: true }) + MAIN_END + footer() + foot(CFG.frame.hero === 'reel' ? ['reel.js'] : CFG.frame.hero === 'slides' ? ['hero-slides.js'] : []);
 };
 
 /* ---------- 2. 사업분야 ---------- */
@@ -2034,6 +2078,14 @@ function checkConfig() {
     if (m.type === 'video' && !m.src) configError(`첫 화면 영상 주소(src)가 없습니다 (설정 hero.media.${k})`);
     if (m.type !== 'photo' && m.type !== 'video') configError(`첫 화면 사진 종류는 'photo' 또는 'video' 입니다 (설정 hero.media.${k})`);
   });
+  /* 큰 틀 'slides'의 장면 (시안 B) */
+  if (CFG.frame.hero === 'slides') {
+    if (!Array.isArray(CFG.hero.scenes) || !CFG.hero.scenes.length) configError(`큰 틀 'slides'에는 장면 목록이 있어야 합니다 (설정 hero.scenes)`);
+    CFG.hero.scenes.forEach((sc, i) => {
+      ['name', 'tag', 'title', 'sub'].forEach((f) => { if (!sc[f]) configError(`첫 화면 장면 ${i + 1}번째의 ${f}가 없습니다 (설정 hero.scenes)`); });
+      if (!PHOTOS[sc.photo]) configError(`첫 화면 장면 '${sc.name}'의 사진 번호 '${sc.photo}'이 사진 목록에 없습니다 (설정 hero.scenes)`);
+    });
+  }
 }
 
 /* css/tokens.css = tools/tokens.head.css(머리 주석과 글꼴 정의 8개, 40차 전의 글자 그대로) + 아래 :root

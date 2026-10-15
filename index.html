@@ -28,7 +28,7 @@
 <link rel="stylesheet" href="css/tokens.css">
 <link rel="stylesheet" href="css/site.css">
 </head>
-<body data-page="home" data-hero="reel">
+<body data-page="home">
 <a class="skip-link" href="#main">본문 바로가기</a>
 <div class="sianbar" role="note" style="--sian: #c2410c"><span class="sianbar__name">시안 B</span><span class="sianbar__note">최종본과 다른 작업용 판입니다</span></div>
 <header class="hdr">
@@ -90,123 +90,69 @@
 
 <main id="main">
 
-  <!-- ===== 히어로: 사업분야 가로 흐름 (큰 틀 'reel', 시안 A) ===== -->
-  <section class="reel is-bright" id="reel" style="--n: 6" aria-label="신정개발이 하는 일">
-    <div class="reel__pin">
-      <div class="reel__bg">
-        <figure class="reel__fig is-on is-light" data-i="0" style="--pos: 30% 50%; --pos-m: 52% 50%"><img src="assets/photos/U01-1672.jpg" srcset="assets/photos/U01-800.jpg 800w, assets/photos/U01-1200.jpg 1200w, assets/photos/U01-1672.jpg 1672w" sizes="(orientation: portrait) 178vh, 100vw" width="1672" height="941" alt="푸른 하늘 아래 흰색 원통형 저장 탱크들" fetchpriority="high" decoding="async"></figure>
-        <figure class="reel__fig has-3d is-light" data-i="1" style="--pos: 50% 50%; --pos-m: 50% 50%"><picture><source media="(max-width: 960px)" srcset="assets/3d/robot-v2-poster-m.jpg" width="780" height="1456"><img src="assets/3d/robot-v2-poster.jpg" width="1920" height="1200" alt="밝은 바탕 위, 앞쪽에 흡입 헤드가 달린 궤도형 로봇(3D 모델)" decoding="async"></picture><div class="reel-3d" data-kind="robot" data-scene="./js/robot-scene.js" data-models="assets/3d/" data-model="robot-v2" data-still aria-hidden="true"></div></figure>
-        <figure class="reel__fig has-3d is-light" data-i="2" style="--pos: 50% 50%; --pos-m: 56% 50%"><picture><source media="(max-width: 960px)" srcset="assets/3d/catalyst-poster-m.jpg" width="780" height="1600"><img src="assets/3d/catalyst-poster.jpg" width="1920" height="1200" alt="절개한 탱크 바닥의 밝은 회색 입자 위 흡입 로봇과 탱크 밖 분리장치로 이어진 호스(3D 그림)" decoding="async"></picture><div class="reel-3d" data-kind="catalyst" data-scene="./js/catalyst-scene.js" data-models="assets/3d/" aria-hidden="true"></div></figure>
-        <figure class="reel__fig" data-i="3" style="--pos: 38% 58%; --pos-m: 20% 58%"><img src="assets/photos/M10-1351.jpg" srcset="assets/photos/M10-640.jpg 640w, assets/photos/M10-1000.jpg 1000w, assets/photos/M10-1351.jpg 1351w" sizes="100vw" width="1000" height="667" alt="안전 구획을 설치한 산업설비 현장에 배치된 진공흡입차" loading="lazy" decoding="async"></figure>
-        <figure class="reel__fig" data-i="4" style="--pos: 50% 62%; --pos-m: 52% 62%"><img src="assets/photos/W10-1600.jpg" srcset="assets/photos/W10-640.jpg 640w, assets/photos/W10-1000.jpg 1000w, assets/photos/W10-1600.jpg 1600w" sizes="100vw" width="1000" height="667" alt="진공흡입차 옆에서 맨홀에 호스를 연결해 작업하는 작업자들" loading="lazy" decoding="async"></figure>
-        <figure class="reel__fig" data-i="5" style="--pos: 50% 58%; --pos-m: 44% 60%"><img src="assets/photos/P08-800.jpg" srcset="assets/photos/P08-640.jpg 640w, assets/photos/P08-800.jpg 800w" sizes="100vw" width="1000" height="667" alt="도로 위에서 GPR 장비를 밀며 조사하는 작업자" loading="lazy" decoding="async"></figure>
-      </div>
-      <div class="reel__shade" aria-hidden="true"></div>
-      <div class="reel__intro">
-        <span class="eyebrow">여수 · 1992년 설립</span>
-        <p class="reel__lead">산업설비 클리닝 전문기업, 신정개발</p>
-        <a class="reel__more" href="services.html">사업분야 보기 <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M13 6.5l5.5 5.5L13 17.5"/></svg></a>
-      </div>
-      <h1 class="sr-only">산업설비 클리닝 · 자체 개발 로봇 · 촉매·충진물 교체 · 화학세정 · 준설·슬러지 회수 · 관로 조사·보수</h1>
-      <div class="reel__stage" tabindex="0" role="group" aria-label="사업분야 넘겨 보기">
-        <div class="reel__prism" aria-hidden="true">
-          <div class="reel__face is-front" data-i="0"><span>산업설비 클리닝</span></div>
-          <div class="reel__face" data-i="1"><span>자체 개발 로봇</span></div>
-          <div class="reel__face" data-i="2"><span>촉매·충진물 교체</span></div>
-          <div class="reel__face" data-i="3"><span>화학세정</span></div>
-          <div class="reel__face" data-i="4"><span>준설·슬러지 회수</span></div>
-          <div class="reel__face" data-i="5"><span>관로 조사·보수</span></div>
+  <!-- ===== 히어로: 구호·가치 5장면 자동 전환 (큰 틀 'slides', 시안 B) ===== -->
+  <section class="heroB" id="heroB" aria-roledescription="carousel" aria-label="신정개발이 중요하게 생각하는 것">
+    <div class="heroB__stage" aria-live="off">
+      <div class="heroB__slide is-on" data-i="0" role="group" aria-roledescription="slide" aria-label="클리닝">
+        <div class="heroB__ph"><img src="assets/photos/M08-2400.jpg" srcset="assets/photos/M08-960.jpg 960w, assets/photos/M08-1600.jpg 1600w, assets/photos/M08-2400.jpg 2400w" sizes="100vw" width="1600" height="1067" alt="산업설비 야간 전경" decoding="async" fetchpriority="high"></div>
+        <div class="heroB__scrim" aria-hidden="true"></div>
+        <div class="heroB__txt">
+          <span class="heroB__tag">CLEANING</span>
+          <h1 class="heroB__title">Cleaning으로<br>안전한 환경을 만드는 기업</h1>
+          <p class="heroB__sub">1992년부터 여수에서 — 산업설비 클리닝 전문기업 신정개발</p>
         </div>
       </div>
-      <span class="reel__xtra-badge" data-xtra="1" aria-hidden="true">우리가 일하는 방법</span>
-      <div class="reel__info">
-        <div class="reel__item is-on" data-i="0" data-no="01"><b><span>01</span>탱크 클리닝</b><p>탱크·Pond·배수로·R.T.O 내부의 잔류물과 퇴적물을 제거합니다.</p><a href="service-equipment-cleaning.html">자세히 보기 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M13 6.5l5.5 5.5L13 17.5"/></svg></a></div>
-        <div class="reel__item" data-i="1" data-extra><span class="reel__xtra-tag">우리가 일하는 방법</span><b class="reel__xtra-desc">위험한 내부 작업은 로봇이 먼저 들어갑니다</b></div>
-        <div class="reel__item" data-i="2" data-no="02"><p>탱크 속 촉매·충진물을 로봇으로 회수하고, 회수물을 분리합니다.</p><a href="service-catalyst-media.html">자세히 보기 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M13 6.5l5.5 5.5L13 17.5"/></svg></a></div>
-        <div class="reel__item" data-i="3" data-no="03"><b><span>03</span>화학세정</b><p>배관·열교환기·냉각탑·보일러를 세정합니다.</p><a href="service-chemical-cleaning.html">자세히 보기 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M13 6.5l5.5 5.5L13 17.5"/></svg></a></div>
-        <div class="reel__item" data-i="4" data-no="04"><b><span>04</span>준설</b><p>하수·오수관과 처리시설의 퇴적물을 준설하고 슬러지를 회수합니다.</p><a href="service-dredging-sludge.html">자세히 보기 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M13 6.5l5.5 5.5L13 17.5"/></svg></a></div>
-        <div class="reel__item" data-i="5" data-no="05"><b><span>05</span>관로 조사</b><p>관로 CCTV·GPR로 조사하고, 비굴착으로 보수합니다.</p><a href="service-inspection-repair.html">자세히 보기 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M13 6.5l5.5 5.5L13 17.5"/></svg></a></div>
-      </div>
-      <div class="reel__ctrl">
-        <button type="button" class="reel__btn reel__btn--motion" data-motion aria-pressed="false" aria-label="배경 움직임 멈춤" hidden><svg class="reel__i-pause" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1" fill="currentColor"/><rect x="14" y="5" width="4" height="14" rx="1" fill="currentColor"/></svg><svg class="reel__i-play" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg></button>
-        <button type="button" class="reel__btn reel__btn--prev" data-go="-1"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M13 6.5l5.5 5.5L13 17.5"/></svg><span class="reel__lbl">이전 사업</span><span class="reel__lbl-x">이전</span></button>
-        <span class="reel__count"><span class="reel__count-n"><b>01</b> / 05</span><span class="reel__count-x"></span></span>
-        <button type="button" class="reel__btn reel__btn--next" data-go="1"><span class="reel__lbl">다음 사업</span><span class="reel__lbl-x">다음</span><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M13 6.5l5.5 5.5L13 17.5"/></svg></button>
-      </div>
-      <button type="button" class="reel__xenter" data-explore="robot" hidden>로봇 자세히 보기</button>
-      <button type="button" class="reel__xenter" data-explore="catalyst" hidden>3D 자세히 보기</button>
-      <div class="reel__xbar" hidden>
-        <p class="reel__xhint"><span class="reel__xhint-mouse">끌어서 돌리고, 휠로 확대·축소합니다</span><span class="reel__xhint-touch">한 손가락으로 돌리고, 두 손가락으로 확대·축소합니다</span></p>
-        <p class="reel__xnote is-on" data-rnote="0"><b>3D 모델</b> <span>앞 왼쪽 사진 한 장을 바탕으로 만든 모델이라, 오른쪽·뒤쪽 모양은 실제와 다를 수 있습니다.</span></p>
-        <div class="reel__xbtns">
-          <button type="button" class="reel__xbtn" data-x="pp" aria-pressed="false"><span class="reel__x-pause">일시정지</span><span class="reel__x-play">재생</span></button>
-          <button type="button" class="reel__xbtn" data-x="reset">기본 시점</button>
-          <button type="button" class="reel__xbtn reel__xbtn--close" data-x="close">닫기</button>
+      <div class="heroB__slide" data-i="1" role="group" aria-roledescription="slide" aria-label="안전" aria-hidden="true">
+        <div class="heroB__ph"><img src="assets/photos/M06-1600.jpg" srcset="assets/photos/M06-640.jpg 640w, assets/photos/M06-1000.jpg 1000w, assets/photos/M06-1600.jpg 1600w" sizes="100vw" width="1000" height="667" alt="작업 현장의 안전모" decoding="async"></div>
+        <div class="heroB__scrim" aria-hidden="true"></div>
+        <div class="heroB__txt">
+          <span class="heroB__tag">SAFETY · 안전</span>
+          <h2 class="heroB__title">안전은 비용이 아니라<br>기준입니다</h2>
+          <p class="heroB__sub">일을 맡는 순간부터 마치는 순간까지, 신정개발의 모든 판단은 안전에서 시작됩니다</p>
         </div>
       </div>
-      <a class="reel__rtag is-on" href="service-catalyst-media.html#photo-W05" data-rtag="0" data-model="robot-v2">
-        <b>스크루 궤도형 흡입 로봇</b><span>촉매·충진물 작업</span><em>자세히 보기 <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M13 6.5l5.5 5.5L13 17.5"/></svg></em>
-      </a>
+      <div class="heroB__slide" data-i="2" role="group" aria-roledescription="slide" aria-label="환경" aria-hidden="true">
+        <div class="heroB__ph"><img src="assets/photos/W10-1600.jpg" srcset="assets/photos/W10-640.jpg 640w, assets/photos/W10-1000.jpg 1000w, assets/photos/W10-1600.jpg 1600w" sizes="100vw" width="1000" height="667" alt="하수관로 준설 작업" decoding="async"></div>
+        <div class="heroB__scrim" aria-hidden="true"></div>
+        <div class="heroB__txt">
+          <span class="heroB__tag">ENVIRONMENT · 환경</span>
+          <h2 class="heroB__title">오늘의 클리닝이<br>내일의 환경이 됩니다</h2>
+          <p class="heroB__sub">설비 하나를 깨끗이 하는 일이 공장을, 도시를, 바다를 바꾼다고 믿습니다</p>
+        </div>
+      </div>
+      <div class="heroB__slide" data-i="3" role="group" aria-roledescription="slide" aria-label="로봇" aria-hidden="true">
+        <div class="heroB__ph"><img src="assets/photos/W05-1600.jpg" srcset="assets/photos/W05-640.jpg 640w, assets/photos/W05-1000.jpg 1000w, assets/photos/W05-1600.jpg 1600w" sizes="100vw" width="1000" height="667" alt="신정개발 흡입 로봇" decoding="async"></div>
+        <div class="heroB__scrim" aria-hidden="true"></div>
+        <div class="heroB__txt">
+          <span class="heroB__tag">ROBOT · 로봇</span>
+          <h2 class="heroB__title">위험한 곳에는<br>사람보다 로봇이 먼저 들어갑니다</h2>
+          <p class="heroB__sub">자체 개발 무인 로봇이, 사람이 들어가기 전에 위험을 먼저 줄입니다</p>
+        </div>
+      </div>
+      <div class="heroB__slide" data-i="4" role="group" aria-roledescription="slide" aria-label="발전" aria-hidden="true">
+        <div class="heroB__ph"><img src="assets/photos/AI01-1536.jpg" srcset="assets/photos/AI01-1536.jpg 1536w" sizes="100vw" width="1536" height="1024" alt="차세대 로봇 3D 그림" decoding="async"></div>
+        <div class="heroB__scrim" aria-hidden="true"></div>
+        <div class="heroB__txt">
+          <span class="heroB__tag">NEXT · 발전</span>
+          <h2 class="heroB__title">신정개발의 가능성에는<br>한계가 없습니다</h2>
+          <p class="heroB__sub">현장에서 얻은 경험이 기술이 되고, 그 기술이 다시 새로운 내일을 엽니다</p>
+          <p class="heroB__note">※ 화면 속 로봇은 AI로 만든 3D 예시 그림입니다</p>
+        </div>
+      </div>
     </div>
-
-    <div class="reel-list">
-      <div class="wrap reel-list__head">
-        <span class="eyebrow">여수 · 1992년 설립</span>
-        <p class="reel__lead">산업설비 클리닝 전문기업, 신정개발</p>
-        <h1 class="reel-list__title">탱크 클리닝 · 촉매·충진물 · 화학세정 · 준설 · 관로 조사</h1>
-      </div>
-      <div class="reel-list__track" tabindex="0" aria-label="사업분야 넘겨 보기">
-        <article class="reel-list__slide" data-i="0" style="--pos: 30% 50%; --pos-m: 52% 50%">
-          <figure class="reel-list__bg"><img src="assets/photos/U01-1672.jpg" srcset="assets/photos/U01-800.jpg 800w, assets/photos/U01-1200.jpg 1200w, assets/photos/U01-1672.jpg 1672w" sizes="(min-width: 961px) 20vw, 100vw" width="1672" height="941" alt="푸른 하늘 아래 흰색 원통형 저장 탱크들" loading="lazy" decoding="async"></figure>
-          <div class="reel-list__body">
-            <span class="reel-list__no">01 / 05</span>
-            <h2>탱크 클리닝</h2>
-            <p>탱크·Pond·배수로·R.T.O 내부의 잔류물과 퇴적물을 제거합니다.</p>
-            <a href="service-equipment-cleaning.html">자세히 보기 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M13 6.5l5.5 5.5L13 17.5"/></svg></a>
-          </div>
-        </article>
-        <article class="reel-list__slide" data-i="1" style="--pos: 50% 50%; --pos-m: 56% 50%">
-          <figure class="reel-list__bg"><img src="assets/photos/P03-1600.jpg" srcset="assets/photos/P03-640.jpg 640w, assets/photos/P03-1000.jpg 1000w, assets/photos/P03-1600.jpg 1600w" sizes="(min-width: 961px) 20vw, 100vw" width="1000" height="667" alt="촉매가 쌓인 반응기 안에 투입된 흡입 로봇과 호스" loading="lazy" decoding="async"></figure>
-          <div class="reel-list__body">
-            <span class="reel-list__no">02 / 05</span>
-            <h2>촉매·충진물</h2>
-            <p>촉매·충진물 작업에서 회수물을 분리합니다.</p>
-            <a href="service-catalyst-media.html">자세히 보기 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M13 6.5l5.5 5.5L13 17.5"/></svg></a>
-          </div>
-        </article>
-        <article class="reel-list__slide" data-i="2" style="--pos: 38% 58%; --pos-m: 20% 58%">
-          <figure class="reel-list__bg"><img src="assets/photos/M10-1351.jpg" srcset="assets/photos/M10-640.jpg 640w, assets/photos/M10-1000.jpg 1000w, assets/photos/M10-1351.jpg 1351w" sizes="(min-width: 961px) 20vw, 100vw" width="1000" height="667" alt="안전 구획을 설치한 산업설비 현장에 배치된 진공흡입차" loading="lazy" decoding="async"></figure>
-          <div class="reel-list__body">
-            <span class="reel-list__no">03 / 05</span>
-            <h2>화학세정</h2>
-            <p>배관·열교환기·냉각탑·보일러를 세정합니다.</p>
-            <a href="service-chemical-cleaning.html">자세히 보기 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M13 6.5l5.5 5.5L13 17.5"/></svg></a>
-          </div>
-        </article>
-        <article class="reel-list__slide" data-i="3" style="--pos: 50% 62%; --pos-m: 52% 62%">
-          <figure class="reel-list__bg"><img src="assets/photos/W10-1600.jpg" srcset="assets/photos/W10-640.jpg 640w, assets/photos/W10-1000.jpg 1000w, assets/photos/W10-1600.jpg 1600w" sizes="(min-width: 961px) 20vw, 100vw" width="1000" height="667" alt="진공흡입차 옆에서 맨홀에 호스를 연결해 작업하는 작업자들" loading="lazy" decoding="async"></figure>
-          <div class="reel-list__body">
-            <span class="reel-list__no">04 / 05</span>
-            <h2>준설</h2>
-            <p>하수·오수관과 처리시설의 퇴적물을 준설하고 슬러지를 회수합니다.</p>
-            <a href="service-dredging-sludge.html">자세히 보기 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M13 6.5l5.5 5.5L13 17.5"/></svg></a>
-          </div>
-        </article>
-        <article class="reel-list__slide" data-i="4" style="--pos: 50% 58%; --pos-m: 44% 60%">
-          <figure class="reel-list__bg"><img src="assets/photos/P08-800.jpg" srcset="assets/photos/P08-640.jpg 640w, assets/photos/P08-800.jpg 800w" sizes="(min-width: 961px) 20vw, 100vw" width="1000" height="667" alt="도로 위에서 GPR 장비를 밀며 조사하는 작업자" loading="lazy" decoding="async"></figure>
-          <div class="reel-list__body">
-            <span class="reel-list__no">05 / 05</span>
-            <h2>관로 조사</h2>
-            <p>관로 CCTV·GPR로 조사하고, 비굴착으로 보수합니다.</p>
-            <a href="service-inspection-repair.html">자세히 보기 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M13 6.5l5.5 5.5L13 17.5"/></svg></a>
-          </div>
-        </article>
-      </div>
-      <div class="reel-list__ctrl">
-        <button type="button" class="reel__btn reel__btn--prev" data-go="-1" aria-label="이전 업무"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M13 6.5l5.5 5.5L13 17.5"/></svg></button>
-        <span class="reel__count"><b>01</b> / 05</span>
-        <button type="button" class="reel__btn" data-go="1" aria-label="다음 업무"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M13 6.5l5.5 5.5L13 17.5"/></svg></button>
-      </div>
+    <div class="heroB__ctrl">
+      <button type="button" class="heroB__btn" data-go="-1" aria-label="이전 장면"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <button type="button" class="heroB__btn heroB__btn--pp" data-pp aria-label="자동 전환 멈춤"><svg class="heroB__i-pause" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><rect x="7" y="5" width="3.5" height="14" rx="1" fill="currentColor"/><rect x="13.5" y="5" width="3.5" height="14" rx="1" fill="currentColor"/></svg><svg class="heroB__i-play" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg></button>
+      <button type="button" class="heroB__btn" data-go="1" aria-label="다음 장면"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <span class="heroB__count" aria-hidden="true"><b>01</b> / 05</span>
+      <span class="heroB__bar" aria-hidden="true"><i></i></span>
+    </div>
+    <div class="heroB__tabs" role="group" aria-label="장면 고르기">
+      <button type="button" class="heroB__tab is-on" data-to="0" aria-current="true" aria-label="클리닝 장면 보기">클리닝</button>
+      <button type="button" class="heroB__tab" data-to="1" aria-label="안전 장면 보기">안전</button>
+      <button type="button" class="heroB__tab" data-to="2" aria-label="환경 장면 보기">환경</button>
+      <button type="button" class="heroB__tab" data-to="3" aria-label="로봇 장면 보기">로봇</button>
+      <button type="button" class="heroB__tab" data-to="4" aria-label="발전 장면 보기">발전</button>
     </div>
   </section>
 
@@ -461,6 +407,6 @@
   <a class="mcta__go" href="contact.html">현장 문의 <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M13 6.5l5.5 5.5L13 17.5"/></svg></a>
 </nav>
 <script src="js/site.js"></script>
-<script src="js/reel.js"></script>
+<script src="js/hero-slides.js"></script>
 </body>
 </html>
