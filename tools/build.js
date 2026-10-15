@@ -650,7 +650,7 @@ ${V ? '' : `<link rel="canonical" href="${SITE_URL}${here}">
 <link rel="stylesheet" href="css/${V ? `tokens.${V.name}.css` : 'tokens.css'}">
 <link rel="stylesheet" href="css/site.css">
 ${!marked && o.jsonld ? `<script type="application/ld+json">${JSON.stringify(o.jsonld)}</script>\n` : ''}</head>
-<body data-page="${o.page}"${o.page === 'home' && CFG.frame.hero === 'reel' ? ' data-hero="reel"' : ''}>
+<body data-page="${o.page}"${o.page === 'home' && (CFG.frame.hero === 'reel' || CFG.frame.hero === 'slides') ? ` data-hero="${CFG.frame.hero}"` : ''}>
 <a class="skip-link" href="#main">본문 바로가기</a>
 ${V ? `<div class="pvbar" role="note">검토용 ${esc(V.label)}입니다 · <a href="../index.html">기본판 보기</a> · 공식 홈페이지 <a href="${OFFICIAL_SITE.url}" target="_blank" rel="noopener">${OFFICIAL_SITE.label}</a></div>\n`
     : S ? `<div class="sianbar" role="note" style="--sian: ${S.color}"><span class="sianbar__name">${esc(S.name)}</span>${S.direction ? `<span class="sianbar__dir">${esc(S.direction)}</span>` : ''}<span class="sianbar__note">최종본과 다른 작업용 판입니다</span></div>\n`

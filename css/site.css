@@ -1573,6 +1573,13 @@ body.reel-dark[data-page="home"] .hdr .hdr__cta:hover { background: #fff; border
 .heroB__tab:hover { color: #fff; }
 .heroB__tab.is-on { color: #fff; border-bottom-color: #8fe492; }
 
+/* 메인 머리말 (3번 표 9번) — 첫 화면 위(스크롤 전)에서는 기존 메인 규칙(body[data-page="home"] .hdr:not(.is-scrolled))대로
+   투명 배경·흰 글자·흰 로고. 아래로 스크롤하면(js/site.js 의 is-scrolled) 시안 B 의 지금 밝은 머리말 모양으로 돌아온다.
+   색과 배경만 바꾸고 메뉴·글자·링크는 그대로. 메인 body[data-hero="slides"]에만 걸리므로 다른 페이지 머리말은 그대로 */
+body[data-hero="slides"][data-page="home"] .hdr.is-scrolled { background: #F8FAFC; color: #17324D; border-bottom: 1px solid #E2E8F0; box-shadow: 0 1px 2px #0f172a0a; }
+body[data-hero="slides"][data-page="home"] .hdr.is-scrolled .hdr__cta { background: #17324D; border-color: #17324D; color: #fff; }
+body[data-hero="slides"][data-page="home"] .hdr.is-scrolled .hdr__cta:hover { background: #0f2338; border-color: #0f2338; color: #fff; }
+
 @media (max-width: 960px) {
   .heroB.is-ready .heroB__tabs { display: none; }   /* 좁은 화면: 이름표는 숨기고 버튼·번호로 넘긴다 */
   .heroB__txt { bottom: 130px; }
