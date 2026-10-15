@@ -205,9 +205,9 @@ module.exports = {
   /* ===================== ⑩ 시안 갈래 (43차) =====================
      시안 갈래(sian-a, sian-b)에서만 채운다. dev·main에서는 비워 둔다(비어 있으면 띠가 나오지 않는다). */
   sian: {
-    name: '시안 A',  // 시안 이름 (예: '시안 A')
+    name: '시안 B',  // 시안 이름 (예: '시안 A')
     direction: '',   // 한 문장 방향 (예: '밝고 대담한 글자'). 비어 있으면 이름만 보인다
     color: '#c2410c', // 띠 색 (예: '#c2410c')
-    url: 'https://idagyeol-bit.github.io/shinjeong-site-sian-a/'   // 이 시안이 올라가는 주소 (시안 A 전용 저장소 shinjeong-site-sian-a). 비어 있으면 원본 주소
+    url: 'https://idagyeol-bit.github.io/shinjeong-site-sian-b/'   // 이 시안이 올라가는 주소 (시안 B 전용 저장소 shinjeong-site-sian-b, 2026-10-16 시안 A 를 그대로 복사해 시작). 비어 있으면 원본 주소
   }
 };
